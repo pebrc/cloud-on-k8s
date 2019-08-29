@@ -9,14 +9,17 @@ import (
 	"sync"
 
 	"github.com/elastic/cloud-on-k8s/pkg/apis/elasticsearch/v1alpha1"
+	"github.com/elastic/cloud-on-k8s/pkg/controller/common/async"
+	async2 "github.com/elastic/cloud-on-k8s/pkg/controller/elasticsearch/async"
 	esclient "github.com/elastic/cloud-on-k8s/pkg/controller/elasticsearch/client"
 	"github.com/elastic/cloud-on-k8s/pkg/utils/stringsutil"
+	"k8s.io/apimachinery/pkg/types"
 )
 
 // ESState gives information about Elasticsearch current status.
 type ESState interface {
 	// NodesInCluster returns true if the given nodes exist in the Elasticsearch cluster.
-	NodesInCluster(nodeNames []string) (bool, error)
+	NodesInCluster(nodeNames []string, revision int64) (bool, error)
 	// ShardAllocationsEnabled returns true if shards allocation are enabled in the cluster.
 	ShardAllocationsEnabled() (bool, error)
 	// GreenHealth returns true if the cluster health is currently green.
@@ -26,19 +29,31 @@ type ESState interface {
 // MemoizingESState requests Elasticsearch for the requested information only once, at first call.
 // It is "lazy" in the sense it only calls Elasticsearch if required, and does not pre-populate the state.
 type MemoizingESState struct {
+	async.TaskManager
 	esClient esclient.Client
-	*memoizingNodes
 	*memoizingShardsAllocationEnabled
 	*memoizingGreenHealth
+	*async2.NodesTask
+}
+
+func (m *MemoizingESState) NodesInCluster(nodeNames []string, revision int64) (bool, error) {
+	inCluster, err, ready := m.NodesTask.NodeNames(m.TaskManager, async.LogicalTime(revision))
+	if err != nil {
+		return false, err
+	}
+	if ready {
+		return stringsutil.StringsInSlice(nodeNames, inCluster), err
+	}
+	return false, nil
 }
 
 // NewMemoizingESState returns an initialized MemoizingESState.
-func NewMemoizingESState(esClient esclient.Client) ESState {
+func NewMemoizingESState(nsn types.NamespacedName, esClient esclient.Client) ESState {
 	return &MemoizingESState{
 		esClient:                         esClient,
-		memoizingNodes:                   &memoizingNodes{esClient: esClient},
 		memoizingShardsAllocationEnabled: &memoizingShardsAllocationEnabled{esClient: esClient},
 		memoizingGreenHealth:             &memoizingGreenHealth{esClient: esClient},
+		NodesTask:                        async2.NewNodesTask(nsn, esClient),
 	}
 }
 
@@ -49,35 +64,6 @@ func initOnce(once *sync.Once, f func() error) error {
 		err = f()
 	})
 	return err
-}
-
-// -- Nodes
-
-// memoizingNodes provides nodes information.
-type memoizingNodes struct {
-	once     sync.Once
-	esClient esclient.Client
-	nodes    []string
-}
-
-// initialize requests Elasticsearch for nodes information, only once.
-func (n *memoizingNodes) initialize() error {
-	ctx, cancel := context.WithTimeout(context.Background(), esclient.DefaultReqTimeout)
-	defer cancel()
-	nodes, err := n.esClient.GetNodes(ctx)
-	if err != nil {
-		return err
-	}
-	n.nodes = nodes.Names()
-	return nil
-}
-
-// NodesInCluster returns true if the given nodes exist in the Elasticsearch cluster.
-func (n *memoizingNodes) NodesInCluster(nodeNames []string) (bool, error) {
-	if err := initOnce(&n.once, n.initialize); err != nil {
-		return false, err
-	}
-	return stringsutil.StringsInSlice(nodeNames, n.nodes), nil
 }
 
 // -- Shards allocation enabled

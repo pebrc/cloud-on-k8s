@@ -28,7 +28,7 @@ func (d *defaultDriver) handleRollingUpgrades(
 	results := &reconciler.Results{}
 
 	// We need an up-to-date ES state, but avoid requesting information we may not need.
-	esState := NewMemoizingESState(esClient)
+	esState := NewMemoizingESState(k8s.ExtractNamespacedName(&d.ES), esClient)
 
 	// Maybe upgrade some of the nodes.
 	res := newRollingUpgrade(d, esClient, esState, statefulSets).run()
@@ -47,7 +47,7 @@ type rollingUpgradeCtx struct {
 	statefulSets   sset.StatefulSetList
 	esClient       esclient.Client
 	esState        ESState
-	podUpgradeDone func(k8s.Client, ESState, types.NamespacedName, string) (bool, error)
+	podUpgradeDone func(k8s.Client, ESState, types.NamespacedName, string, int64) (bool, error)
 	upgrader       func(statefulSet *appsv1.StatefulSet, newPartition int32) error
 }
 
@@ -218,7 +218,7 @@ func clusterReadyForNodeRestart(es v1alpha1.Elasticsearch, esState ESState) (boo
 }
 
 // podUpgradeDone inspects the given pod and returns true if it was successfully upgraded.
-func podUpgradeDone(c k8s.Client, esState ESState, podRef types.NamespacedName, expectedRevision string) (bool, error) {
+func podUpgradeDone(c k8s.Client, esState ESState, podRef types.NamespacedName, expectedRevision string, generation int64) (bool, error) {
 	if expectedRevision == "" {
 		// no upgrade scheduled for the sset
 		return false, nil
@@ -242,7 +242,7 @@ func podUpgradeDone(c k8s.Client, esState ESState, podRef types.NamespacedName, 
 		return false, nil
 	}
 	// has the node joined the cluster yet?
-	inCluster, err := esState.NodesInCluster([]string{podRef.Name})
+	inCluster, err := esState.NodesInCluster([]string{podRef.Name}, int(generation))
 	if err != nil {
 		return false, err
 	}
@@ -294,7 +294,7 @@ func (d *defaultDriver) MaybeEnableShardsAllocation(
 	}
 
 	// Make sure all nodes scheduled for upgrade are back into the cluster.
-	nodesInCluster, err := esState.NodesInCluster(statefulSets.PodNames())
+	nodesInCluster, err := esState.NodesInCluster(statefulSets.PodNames(), sset.MaxGeneration(statefulSets))
 	if err != nil {
 		return results.WithError(err)
 	}

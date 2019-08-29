@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/elastic/cloud-on-k8s/pkg/controller/common/async"
 	commondriver "github.com/elastic/cloud-on-k8s/pkg/controller/common/driver"
 	"github.com/elastic/cloud-on-k8s/pkg/controller/elasticsearch/label"
 	"github.com/elastic/cloud-on-k8s/pkg/controller/elasticsearch/name"
@@ -83,6 +84,9 @@ type DefaultDriverParameters struct {
 	// Expectations control some expectations set on resources in the cache, in order to
 	// avoid doing certain operations if the cache hasn't seen an up-to-date resource yet.
 	Expectations *reconciler.Expectations
+
+	// TaskManager runs asynchronous tasks
+	TaskManager *async.TaskManager
 }
 
 // defaultDriver is the default Driver implementation

@@ -103,3 +103,15 @@ func ScheduledUpgradesDone(c k8s.Client, statefulSets StatefulSetList) (bool, er
 	}
 	return true, nil
 }
+
+func MaxGeneration(statefulSets StatefulSetList) int64 {
+	var max int64
+	for _, s := range statefulSets {
+		gen := s.ObjectMeta.Generation
+		if gen > max {
+			max = gen
+		}
+	}
+	return max
+
+}
