@@ -5,5 +5,13 @@ metadata:
 spec:
   version: 7.3.0
   nodes:
-  - name: default
-    nodeCount: 1
+  - name: masters
+    config:
+      node.master: true
+      node.data: false
+    nodeCount: 3
+  - name: data
+    config:
+      node.master: false
+      node.data: true
+    nodeCount: 3
