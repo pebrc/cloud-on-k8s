@@ -15,3 +15,14 @@ spec:
       node.master: false
       node.data: true
     nodeCount: 3
+---
+apiVersion: kibana.k8s.elastic.co/v1alpha1
+kind: Kibana
+metadata:
+  name: hello-kibana
+spec:
+  version: 7.3.0
+  nodeCount: 1
+  elasticsearchRef:
+    name: "hello-eck"
+    
