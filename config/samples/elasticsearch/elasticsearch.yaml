@@ -17,4 +17,7 @@ spec:
   nodeCount: 1
   elasticsearchRef:
     name: "hello-eck"
-    
+  http:
+    tls:
+      certificate:
+        secretName: pebrc-ovh-tls
