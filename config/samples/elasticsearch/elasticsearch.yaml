@@ -5,15 +5,7 @@ metadata:
 spec:
   version: 7.3.0
   nodes:
-  - name: masters
-    config:
-      node.master: true
-      node.data: false
-    nodeCount: 3
-  - name: data
-    config:
-      node.master: false
-      node.data: true
+  - name: mixed
     nodeCount: 3
 ---
 apiVersion: kibana.k8s.elastic.co/v1alpha1
