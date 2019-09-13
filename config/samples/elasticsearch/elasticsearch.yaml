@@ -7,6 +7,20 @@ spec:
   nodes:
   - name: mixed-large
     nodeCount: 3
+    podTemplate:
+      spec:
+        containers:
+        - name: elasticsearch
+          env:
+          - name: ES_JAVA_OPTS
+            value: -Xms2048M -Xmx2048M
+          resources:
+            requests:
+              memory: 4Gi
+              cpu: 2
+            limits:
+              memory: 4Gi
+              cpu: 2
     volumeClaimTemplates:
     - metadata:
         name: elasticsearch-data # note: elasticsearch-data must be the name of the Elasticsearch volume
