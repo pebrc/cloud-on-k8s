@@ -5,8 +5,17 @@ metadata:
 spec:
   version: 7.3.0
   nodes:
-  - name: mixed
+  - name: mixed-large
     nodeCount: 3
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data # note: elasticsearch-data must be the name of the Elasticsearch volume
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
 ---
 apiVersion: kibana.k8s.elastic.co/v1alpha1
 kind: Kibana
