@@ -4,6 +4,16 @@ metadata:
   name: hello-eck
 spec:
   version: 7.3.0
+  image: eu.gcr.io/elastic-cloud-dev/elasticsearch-gcs:7.3.0
+  secureSettings:
+    - secretName: gcs-repo-account
+      entries:
+      - key: service-account.json
+        path: gcs.client.default.credentials_file
+  updateStrategy:
+    changeBudget:
+      maxSurge: 3
+      maxUnavailable: 3
   nodes:
   - name: mixed-large
     nodeCount: 3
