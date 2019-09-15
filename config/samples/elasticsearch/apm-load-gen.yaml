@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hey-apm
+  labels:
+    app: hey-apm
+spec:
+  ttlSecondsAfterFinished: 500
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: hey-apm
+        image: eu.gcr.io/elastic-cloud-dev/hey-apm:latest
+        command:
+          - /hey-apm
+          - -apm-url
+          - "http://hello-eck-apm-http:8200"
+          - -apm-secret
+          - $(APM_TOKEN)
+          - -run
+          - 15m
+        env:
+          - name: APM_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: secret-token
+                name: hello-eck-apm-token

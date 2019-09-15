@@ -44,3 +44,20 @@ spec:
     tls:
       certificate:
         secretName: pebrc-ovh-tls
+---
+apiVersion: apm.k8s.elastic.co/v1alpha1
+kind: ApmServer
+metadata:
+  name: hello-eck
+spec:
+  version: 7.3.0
+  nodeCount: 1
+  config:
+    apm-server.rum.enabled: true
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  elasticsearchRef:
+    name: hello-eck
+
