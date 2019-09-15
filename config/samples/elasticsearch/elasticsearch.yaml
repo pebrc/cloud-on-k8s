@@ -12,12 +12,30 @@ spec:
         path: gcs.client.default.credentials_file
   updateStrategy:
     changeBudget:
-      maxSurge: 3
-      maxUnavailable: 3
+      maxSurge: 9
+      maxUnavailable: 9
   nodes:
-  - name: mixed-large
+  - name: masters
+    nodeCount: 3
+    config:
+      node.master: true
+      node.data: false
+      node.ml: false
+      node.ingest: false
+      node.attr.node_type: dedicated_master
+    podTemplate:
+      metadata:
+        annotations:
+          "co.elastic.logs/module": elasticsearch
+  - name: hot
+    config:
+      node.master: false
+      node.attr.node_type: hot
     nodeCount: 3
     podTemplate:
+      metadata:
+        annotations:
+          "co.elastic.logs/module": elasticsearch
       spec:
         containers:
         - name: elasticsearch
@@ -40,6 +58,26 @@ spec:
         resources:
           requests:
             storage: 10Gi
+        storageClass: hot-nodes
+  - name: warm
+    nodeCount: 3
+    config:
+      node.master: false
+      node.attr.node_type: warm
+    podTemplate:
+      metadata:
+        annotations:
+          "co.elastic.logs/module": elasticsearch
+    volumeClaimTemplates:
+    - metadata:
+        name: elasticsearch-data # note: elasticsearch-data must be the name of the Elasticsearch volume
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Ti
+        storageClass: warm-nodes
 ---
 apiVersion: kibana.k8s.elastic.co/v1alpha1
 kind: Kibana
