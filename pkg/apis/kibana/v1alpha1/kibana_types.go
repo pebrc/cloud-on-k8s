@@ -2,13 +2,13 @@
 // or more contributor license agreements. Licensed under the Elastic License;
 // you may not use this file except in compliance with the Elastic License.
 
-package v1beta1
+package v1alpha1
 
 import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	commonv1beta1 "github.com/elastic/cloud-on-k8s/pkg/apis/common/v1beta1"
+	commonv1alpha1 "github.com/elastic/cloud-on-k8s/pkg/apis/common/v1alpha1"
 )
 
 const (
@@ -29,28 +29,50 @@ type KibanaSpec struct {
 
 	// ElasticsearchRef references an Elasticsearch resource in the Kubernetes cluster.
 	// If the namespace is not specified, the current resource namespace will be used.
-	ElasticsearchRef commonv1beta1.ObjectSelector `json:"elasticsearchRef,omitempty"`
+	ElasticsearchRef commonv1alpha1.ObjectSelector `json:"elasticsearchRef,omitempty"`
+
+	// Elasticsearch configures how Kibana connects to Elasticsearch
+	// +optional
+	Elasticsearch BackendElasticsearch `json:"elasticsearch,omitempty"`
 
 	// Config represents Kibana configuration.
-	Config *commonv1beta1.Config `json:"config,omitempty"`
+	Config *commonv1alpha1.Config `json:"config,omitempty"`
 
 	// HTTP contains settings for HTTP.
-	HTTP commonv1beta1.HTTPConfig `json:"http,omitempty"`
+	HTTP commonv1alpha1.HTTPConfig `json:"http,omitempty"`
 
 	// PodTemplate can be used to propagate configuration to Kibana pods.
 	// This allows specifying custom annotations, labels, environment variables,
 	// affinity, resources, etc. for the pods created from this NodeSpec.
-	// +kubebuilder:validation:Optional
+	// +optional
 	PodTemplate corev1.PodTemplateSpec `json:"podTemplate,omitempty"`
 
-	// SecureSettings references secrets containing secure settings, to be injected
+	// SecureSettings reference a secret containing secure settings, to be injected
 	// into Kibana keystore on each node.
-	// Each individual key/value entry in the referenced secrets is considered as an
+	// Each individual key/value entry in the referenced secret is considered as an
 	// individual secure setting to be injected.
-	// You can use the `entries` and `key` fields to consider only a subset of the secret
-	// entries and the `path` field to change the target path of a secret entry key.
 	// The secret must exist in the same namespace as the Kibana resource.
-	SecureSettings []commonv1beta1.SecretSource `json:"secureSettings,omitempty"`
+	SecureSettings *commonv1alpha1.SecretRef `json:"secureSettings,omitempty"`
+
+	// FeatureFlags are instance-specific flags that enable or disable specific experimental features
+	FeatureFlags commonv1alpha1.FeatureFlags `json:"featureFlags,omitempty"`
+}
+
+// BackendElasticsearch contains configuration for an Elasticsearch backend for Kibana
+type BackendElasticsearch struct {
+	// ElasticsearchURL is the URL to the target Elasticsearch
+	URL string `json:"url"`
+
+	// Auth configures authentication for Kibana to use.
+	Auth commonv1alpha1.ElasticsearchAuth `json:"auth,omitempty"`
+
+	// CertificateAuthorities names a secret that contains a CA file entry to use.
+	CertificateAuthorities commonv1alpha1.SecretRef `json:"certificateAuthorities,omitempty"`
+}
+
+// IsConfigured returns true if the backend configuration is populated with non-default values.
+func (b BackendElasticsearch) IsConfigured() bool {
+	return b.URL != "" && b.Auth.IsConfigured() && b.CertificateAuthorities.SecretName != ""
 }
 
 // KibanaHealth expresses the status of the Kibana instances.
@@ -65,9 +87,11 @@ const (
 
 // KibanaStatus defines the observed state of Kibana
 type KibanaStatus struct {
-	commonv1beta1.ReconcilerStatus `json:",inline"`
-	Health                         KibanaHealth                    `json:"health,omitempty"`
-	AssociationStatus              commonv1beta1.AssociationStatus `json:"associationStatus,omitempty"`
+	commonv1alpha1.ReconcilerStatus `json:",inline"`
+	Health                          KibanaHealth                     `json:"health,omitempty"`
+	AssociationStatus               commonv1alpha1.AssociationStatus `json:"associationStatus,omitempty"`
+	// ControllerVersion is the version of the controller that last updated the Kibana instance
+	ControllerVersion string `json:"controllerVersion,omitempty"`
 }
 
 // IsDegraded returns true if the current status is worse than the previous.
@@ -77,14 +101,17 @@ func (ks KibanaStatus) IsDegraded(prev KibanaStatus) bool {
 
 // IsMarkedForDeletion returns true if the Kibana is going to be deleted
 func (k Kibana) IsMarkedForDeletion() bool {
-	return !k.DeletionTimestamp.IsZero()
+	if k.DeletionTimestamp.IsZero() { // already handles nil pointer
+		return false
+	}
+	return true
 }
 
-func (k *Kibana) ElasticsearchRef() commonv1beta1.ObjectSelector {
-	return k.Spec.ElasticsearchRef
+func (k *Kibana) ElasticsearchAuth() commonv1alpha1.ElasticsearchAuth {
+	return k.Spec.Elasticsearch.Auth
 }
 
-func (k *Kibana) SecureSettings() []commonv1beta1.SecretSource {
+func (k *Kibana) SecureSettings() *commonv1alpha1.SecretRef {
 	return k.Spec.SecureSettings
 }
 
@@ -94,17 +121,10 @@ func (k *Kibana) Kind() string {
 	return Kind
 }
 
-func (k *Kibana) AssociationConf() *commonv1beta1.AssociationConf {
-	return k.assocConf
-}
-
-func (k *Kibana) SetAssociationConf(assocConf *commonv1beta1.AssociationConf) {
-	k.assocConf = assocConf
-}
-
 // +kubebuilder:object:root=true
 
 // Kibana is the Schema for the kibanas API
+// +k8s:openapi-gen=true
 // +kubebuilder:categories=elastic
 // +kubebuilder:resource:shortName=kb
 // +kubebuilder:subresource:status
@@ -112,14 +132,12 @@ func (k *Kibana) SetAssociationConf(assocConf *commonv1beta1.AssociationConf) {
 // +kubebuilder:printcolumn:name="nodes",type="integer",JSONPath=".status.availableNodes",description="Available nodes"
 // +kubebuilder:printcolumn:name="version",type="string",JSONPath=".spec.version",description="Kibana version"
 // +kubebuilder:printcolumn:name="age",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:storageversion
 type Kibana struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec      KibanaSpec                     `json:"spec,omitempty"`
-	Status    KibanaStatus                   `json:"status,omitempty"`
-	assocConf *commonv1beta1.AssociationConf `json:"-"`
+	Spec   KibanaSpec   `json:"spec,omitempty"`
+	Status KibanaStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

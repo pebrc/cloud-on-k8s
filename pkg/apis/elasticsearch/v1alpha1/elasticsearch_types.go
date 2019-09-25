@@ -2,10 +2,10 @@
 // or more contributor license agreements. Licensed under the Elastic License;
 // you may not use this file except in compliance with the Elastic License.
 
-package v1beta1
+package v1alpha1
 
 import (
-	commonv1beta1 "github.com/elastic/cloud-on-k8s/pkg/apis/common/v1beta1"
+	commonv1alpha1 "github.com/elastic/cloud-on-k8s/pkg/apis/common/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -30,10 +30,13 @@ type ElasticsearchSpec struct {
 	SetVMMaxMapCount *bool `json:"setVmMaxMapCount,omitempty"`
 
 	// HTTP contains settings for HTTP.
-	HTTP commonv1beta1.HTTPConfig `json:"http,omitempty"`
+	HTTP commonv1alpha1.HTTPConfig `json:"http,omitempty"`
 
 	// Nodes represents a list of groups of nodes with the same configuration to be part of the cluster
 	Nodes []NodeSpec `json:"nodes,omitempty"`
+
+	// FeatureFlags are instance-specific flags that enable or disable specific experimental features
+	FeatureFlags commonv1alpha1.FeatureFlags `json:"featureFlags,omitempty"`
 
 	// UpdateStrategy specifies how updates to the cluster should be performed.
 	UpdateStrategy UpdateStrategy `json:"updateStrategy,omitempty"`
@@ -42,17 +45,15 @@ type ElasticsearchSpec struct {
 	//
 	// The default budget selects all cluster pods and sets maxUnavailable to 1.
 	// To disable it entirely, set to the empty value (`{}` in YAML).
-	// +kubebuilder:validation:Optional
-	PodDisruptionBudget *commonv1beta1.PodDisruptionBudgetTemplate `json:"podDisruptionBudget,omitempty"`
+	// +optional
+	PodDisruptionBudget *commonv1alpha1.PodDisruptionBudgetTemplate `json:"podDisruptionBudget,omitempty"`
 
-	// SecureSettings references secrets containing secure settings, to be injected
+	// SecureSettings reference a secret containing secure settings, to be injected
 	// into Elasticsearch keystore on each node.
-	// Each individual key/value entry in the referenced secrets is considered as an
+	// Each individual key/value entry in the referenced secret is considered as an
 	// individual secure setting to be injected.
-	// You can use the `entries` and `key` fields to consider only a subset of the secret
-	// entries and the `path` field to change the target path of a secret entry key.
 	// The secret must exist in the same namespace as the Elasticsearch resource.
-	SecureSettings []commonv1beta1.SecretSource `json:"secureSettings,omitempty"`
+	SecureSettings *commonv1alpha1.SecretRef `json:"secureSettings,omitempty"`
 }
 
 // NodeCount returns the total number of nodes of the Elasticsearch cluster
@@ -67,12 +68,12 @@ func (es ElasticsearchSpec) NodeCount() int32 {
 // NodeSpec defines a common topology for a set of Elasticsearch nodes
 type NodeSpec struct {
 	// Name is a logical name for this set of nodes. Used as a part of the managed Elasticsearch node.name setting.
-	// +kubebuilder:validation:Pattern=[a-zA-Z0-9-]+
-	// +kubebuilder:validation:MaxLength=23
-	Name string `json:"name"`
+	// +kubebuilder:validation:Pattern=[a-zA-Z0-9-]*
+	// +kubebuilder:validation:MaxLength=12
+	Name string `json:"name,omitempty"`
 
 	// Config represents Elasticsearch configuration.
-	Config *commonv1beta1.Config `json:"config,omitempty"`
+	Config *commonv1alpha1.Config `json:"config,omitempty"`
 
 	// NodeCount defines how many nodes have this topology
 	NodeCount int32 `json:"nodeCount,omitempty"`
@@ -80,7 +81,7 @@ type NodeSpec struct {
 	// PodTemplate can be used to propagate configuration to Elasticsearch pods.
 	// This allows specifying custom annotations, labels, environment variables,
 	// volumes, affinity, resources, etc. for the pods created from this NodeSpec.
-	// +kubebuilder:validation:Optional
+	// +optional
 	PodTemplate corev1.PodTemplateSpec `json:"podTemplate,omitempty"`
 
 	// VolumeClaimTemplates is a list of claims that pods are allowed to reference.
@@ -89,7 +90,7 @@ type NodeSpec struct {
 	// any volumes in the template, with the same name.
 	// TODO: Define the behavior if a claim already exists with the same name.
 	// TODO: define special behavior based on claim metadata.name. (e.g data / logs volumes)
-	// +kubebuilder:validation:Optional
+	// +optional
 	VolumeClaimTemplates []corev1.PersistentVolumeClaim `json:"volumeClaimTemplates,omitempty"`
 }
 
@@ -105,6 +106,11 @@ func (n NodeSpec) GetESContainerTemplate() *corev1.Container {
 
 // UpdateStrategy specifies how updates to the cluster should be performed.
 type UpdateStrategy struct {
+	// Groups is a list of groups that should have their cluster mutations considered in a fair manner with a strict
+	// change budget (not allowing any surge or unavailability) before the entire cluster is reconciled with the
+	// full change budget.
+	Groups []GroupingDefinition `json:"groups,omitempty"`
+
 	// ChangeBudget is the change budget that should be used when performing mutations to the cluster.
 	ChangeBudget *ChangeBudget `json:"changeBudget,omitempty"`
 }
@@ -116,6 +122,12 @@ func (s UpdateStrategy) ResolveChangeBudget() ChangeBudget {
 	}
 
 	return DefaultChangeBudget
+}
+
+// GroupingDefinition is used to select a group of pods.
+type GroupingDefinition struct {
+	// Selector is the selector used to match pods.
+	Selector metav1.LabelSelector `json:"selector,omitempty"`
 }
 
 // ChangeBudget defines how Pods in a single group should be updated.
@@ -149,6 +161,13 @@ type ChangeBudget struct {
 	MaxSurge int `json:"maxSurge"`
 }
 
+// DefaultFallbackGroupingDefinition is the grouping definition that is used if no user-defined groups are specified or
+// there are pods that are not selected by the user-defined groups.
+var DefaultFallbackGroupingDefinition = GroupingDefinition{
+	// use a selector that matches everything
+	Selector: metav1.LabelSelector{},
+}
+
 // DefaultChangeBudget is used when no change budget is provided. It might not be the most effective, but should work in
 // every case
 var DefaultChangeBudget = ChangeBudget{
@@ -161,10 +180,9 @@ type ElasticsearchHealth string
 
 // Possible traffic light states Elasticsearch health can have.
 const (
-	ElasticsearchRedHealth     ElasticsearchHealth = "red"
-	ElasticsearchYellowHealth  ElasticsearchHealth = "yellow"
-	ElasticsearchGreenHealth   ElasticsearchHealth = "green"
-	ElasticsearchUnknownHealth ElasticsearchHealth = "unknown"
+	ElasticsearchRedHealth    ElasticsearchHealth = "red"
+	ElasticsearchYellowHealth ElasticsearchHealth = "yellow"
+	ElasticsearchGreenHealth  ElasticsearchHealth = "green"
 )
 
 var elasticsearchHealthOrder = map[ElasticsearchHealth]int{
@@ -185,10 +203,10 @@ func (h ElasticsearchHealth) Less(other ElasticsearchHealth) bool {
 type ElasticsearchOrchestrationPhase string
 
 const (
-	// ElasticsearchReadyPhase is operating at the desired spec.
-	ElasticsearchReadyPhase ElasticsearchOrchestrationPhase = "Ready"
-	// ElasticsearchApplyingChangesPhase controller is working towards a desired state, cluster can be unavailable.
-	ElasticsearchApplyingChangesPhase ElasticsearchOrchestrationPhase = "ApplyingChanges"
+	// ElasticsearchOperationalPhase is operating at the desired spec.
+	ElasticsearchOperationalPhase ElasticsearchOrchestrationPhase = "Operational"
+	// ElasticsearchPendingPhase controller is working towards a desired state, cluster can be unavailable.
+	ElasticsearchPendingPhase ElasticsearchOrchestrationPhase = "Pending"
 	// ElasticsearchMigratingDataPhase Elasticsearch is currently migrating data to another node.
 	ElasticsearchMigratingDataPhase ElasticsearchOrchestrationPhase = "MigratingData"
 	// ElasticsearchResourceInvalid is marking a resource as invalid, should never happen if admission control is installed correctly.
@@ -197,13 +215,15 @@ const (
 
 // ElasticsearchStatus defines the observed state of Elasticsearch
 type ElasticsearchStatus struct {
-	commonv1beta1.ReconcilerStatus `json:",inline"`
-	Health                         ElasticsearchHealth             `json:"health,omitempty"`
-	Phase                          ElasticsearchOrchestrationPhase `json:"phase,omitempty"`
-	ClusterUUID                    string                          `json:"clusterUUID,omitempty"`
-	MasterNode                     string                          `json:"masterNode,omitempty"`
-	ExternalService                string                          `json:"service,omitempty"`
-	ZenDiscovery                   ZenDiscoveryStatus              `json:"zenDiscovery,omitempty"`
+	commonv1alpha1.ReconcilerStatus `json:",inline"`
+	Health                          ElasticsearchHealth             `json:"health,omitempty"`
+	Phase                           ElasticsearchOrchestrationPhase `json:"phase,omitempty"`
+	ClusterUUID                     string                          `json:"clusterUUID,omitempty"`
+	MasterNode                      string                          `json:"masterNode,omitempty"`
+	ExternalService                 string                          `json:"service,omitempty"`
+	ZenDiscovery                    ZenDiscoveryStatus              `json:"zenDiscovery,omitempty"`
+	// ControllerVersion is the version of the controller that last updated the Elasticsearch cluster
+	ControllerVersion string `json:"controllerVersion,omitempty"`
 }
 
 type ZenDiscoveryStatus struct {
@@ -226,7 +246,6 @@ func (es ElasticsearchStatus) IsDegraded(prev ElasticsearchStatus) bool {
 // +kubebuilder:printcolumn:name="version",type="string",JSONPath=".spec.version",description="Elasticsearch version"
 // +kubebuilder:printcolumn:name="phase",type="string",JSONPath=".status.phase"
 // +kubebuilder:printcolumn:name="age",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:storageversion
 type Elasticsearch struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -237,10 +256,13 @@ type Elasticsearch struct {
 
 // IsMarkedForDeletion returns true if the Elasticsearch is going to be deleted
 func (e Elasticsearch) IsMarkedForDeletion() bool {
-	return !e.DeletionTimestamp.IsZero()
+	if e.DeletionTimestamp.IsZero() { // already handles nil pointer
+		return false
+	}
+	return true
 }
 
-func (e Elasticsearch) SecureSettings() []commonv1beta1.SecretSource {
+func (e Elasticsearch) SecureSettings() *commonv1alpha1.SecretRef {
 	return e.Spec.SecureSettings
 }
 
@@ -260,5 +282,7 @@ type ElasticsearchList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Elasticsearch{}, &ElasticsearchList{})
+	SchemeBuilder.Register(
+		&Elasticsearch{}, &ElasticsearchList{},
+	)
 }

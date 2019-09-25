@@ -186,6 +186,7 @@ func (r *ReconcileElasticsearch) Reconcile(request reconcile.Request) (reconcile
 	err := r.Get(request.NamespacedName, &es)
 	if err != nil {
 		if apierrors.IsNotFound(err) {
+			log.Info("Not found", "namespace", es.Namespace, "es_name", es.Name)
 			// Object not found, return.  Created objects are automatically garbage collected.
 			// For additional cleanup logic use finalizers.
 			return reconcile.Result{}, nil
