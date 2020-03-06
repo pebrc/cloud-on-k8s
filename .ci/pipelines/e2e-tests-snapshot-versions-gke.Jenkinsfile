@@ -26,11 +26,13 @@ pipeline {
                 }
             }
         }
+/*
         stage('Validate Jenkins pipelines') {
             steps {
                 sh 'make -C .ci TARGET=validate-jenkins-pipelines ci'
             }
         }
+ */
         stage('Run checks') {
             steps {
                 sh 'make -C .ci TARGET=ci-check ci'
@@ -50,6 +52,7 @@ pipeline {
             parallel {
                 stage("7.6.1-SNAPSHOT") {
                     steps {
+                        println "${OPERATOR_IMAGE}"
                         checkout scm
                         script {
                             runWith(lib, failedTests, "eck-76-snapshot-${BUILD_NUMBER}-e2e", "7.6.1-SNAPSHOT")
@@ -58,6 +61,7 @@ pipeline {
                 }
                 stage("7.7.0-SNAPSHOT") {
                     steps {
+                        println "${OPERATOR_IMAGE}"
                         checkout scm
                         script {
                             runWith(lib, failedTests, "eck-77-snapshot-${BUILD_NUMBER}-e2e", "7.7.0-SNAPSHOT")

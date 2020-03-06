@@ -210,6 +210,7 @@ REPOSITORY = $GCLOUD_PROJECT
 IMG_SUFFIX = -ci
 IS_SNAPSHOT_BUILD = ${isSnapshotVersion}
 TEST_LICENSE = /go/src/github.com/elastic/cloud-on-k8s/.ci/test-license.json
+TESTS_MATCH = TestEnterprise
 
 OPERATOR_IMAGE = ${operatorImage}
 STACK_VERSION = ${stackVersion}
