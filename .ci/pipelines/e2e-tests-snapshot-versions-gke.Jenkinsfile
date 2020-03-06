@@ -59,6 +59,9 @@ pipeline {
             }
             parallel {
                 stage("7.6.1-SNAPSHOT") {
+                    agent {
+                        label 'linux'
+                    }
                     steps {
                         println "${OPERATOR_IMAGE}"
                         checkout scm
@@ -68,6 +71,9 @@ pipeline {
                     }
                 }
                 stage("7.7.0-SNAPSHOT") {
+                    agent {
+                        label 'linux'
+                    }
                     steps {
                         println "${OPERATOR_IMAGE}"
                         checkout scm
