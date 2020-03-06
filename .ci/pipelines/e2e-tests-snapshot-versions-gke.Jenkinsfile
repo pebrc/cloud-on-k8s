@@ -42,14 +42,20 @@ pipeline {
             steps {
                 sh '.ci/setenvconfig dev/build'
                 sh('make -C .ci  get-docker-creds get-elastic-public-key TARGET=ci-release ci')
-                println "${sh(returnStdout: true, script: 'make print-operator-image').trim()}"
-                println "${sh(returnStdout: true, script: 'make print-operator-image')}"
+                println readFromEnvFile("OPERATOR_IMAGE")
+                println """${sh(
+                returnStdout: true,
+                script: 'make print-operator-image'
+                )}"""
             }
          }
         stage('Run tests for different stack versions in GKE') {
             environment {
                // use the image we just built
-               OPERATOR_IMAGE = "${sh(returnStdout: true, script: 'make print-operator-image').trim()}"
+               OPERATOR_IMAGE = """${sh(
+                returnStdout: true,
+                script: 'make print-operator-image'
+                )}"""
             }
             parallel {
                 stage("7.6.1-SNAPSHOT") {
@@ -134,4 +140,16 @@ def runWith(lib, failedTests, clusterName, stackVersion) {
 
         sh 'exit $SHELL_EXIT_CODE'
     }
+}
+
+def readFromEnvFile(name) {
+    def val = sh(returnStdout: true, script:
+    """
+    awk \'/${name}/{print \$3}\' .env
+    """
+    ).trim()
+
+    sh("echo ${name}=${val}")
+
+    return val
 }
