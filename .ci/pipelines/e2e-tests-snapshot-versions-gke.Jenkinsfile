@@ -43,11 +43,10 @@ pipeline {
                 sh '.ci/setenvconfig dev/build'
                 sh('make -C .ci  get-docker-creds get-elastic-public-key TARGET=ci-release ci')
                 println "${OPERATOR_IMAGE}"
+                println "${sh(returnStdout: true, script: 'make print-operator-image').trim()}"
             }
          }
         stage('Run tests for different stack versions in GKE') {
-            println "${sh(returnStdout: true, script: 'make print-operator-image').trim()}"
-            println "${OPERATOR_IMAGE}"
             environment {
                // use the image we just built
                OPERATOR_IMAGE = "${sh(returnStdout: true, script: 'make print-operator-image').trim()}"
