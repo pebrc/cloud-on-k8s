@@ -54,6 +54,7 @@ BASE_IMG       := $(REGISTRY)/$(REPOSITORY)/$(IMG_NAME)
 OPERATOR_IMAGE ?= $(BASE_IMG):$(IMG_VERSION)
 
 print-operator-image:
+	@ echo $(TAG) 1>&2
 	@ echo $(OPERATOR_IMAGE)
 
 GO_LDFLAGS := -X github.com/elastic/cloud-on-k8s/pkg/about.version=$(VERSION) \
