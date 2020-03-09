@@ -43,6 +43,7 @@ pipeline {
                 sh '.ci/setenvconfig dev/build'
                 sh('make -C .ci  get-docker-creds get-elastic-public-key TARGET=ci-release ci')
                 println readFromEnvFile("OPERATOR_IMAGE")
+                println "TAG: ${TAG}"
                 println """${sh(
                 returnStdout: true,
                 script: 'make print-operator-image'
