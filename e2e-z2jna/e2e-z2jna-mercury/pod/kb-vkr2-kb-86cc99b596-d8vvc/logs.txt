@@ -1,0 +1,29 @@
+==== START logs for pod e2e-z2jna-mercury/pod/kb-vkr2-kb-86cc99b596-d8vvc ====
++ init_config_initialized_flag=/mnt/elastic-internal/kibana-config-local/elastic-internal-init-config.ok
++ [[ -f /mnt/elastic-internal/kibana-config-local/elastic-internal-init-config.ok ]]
++ echo 'Setup Kibana configuration'
++ ln -sf /mnt/elastic-internal/kibana-config/kibana.yml /mnt/elastic-internal/kibana-config-local/
+Setup Kibana configuration
++ touch /mnt/elastic-internal/kibana-config-local/elastic-internal-init-config.ok
+Kibana configuration successfully prepared.
++ echo 'Kibana configuration successfully prepared.'
+{"type":"log","@timestamp":"2021-01-14T16:12:53Z","tags":["warning","plugins-discovery"],"pid":7,"message":"Expect plugin \"id\" in camelCase, but found: apm_oss"}
+{"type":"log","@timestamp":"2021-01-14T16:12:53Z","tags":["warning","plugins-discovery"],"pid":7,"message":"Expect plugin \"id\" in camelCase, but found: file_upload"}
+{"type":"log","@timestamp":"2021-01-14T16:12:53Z","tags":["warning","plugins-discovery"],"pid":7,"message":"Expect plugin \"id\" in camelCase, but found: triggers_actions_ui"}
+{"type":"log","@timestamp":"2021-01-14T16:13:54Z","tags":["warning","config","deprecation"],"pid":7,"message":"\"xpack.monitoring.ui.container.elasticsearch.enabled\" is deprecated and has been replaced by \"monitoring.ui.container.elasticsearch.enabled\""}
+{"type":"log","@timestamp":"2021-01-14T16:13:54Z","tags":["warning","config","deprecation"],"pid":7,"message":"\"xpack.monitoring\" is deprecated and has been replaced by \"monitoring\". However both key are present, ignoring \"xpack.monitoring\""}
+{"type":"log","@timestamp":"2021-01-14T16:13:54Z","tags":["info","plugins-system"],"pid":7,"message":"Setting up [76] plugins: [taskManager,siem,licensing,eventLog,encryptedSavedObjects,code,visTypeVega,usageCollection,metrics,ossTelemetry,lens,telemetryCollectionManager,telemetry,telemetryCollectionXpack,timelion,features,kibanaLegacy,devTools,apm_oss,translations,rollup,observability,uiActions,share,statusPage,savedObjects,newsfeed,kibanaUtils,kibanaReact,inspector,maps,embeddable,drilldowns,advancedUiActions,discover,esUiShared,bfetch,expressions,visualizations,data,home,cloud,console,consoleExtensions,searchprofiler,painlessLab,canvas,management,upgradeAssistant,security,snapshotRestore,transform,licenseManagement,indexManagement,remoteClusters,reporting,advancedSettings,spaces,actions,case,alerting,apm,alertingBuiltins,uptime,ml,telemetryManagementSection,file_upload,dataEnhanced,navigation,graph,dashboard,charts,watcher,triggers_actions_ui,infra,monitoring]"}
+{"type":"log","@timestamp":"2021-01-14T16:13:55Z","tags":["info","plugins","monitoring","monitoring"],"pid":7,"message":"config sourced from: production cluster"}
+{"type":"log","@timestamp":"2021-01-14T16:13:55Z","tags":["warning","plugins","monitoring","monitoring"],"pid":7,"message":"X-Pack Monitoring Cluster Alerts will not be available: undefined"}
+{"type":"log","@timestamp":"2021-01-14T16:13:55Z","tags":["info","savedobjects-service"],"pid":7,"message":"Waiting until all Elasticsearch nodes are compatible with Kibana before starting saved objects migrations..."}
+{"type":"log","@timestamp":"2021-01-14T16:13:55Z","tags":["info","plugins","watcher"],"pid":7,"message":"Your basic license does not support watcher. Please upgrade your license."}
+{"type":"log","@timestamp":"2021-01-14T16:13:55Z","tags":["info","plugins","monitoring","monitoring","kibana-monitoring"],"pid":7,"message":"Starting monitoring stats collection"}
+{"type":"log","@timestamp":"2021-01-14T16:13:55Z","tags":["info","savedobjects-service"],"pid":7,"message":"Starting saved objects migrations"}
+{"type":"log","@timestamp":"2021-01-14T16:13:55Z","tags":["info","savedobjects-service"],"pid":7,"message":"Creating index .kibana_1."}
+{"type":"log","@timestamp":"2021-01-14T16:13:55Z","tags":["info","savedobjects-service"],"pid":7,"message":"Creating index .kibana_task_manager_1."}
+{"type":"log","@timestamp":"2021-01-14T16:14:25Z","tags":["warning","savedobjects-service"],"pid":7,"message":"Unable to connect to Elasticsearch. Error: Request Timeout after 30000ms"}
+{"type":"log","@timestamp":"2021-01-14T16:14:28Z","tags":["warning","savedobjects-service"],"pid":7,"message":"Unable to connect to Elasticsearch. Error: [resource_already_exists_exception] index [.kibana_1/yRQM0oXzQxirOeRe1uRHQA] already exists, with { index_uuid=\"yRQM0oXzQxirOeRe1uRHQA\" & index=\".kibana_1\" }"}
+{"type":"log","@timestamp":"2021-01-14T16:14:28Z","tags":["warning","savedobjects-service"],"pid":7,"message":"Another Kibana instance appears to be migrating the index. Waiting for that migration to complete. If no other Kibana instance is attempting migrations, you can get past this message by deleting index .kibana_1 and restarting Kibana."}
+{"type":"log","@timestamp":"2021-01-14T16:14:28Z","tags":["warning","savedobjects-service"],"pid":7,"message":"Unable to connect to Elasticsearch. Error: [resource_already_exists_exception] index [.kibana_task_manager_1/WU-8yqsGRJCyS3Ihnd748w] already exists, with { index_uuid=\"WU-8yqsGRJCyS3Ihnd748w\" & index=\".kibana_task_manager_1\" }"}
+{"type":"log","@timestamp":"2021-01-14T16:14:28Z","tags":["warning","savedobjects-service"],"pid":7,"message":"Another Kibana instance appears to be migrating the index. Waiting for that migration to complete. If no other Kibana instance is attempting migrations, you can get past this message by deleting index .kibana_task_manager_1 and restarting Kibana."}
+==== END logs for pod e2e-z2jna-mercury/pod/kb-vkr2-kb-86cc99b596-d8vvc ====

@@ -1,0 +1,785 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "apps/v1",
+            "data": {
+                "spec": {
+                    "template": {
+                        "$patch": "replace",
+                        "metadata": {
+                            "annotations": {
+                                "co.elastic.logs/module": "elasticsearch"
+                            },
+                            "creationTimestamp": null,
+                            "labels": {
+                                "common.k8s.elastic.co/type": "elasticsearch",
+                                "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt",
+                                "elasticsearch.k8s.elastic.co/config-hash": "698554432",
+                                "elasticsearch.k8s.elastic.co/http-scheme": "https",
+                                "elasticsearch.k8s.elastic.co/node-data": "true",
+                                "elasticsearch.k8s.elastic.co/node-ingest": "true",
+                                "elasticsearch.k8s.elastic.co/node-master": "true",
+                                "elasticsearch.k8s.elastic.co/node-ml": "true",
+                                "elasticsearch.k8s.elastic.co/node-remote_cluster_client": "true",
+                                "elasticsearch.k8s.elastic.co/node-transform": "true",
+                                "elasticsearch.k8s.elastic.co/node-voting_only": "false",
+                                "elasticsearch.k8s.elastic.co/statefulset-name": "es-t5dt-es-masterdata",
+                                "elasticsearch.k8s.elastic.co/version": "7.7.0",
+                                "test-name": "es"
+                            }
+                        },
+                        "spec": {
+                            "affinity": {
+                                "podAntiAffinity": {
+                                    "preferredDuringSchedulingIgnoredDuringExecution": [
+                                        {
+                                            "podAffinityTerm": {
+                                                "labelSelector": {
+                                                    "matchLabels": {
+                                                        "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt"
+                                                    }
+                                                },
+                                                "topologyKey": "kubernetes.io/hostname"
+                                            },
+                                            "weight": 100
+                                        }
+                                    ]
+                                }
+                            },
+                            "automountServiceAccountToken": false,
+                            "containers": [
+                                {
+                                    "env": [
+                                        {
+                                            "name": "POD_IP",
+                                            "valueFrom": {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "status.podIP"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "name": "POD_NAME",
+                                            "valueFrom": {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.name"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "name": "NODE_NAME",
+                                            "valueFrom": {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "spec.nodeName"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "name": "NAMESPACE",
+                                            "valueFrom": {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "name": "PROBE_PASSWORD_PATH",
+                                            "value": "/mnt/elastic-internal/probe-user/elastic-internal-probe"
+                                        },
+                                        {
+                                            "name": "PROBE_USERNAME",
+                                            "value": "elastic-internal-probe"
+                                        },
+                                        {
+                                            "name": "READINESS_PROBE_PROTOCOL",
+                                            "value": "https"
+                                        },
+                                        {
+                                            "name": "HEADLESS_SERVICE_NAME",
+                                            "value": "es-t5dt-es-masterdata"
+                                        },
+                                        {
+                                            "name": "NSS_SDB_USE_CACHE",
+                                            "value": "no"
+                                        }
+                                    ],
+                                    "image": "docker.elastic.co/elasticsearch/elasticsearch:7.7.0",
+                                    "imagePullPolicy": "IfNotPresent",
+                                    "lifecycle": {
+                                        "preStop": {
+                                            "exec": {
+                                                "command": [
+                                                    "bash",
+                                                    "-c",
+                                                    "/mnt/elastic-internal/scripts/pre-stop-hook-script.sh"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "name": "elasticsearch",
+                                    "ports": [
+                                        {
+                                            "containerPort": 9200,
+                                            "name": "https",
+                                            "protocol": "TCP"
+                                        },
+                                        {
+                                            "containerPort": 9300,
+                                            "name": "transport",
+                                            "protocol": "TCP"
+                                        }
+                                    ],
+                                    "readinessProbe": {
+                                        "exec": {
+                                            "command": [
+                                                "bash",
+                                                "-c",
+                                                "/mnt/elastic-internal/scripts/readiness-probe-script.sh"
+                                            ]
+                                        },
+                                        "failureThreshold": 3,
+                                        "initialDelaySeconds": 10,
+                                        "periodSeconds": 5,
+                                        "successThreshold": 1,
+                                        "timeoutSeconds": 5
+                                    },
+                                    "resources": {
+                                        "limits": {
+                                            "memory": "2Gi"
+                                        }
+                                    },
+                                    "terminationMessagePath": "/dev/termination-log",
+                                    "terminationMessagePolicy": "File",
+                                    "volumeMounts": [
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/downward-api",
+                                            "name": "downward-api",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/bin",
+                                            "name": "elastic-internal-elasticsearch-bin-local"
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/elasticsearch-config",
+                                            "name": "elastic-internal-elasticsearch-config",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/config",
+                                            "name": "elastic-internal-elasticsearch-config-local"
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/plugins",
+                                            "name": "elastic-internal-elasticsearch-plugins-local"
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/config/http-certs",
+                                            "name": "elastic-internal-http-certificates",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/probe-user",
+                                            "name": "elastic-internal-probe-user",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/config/transport-remote-certs/",
+                                            "name": "elastic-internal-remote-certificate-authorities",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/scripts",
+                                            "name": "elastic-internal-scripts",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/config/transport-certs",
+                                            "name": "elastic-internal-transport-certificates",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/unicast-hosts",
+                                            "name": "elastic-internal-unicast-hosts",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/xpack-file-realm",
+                                            "name": "elastic-internal-xpack-file-realm",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/data",
+                                            "name": "elasticsearch-data"
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/logs",
+                                            "name": "elasticsearch-logs"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "dnsPolicy": "ClusterFirst",
+                            "initContainers": [
+                                {
+                                    "command": [
+                                        "bash",
+                                        "-c",
+                                        "/mnt/elastic-internal/scripts/prepare-fs.sh"
+                                    ],
+                                    "env": [
+                                        {
+                                            "name": "POD_IP",
+                                            "valueFrom": {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "status.podIP"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "name": "POD_NAME",
+                                            "valueFrom": {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.name"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "name": "NODE_NAME",
+                                            "valueFrom": {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "spec.nodeName"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "name": "NAMESPACE",
+                                            "valueFrom": {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "name": "HEADLESS_SERVICE_NAME",
+                                            "value": "es-t5dt-es-masterdata"
+                                        }
+                                    ],
+                                    "image": "docker.elastic.co/elasticsearch/elasticsearch:7.7.0",
+                                    "imagePullPolicy": "IfNotPresent",
+                                    "name": "elastic-internal-init-filesystem",
+                                    "resources": {
+                                        "limits": {
+                                            "cpu": "100m",
+                                            "memory": "50Mi"
+                                        },
+                                        "requests": {
+                                            "cpu": "100m",
+                                            "memory": "50Mi"
+                                        }
+                                    },
+                                    "securityContext": {
+                                        "privileged": false
+                                    },
+                                    "terminationMessagePath": "/dev/termination-log",
+                                    "terminationMessagePolicy": "File",
+                                    "volumeMounts": [
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/downward-api",
+                                            "name": "downward-api",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/elasticsearch-bin-local",
+                                            "name": "elastic-internal-elasticsearch-bin-local"
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/elasticsearch-config",
+                                            "name": "elastic-internal-elasticsearch-config",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/elasticsearch-config-local",
+                                            "name": "elastic-internal-elasticsearch-config-local"
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/elasticsearch-plugins-local",
+                                            "name": "elastic-internal-elasticsearch-plugins-local"
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/config/http-certs",
+                                            "name": "elastic-internal-http-certificates",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/probe-user",
+                                            "name": "elastic-internal-probe-user",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/config/transport-remote-certs/",
+                                            "name": "elastic-internal-remote-certificate-authorities",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/scripts",
+                                            "name": "elastic-internal-scripts",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/transport-certificates",
+                                            "name": "elastic-internal-transport-certificates",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/unicast-hosts",
+                                            "name": "elastic-internal-unicast-hosts",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/xpack-file-realm",
+                                            "name": "elastic-internal-xpack-file-realm",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/data",
+                                            "name": "elasticsearch-data"
+                                        },
+                                        {
+                                            "mountPath": "/usr/share/elasticsearch/logs",
+                                            "name": "elasticsearch-logs"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "restartPolicy": "Always",
+                            "schedulerName": "default-scheduler",
+                            "securityContext": {
+                                "fsGroup": 1000,
+                                "runAsNonRoot": true,
+                                "runAsUser": 1000
+                            },
+                            "terminationGracePeriodSeconds": 180,
+                            "volumes": [
+                                {
+                                    "downwardAPI": {
+                                        "defaultMode": 420,
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.labels"
+                                                },
+                                                "path": "labels"
+                                            }
+                                        ]
+                                    },
+                                    "name": "downward-api"
+                                },
+                                {
+                                    "emptyDir": {},
+                                    "name": "elastic-internal-elasticsearch-bin-local"
+                                },
+                                {
+                                    "name": "elastic-internal-elasticsearch-config",
+                                    "secret": {
+                                        "defaultMode": 420,
+                                        "optional": false,
+                                        "secretName": "es-t5dt-es-masterdata-es-config"
+                                    }
+                                },
+                                {
+                                    "emptyDir": {},
+                                    "name": "elastic-internal-elasticsearch-config-local"
+                                },
+                                {
+                                    "emptyDir": {},
+                                    "name": "elastic-internal-elasticsearch-plugins-local"
+                                },
+                                {
+                                    "name": "elastic-internal-http-certificates",
+                                    "secret": {
+                                        "defaultMode": 420,
+                                        "optional": false,
+                                        "secretName": "es-t5dt-es-http-certs-internal"
+                                    }
+                                },
+                                {
+                                    "name": "elastic-internal-probe-user",
+                                    "secret": {
+                                        "defaultMode": 420,
+                                        "items": [
+                                            {
+                                                "key": "elastic-internal-probe",
+                                                "path": "elastic-internal-probe"
+                                            }
+                                        ],
+                                        "optional": false,
+                                        "secretName": "es-t5dt-es-internal-users"
+                                    }
+                                },
+                                {
+                                    "name": "elastic-internal-remote-certificate-authorities",
+                                    "secret": {
+                                        "defaultMode": 420,
+                                        "optional": false,
+                                        "secretName": "es-t5dt-es-remote-ca"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "defaultMode": 493,
+                                        "name": "es-t5dt-es-scripts",
+                                        "optional": false
+                                    },
+                                    "name": "elastic-internal-scripts"
+                                },
+                                {
+                                    "name": "elastic-internal-transport-certificates",
+                                    "secret": {
+                                        "defaultMode": 420,
+                                        "optional": false,
+                                        "secretName": "es-t5dt-es-masterdata-es-transport-certs"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "defaultMode": 420,
+                                        "name": "es-t5dt-es-unicast-hosts",
+                                        "optional": false
+                                    },
+                                    "name": "elastic-internal-unicast-hosts"
+                                },
+                                {
+                                    "name": "elastic-internal-xpack-file-realm",
+                                    "secret": {
+                                        "defaultMode": 420,
+                                        "optional": false,
+                                        "secretName": "es-t5dt-es-xpack-file-realm"
+                                    }
+                                },
+                                {
+                                    "name": "elasticsearch-data",
+                                    "persistentVolumeClaim": {
+                                        "claimName": "claim-name-placeholder"
+                                    }
+                                },
+                                {
+                                    "emptyDir": {},
+                                    "name": "elasticsearch-logs"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "kind": "ControllerRevision",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T16:10:37Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "controller.kubernetes.io/hash": "6cf5cf8594",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt",
+                    "elasticsearch.k8s.elastic.co/config-hash": "698554432",
+                    "elasticsearch.k8s.elastic.co/http-scheme": "https",
+                    "elasticsearch.k8s.elastic.co/node-data": "true",
+                    "elasticsearch.k8s.elastic.co/node-ingest": "true",
+                    "elasticsearch.k8s.elastic.co/node-master": "true",
+                    "elasticsearch.k8s.elastic.co/node-ml": "true",
+                    "elasticsearch.k8s.elastic.co/node-remote_cluster_client": "true",
+                    "elasticsearch.k8s.elastic.co/node-transform": "true",
+                    "elasticsearch.k8s.elastic.co/node-voting_only": "false",
+                    "elasticsearch.k8s.elastic.co/statefulset-name": "es-t5dt-es-masterdata",
+                    "elasticsearch.k8s.elastic.co/version": "7.7.0",
+                    "test-name": "es"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:data": {},
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:controller.kubernetes.io/hash": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {},
+                                    "f:elasticsearch.k8s.elastic.co/config-hash": {},
+                                    "f:elasticsearch.k8s.elastic.co/http-scheme": {},
+                                    "f:elasticsearch.k8s.elastic.co/node-data": {},
+                                    "f:elasticsearch.k8s.elastic.co/node-ingest": {},
+                                    "f:elasticsearch.k8s.elastic.co/node-master": {},
+                                    "f:elasticsearch.k8s.elastic.co/node-ml": {},
+                                    "f:elasticsearch.k8s.elastic.co/node-remote_cluster_client": {},
+                                    "f:elasticsearch.k8s.elastic.co/node-transform": {},
+                                    "f:elasticsearch.k8s.elastic.co/node-voting_only": {},
+                                    "f:elasticsearch.k8s.elastic.co/statefulset-name": {},
+                                    "f:elasticsearch.k8s.elastic.co/version": {},
+                                    "f:test-name": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"31a603e5-f022-4910-9f7b-ebf4f6024fad\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:revision": {}
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:37Z"
+                    }
+                ],
+                "name": "es-t5dt-es-masterdata-6cf5cf8594",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "StatefulSet",
+                        "name": "es-t5dt-es-masterdata",
+                        "uid": "31a603e5-f022-4910-9f7b-ebf4f6024fad"
+                    }
+                ],
+                "resourceVersion": "6515",
+                "uid": "2d43cf47-f4e1-4528-ac43-43fff7717f4a"
+            },
+            "revision": 1
+        },
+        {
+            "apiVersion": "apps/v1",
+            "data": {
+                "spec": {
+                    "template": {
+                        "$patch": "replace",
+                        "metadata": {
+                            "creationTimestamp": null,
+                            "labels": {
+                                "beat.k8s.elastic.co/config-checksum": "b7e37cdfb077ae0fb1138394598654ed548d3fd5def850f9220823c9",
+                                "beat.k8s.elastic.co/name": "fb-4zjj",
+                                "beat.k8s.elastic.co/version": "7.7.0",
+                                "common.k8s.elastic.co/type": "beat"
+                            }
+                        },
+                        "spec": {
+                            "automountServiceAccountToken": true,
+                            "containers": [
+                                {
+                                    "args": [
+                                        "-e",
+                                        "-c",
+                                        "/etc/beat.yml"
+                                    ],
+                                    "image": "docker.elastic.co/beats/filebeat:7.7.0",
+                                    "imagePullPolicy": "IfNotPresent",
+                                    "name": "filebeat",
+                                    "resources": {
+                                        "limits": {
+                                            "cpu": "100m",
+                                            "memory": "200Mi"
+                                        },
+                                        "requests": {
+                                            "cpu": "100m",
+                                            "memory": "200Mi"
+                                        }
+                                    },
+                                    "terminationMessagePath": "/dev/termination-log",
+                                    "terminationMessagePolicy": "File",
+                                    "volumeMounts": [
+                                        {
+                                            "mountPath": "/usr/share/filebeat/data",
+                                            "name": "beat-data"
+                                        },
+                                        {
+                                            "mountPath": "/etc/beat.yml",
+                                            "name": "config",
+                                            "readOnly": true,
+                                            "subPath": "beat.yml"
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/elasticsearch-certs",
+                                            "name": "elasticsearch-certs",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/mnt/elastic-internal/kibana-certs",
+                                            "name": "kibana-certs",
+                                            "readOnly": true
+                                        },
+                                        {
+                                            "mountPath": "/var/lib/docker/containers",
+                                            "name": "varlibdockercontainers"
+                                        },
+                                        {
+                                            "mountPath": "/var/log/containers",
+                                            "name": "varlogcontainers"
+                                        },
+                                        {
+                                            "mountPath": "/var/log/pods",
+                                            "name": "varlogpods"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "dnsPolicy": "ClusterFirstWithHostNet",
+                            "hostNetwork": true,
+                            "restartPolicy": "Always",
+                            "schedulerName": "default-scheduler",
+                            "securityContext": {
+                                "runAsUser": 0
+                            },
+                            "serviceAccount": "fb-4zjj-sa",
+                            "serviceAccountName": "fb-4zjj-sa",
+                            "terminationGracePeriodSeconds": 30,
+                            "volumes": [
+                                {
+                                    "hostPath": {
+                                        "path": "/var/lib/e2e-z2jna-mercury/fb-4zjj/filebeat-data",
+                                        "type": "DirectoryOrCreate"
+                                    },
+                                    "name": "beat-data"
+                                },
+                                {
+                                    "name": "config",
+                                    "secret": {
+                                        "defaultMode": 384,
+                                        "optional": false,
+                                        "secretName": "fb-4zjj-beat-filebeat-config"
+                                    }
+                                },
+                                {
+                                    "name": "elasticsearch-certs",
+                                    "secret": {
+                                        "defaultMode": 420,
+                                        "optional": false,
+                                        "secretName": "fb-4zjj-beat-es-ca"
+                                    }
+                                },
+                                {
+                                    "name": "kibana-certs",
+                                    "secret": {
+                                        "defaultMode": 420,
+                                        "optional": false,
+                                        "secretName": "fb-4zjj-beat-kibana-ca"
+                                    }
+                                },
+                                {
+                                    "hostPath": {
+                                        "path": "/var/lib/docker/containers",
+                                        "type": ""
+                                    },
+                                    "name": "varlibdockercontainers"
+                                },
+                                {
+                                    "hostPath": {
+                                        "path": "/var/log/containers",
+                                        "type": ""
+                                    },
+                                    "name": "varlogcontainers"
+                                },
+                                {
+                                    "hostPath": {
+                                        "path": "/var/log/pods",
+                                        "type": ""
+                                    },
+                                    "name": "varlogpods"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "kind": "ControllerRevision",
+            "metadata": {
+                "annotations": {
+                    "deprecated.daemonset.template.generation": "1"
+                },
+                "creationTimestamp": "2021-01-14T16:10:39Z",
+                "labels": {
+                    "beat.k8s.elastic.co/config-checksum": "b7e37cdfb077ae0fb1138394598654ed548d3fd5def850f9220823c9",
+                    "beat.k8s.elastic.co/name": "fb-4zjj",
+                    "beat.k8s.elastic.co/version": "7.7.0",
+                    "common.k8s.elastic.co/type": "beat",
+                    "controller-revision-hash": "5f8f48db89"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:data": {},
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:deprecated.daemonset.template.generation": {}
+                                },
+                                "f:labels": {
+                                    ".": {},
+                                    "f:beat.k8s.elastic.co/config-checksum": {},
+                                    "f:beat.k8s.elastic.co/name": {},
+                                    "f:beat.k8s.elastic.co/version": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:controller-revision-hash": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"a7b1f306-763b-404d-b65c-b7fe560c306f\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:revision": {}
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:39Z"
+                    }
+                ],
+                "name": "fb-4zjj-beat-filebeat-5f8f48db89",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "DaemonSet",
+                        "name": "fb-4zjj-beat-filebeat",
+                        "uid": "a7b1f306-763b-404d-b65c-b7fe560c306f"
+                    }
+                ],
+                "resourceVersion": "6620",
+                "uid": "950c1305-71d7-4b19-b618-c5833921f328"
+            },
+            "revision": 1
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

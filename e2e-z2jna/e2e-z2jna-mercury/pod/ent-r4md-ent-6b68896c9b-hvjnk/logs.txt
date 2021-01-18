@@ -1,0 +1,66 @@
+==== START logs for pod e2e-z2jna-mercury/pod/ent-r4md-ent-6b68896c9b-hvjnk ====
+Found java executable in PATH
+Java version: 1.8.0_252
+
+Enterprise Search is starting...
+
+scripting container class loader urls: [file:/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/jruby-stdlib-9.2.9.0.jar, file:/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/jetty-util.jar, file:/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/jruby-rack-1.1.21.jar, file:/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/jetty-servlets.jar, file:/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/jruby-core-9.2.9.0-complete.jar, file:/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/jruby-rack-worker_0.14.1.jar]
+setting GEM_HOME to /usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems
+... and BUNDLE_GEMFILE to /usr/share/enterprise-search/tmp/jruby3418953537171485042extract/Gemfile
+loading resource: /usr/share/enterprise-search/tmp/jruby3418953537171485042extract/./META-INF/rails.rb
+invoking /usr/share/enterprise-search/tmp/jruby3418953537171485042extract/./META-INF/rails.rb with: [runner, SharedTogo.start_app_server!]
+[2021-01-14T16:43:47.198+00:00][14][2002][app-server][INFO]: Successfully connected to Elasticsearch
+[2021-01-14T16:43:47.291+00:00][14][2002][app-server][INFO]: Enterprise Search version=7.7.0, JRuby version=9.2.9.0, Ruby version=2.5.7, Rails version=4.2.11.1
+ERROR: org.jruby.exceptions.StandardError: (TimeoutError) GET https://es-t5dt-es-http.e2e-z2jna-mercury.svc:9200/_cluster/health/.ent-search-db-lock-20200304?wait_for_status=yellow returned an unexpected error; status_code=408, reason=, body={"cluster_name":"es-t5dt","status":"red","timed_out":true,"number_of_nodes":3,"number_of_data_nodes":3,"active_primary_shards":0,"active_shards":0,"relocating_shards":0,"initializing_shards":0,"unassigned_shards":2,"delayed_unassigned_shards":0,"number_of_pending_tasks":0,"number_of_in_flight_fetch":0,"task_max_waiting_in_queue_millis":0,"active_shards_percent_as_number":0.0}
+org.jruby.exceptions.StandardError: (TimeoutError) GET https://es-t5dt-es-http.e2e-z2jna-mercury.svc:9200/_cluster/health/.ent-search-db-lock-20200304?wait_for_status=yellow returned an unexpected error; status_code=408, reason=, body={"cluster_name":"es-t5dt","status":"red","timed_out":true,"number_of_nodes":3,"number_of_data_nodes":3,"active_primary_shards":0,"active_shards":0,"relocating_shards":0,"initializing_shards":0,"unassigned_shards":2,"delayed_unassigned_shards":0,"number_of_pending_tasks":0,"number_of_in_flight_fetch":0,"task_max_waiting_in_queue_millis":0,"active_shards_percent_as_number":0.0}
+	at RUBY.raise_from_response(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/swiftype/es/es_exception.class:19)
+	at RUBY.raise_if_error!(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/swiftype/es/response.class:93)
+	at org.jruby.RubyKernel.tap(org/jruby/RubyKernel.java:1904)
+	at RUBY.request!(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/swiftype/es/client.class:45)
+	at RUBY.request!(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/swiftype/es/node.class:125)
+	at RUBY.request!(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/swiftype/es/index.class:40)
+	at RUBY.health(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/lib/swiftype/es/index.class:153)
+	at RUBY.create_db_lock_index(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/shared_togo/lib/shared_togo.class:905)
+	at RUBY.install!(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/shared_togo/lib/shared_togo.class:362)
+	at RUBY.Application(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/config/application.class:88)
+	at RUBY.execute_hook(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/activesupport-4.2.11.1/lib/active_support/lazy_load_hooks.rb:36)
+	at RUBY.run_load_hooks(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/activesupport-4.2.11.1/lib/active_support/lazy_load_hooks.rb:45)
+	at org.jruby.RubyArray.each(org/jruby/RubyArray.java:1814)
+	at RUBY.run_load_hooks(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/activesupport-4.2.11.1/lib/active_support/lazy_load_hooks.rb:44)
+	at RUBY.Finisher(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/application/finisher.rb:62)
+	at org.jruby.RubyBasicObject.instance_exec(org/jruby/RubyBasicObject.java:2680)
+	at usr.share.enterprise_minus_search.tmp.jruby3418953537171485042extract.gems.gems.railties_minus_4_dot_2_dot_11_dot_1.lib.rails.initializable.run(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/initializable.rb:30)
+	at usr.share.enterprise_minus_search.tmp.jruby3418953537171485042extract.gems.gems.railties_minus_4_dot_2_dot_11_dot_1.lib.rails.initializable.run_initializers(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/initializable.rb:55)
+	at uri_3a_classloader_3a_.META_minus_INF.jruby_dot_home.lib.ruby.stdlib.tsort.tsort_each(uri:classloader:/META-INF/jruby.home/lib/ruby/stdlib/tsort.rb:228)
+	at uri_3a_classloader_3a_.META_minus_INF.jruby_dot_home.lib.ruby.stdlib.tsort.each_strongly_connected_component(uri:classloader:/META-INF/jruby.home/lib/ruby/stdlib/tsort.rb:350)
+	at uri_3a_classloader_3a_.META_minus_INF.jruby_dot_home.lib.ruby.stdlib.tsort.each_strongly_connected_component_from(uri:classloader:/META-INF/jruby.home/lib/ruby/stdlib/tsort.rb:431)
+	at uri_3a_classloader_3a_.META_minus_INF.jruby_dot_home.lib.ruby.stdlib.tsort.each_strongly_connected_component(uri:classloader:/META-INF/jruby.home/lib/ruby/stdlib/tsort.rb:349)
+	at org.jruby.RubyArray.each(org/jruby/RubyArray.java:1814)
+	at org.jruby.RubyMethod.call(org/jruby/RubyMethod.java:132)
+	at RUBY.each_strongly_connected_component(uri:classloader:/META-INF/jruby.home/lib/ruby/stdlib/tsort.rb:347)
+	at RUBY.tsort_each(uri:classloader:/META-INF/jruby.home/lib/ruby/stdlib/tsort.rb:226)
+	at RUBY.tsort_each(uri:classloader:/META-INF/jruby.home/lib/ruby/stdlib/tsort.rb:205)
+	at RUBY.run_initializers(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/initializable.rb:54)
+	at RUBY.initialize!(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/application.rb:352)
+	at org.jruby.RubyKernel.public_send(org/jruby/RubyKernel.java:1974)
+	at RUBY.method_missing(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/railtie.rb:194)
+	at RUBY.<main>(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/config/environment.class:7)
+	at org.jruby.RubyKernel.load(org/jruby/RubyKernel.java:1020)
+	at RUBY.load(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/activesupport-4.2.11.1/lib/active_support/dependencies.rb:268)
+	at usr.share.enterprise_minus_search.tmp.jruby3418953537171485042extract.gems.gems.activesupport_minus_4_dot_2_dot_11_dot_1.lib.active_support.dependencies.load_dependency(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/activesupport-4.2.11.1/lib/active_support/dependencies.rb:240)
+	at RUBY.load(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/activesupport-4.2.11.1/lib/active_support/dependencies.rb:268)
+	at RUBY.<main>(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/config/environment.rb:1)
+	at org.jruby.RubyKernel.require(org/jruby/RubyKernel.java:978)
+	at usr.share.enterprise_minus_search.tmp.jruby3418953537171485042extract.gems.gems.activesupport_minus_4_dot_2_dot_11_dot_1.lib.active_support.dependencies.require(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/activesupport-4.2.11.1/lib/active_support/dependencies.rb:274)
+	at usr.share.enterprise_minus_search.tmp.jruby3418953537171485042extract.gems.gems.activesupport_minus_4_dot_2_dot_11_dot_1.lib.active_support.dependencies.load_dependency(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/activesupport-4.2.11.1/lib/active_support/dependencies.rb:240)
+	at usr.share.enterprise_minus_search.tmp.jruby3418953537171485042extract.gems.gems.activesupport_minus_4_dot_2_dot_11_dot_1.lib.active_support.dependencies.require(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/activesupport-4.2.11.1/lib/active_support/dependencies.rb:274)
+	at RUBY.require_environment!(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/application.rb:328)
+	at RUBY.<main>(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/commands/runner.rb:52)
+	at org.jruby.RubyKernel.require(org/jruby/RubyKernel.java:978)
+	at RUBY.require_command!(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/commands/commands_tasks.rb:123)
+	at RUBY.runner(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/commands/commands_tasks.rb:90)
+	at RUBY.run_command!(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/commands/commands_tasks.rb:39)
+	at RUBY.<main>(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/gems/gems/railties-4.2.11.1/lib/rails/commands.rb:17)
+	at org.jruby.RubyKernel.require(org/jruby/RubyKernel.java:978)
+	at usr.share.enterprise_minus_search.tmp.jruby3418953537171485042extract.$_dot_.META_minus_INF.rails.<main>(/usr/share/enterprise-search/tmp/jruby3418953537171485042extract/./META-INF/rails.rb:7)
+==== END logs for pod e2e-z2jna-mercury/pod/ent-r4md-ent-6b68896c9b-hvjnk ====

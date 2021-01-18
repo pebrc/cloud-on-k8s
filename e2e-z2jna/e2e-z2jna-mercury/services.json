@@ -1,0 +1,602 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T16:10:33Z",
+                "labels": {
+                    "apm.k8s.elastic.co/name": "apm-7djz",
+                    "common.k8s.elastic.co/type": "apm-server"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:apm.k8s.elastic.co/name": {},
+                                    "f:common.k8s.elastic.co/type": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"8f922b64-a946-4095-ad47-50ac34f447a0\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:ports": {
+                                    ".": {},
+                                    "k:{\"port\":8200,\"protocol\":\"TCP\"}": {
+                                        ".": {},
+                                        "f:name": {},
+                                        "f:port": {},
+                                        "f:protocol": {},
+                                        "f:targetPort": {}
+                                    }
+                                },
+                                "f:selector": {
+                                    ".": {},
+                                    "f:apm.k8s.elastic.co/name": {},
+                                    "f:common.k8s.elastic.co/type": {}
+                                },
+                                "f:sessionAffinity": {},
+                                "f:type": {}
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:33Z"
+                    }
+                ],
+                "name": "apm-7djz-apm-http",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apm.k8s.elastic.co/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ApmServer",
+                        "name": "apm-7djz",
+                        "uid": "8f922b64-a946-4095-ad47-50ac34f447a0"
+                    }
+                ],
+                "resourceVersion": "6437",
+                "uid": "8884891a-f6d4-4eef-bc5c-b0594ace829d"
+            },
+            "spec": {
+                "clusterIP": "10.96.148.126",
+                "clusterIPs": [
+                    "10.96.148.126"
+                ],
+                "ports": [
+                    {
+                        "name": "https",
+                        "port": 8200,
+                        "protocol": "TCP",
+                        "targetPort": 8200
+                    }
+                ],
+                "selector": {
+                    "apm.k8s.elastic.co/name": "apm-7djz",
+                    "common.k8s.elastic.co/type": "apm-server"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T16:10:32Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "enterprise-search",
+                    "enterprisesearch.k8s.elastic.co/name": "ent-r4md"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:enterprisesearch.k8s.elastic.co/name": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"8fb8aaa3-4905-4e24-bc6c-41c1c121d9b1\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:ports": {
+                                    ".": {},
+                                    "k:{\"port\":3002,\"protocol\":\"TCP\"}": {
+                                        ".": {},
+                                        "f:name": {},
+                                        "f:port": {},
+                                        "f:protocol": {},
+                                        "f:targetPort": {}
+                                    }
+                                },
+                                "f:selector": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:enterprisesearch.k8s.elastic.co/name": {}
+                                },
+                                "f:sessionAffinity": {},
+                                "f:type": {}
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:32Z"
+                    }
+                ],
+                "name": "ent-r4md-ent-http",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "enterprisesearch.k8s.elastic.co/v1beta1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "EnterpriseSearch",
+                        "name": "ent-r4md",
+                        "uid": "8fb8aaa3-4905-4e24-bc6c-41c1c121d9b1"
+                    }
+                ],
+                "resourceVersion": "6417",
+                "uid": "163a8abe-f669-4ff2-8b2e-589e57fce452"
+            },
+            "spec": {
+                "clusterIP": "10.96.171.194",
+                "clusterIPs": [
+                    "10.96.171.194"
+                ],
+                "ports": [
+                    {
+                        "name": "https",
+                        "port": 3002,
+                        "protocol": "TCP",
+                        "targetPort": 3002
+                    }
+                ],
+                "selector": {
+                    "common.k8s.elastic.co/type": "enterprise-search",
+                    "enterprisesearch.k8s.elastic.co/name": "ent-r4md"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T16:10:31Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"1565e914-547c-4885-adc7-d93d763b354d\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:ports": {
+                                    ".": {},
+                                    "k:{\"port\":9200,\"protocol\":\"TCP\"}": {
+                                        ".": {},
+                                        "f:name": {},
+                                        "f:port": {},
+                                        "f:protocol": {},
+                                        "f:targetPort": {}
+                                    }
+                                },
+                                "f:selector": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {}
+                                },
+                                "f:sessionAffinity": {},
+                                "f:type": {}
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:31Z"
+                    }
+                ],
+                "name": "es-t5dt-es-http",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "elasticsearch.k8s.elastic.co/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Elasticsearch",
+                        "name": "es-t5dt",
+                        "uid": "1565e914-547c-4885-adc7-d93d763b354d"
+                    }
+                ],
+                "resourceVersion": "6371",
+                "uid": "8a7f2ee3-3c7d-4c33-8ffc-56e94f394422"
+            },
+            "spec": {
+                "clusterIP": "10.96.25.179",
+                "clusterIPs": [
+                    "10.96.25.179"
+                ],
+                "ports": [
+                    {
+                        "name": "https",
+                        "port": 9200,
+                        "protocol": "TCP",
+                        "targetPort": 9200
+                    }
+                ],
+                "selector": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T16:10:37Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt",
+                    "elasticsearch.k8s.elastic.co/statefulset-name": "es-t5dt-es-masterdata"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {},
+                                    "f:elasticsearch.k8s.elastic.co/statefulset-name": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"1565e914-547c-4885-adc7-d93d763b354d\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:clusterIP": {},
+                                "f:ports": {
+                                    ".": {},
+                                    "k:{\"port\":9200,\"protocol\":\"TCP\"}": {
+                                        ".": {},
+                                        "f:name": {},
+                                        "f:port": {},
+                                        "f:protocol": {},
+                                        "f:targetPort": {}
+                                    }
+                                },
+                                "f:publishNotReadyAddresses": {},
+                                "f:selector": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {},
+                                    "f:elasticsearch.k8s.elastic.co/statefulset-name": {}
+                                },
+                                "f:sessionAffinity": {},
+                                "f:type": {}
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:37Z"
+                    }
+                ],
+                "name": "es-t5dt-es-masterdata",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "elasticsearch.k8s.elastic.co/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Elasticsearch",
+                        "name": "es-t5dt",
+                        "uid": "1565e914-547c-4885-adc7-d93d763b354d"
+                    }
+                ],
+                "resourceVersion": "6509",
+                "uid": "ffec8e36-108c-4b02-a001-e2877c1e3aee"
+            },
+            "spec": {
+                "clusterIP": "None",
+                "clusterIPs": [
+                    "None"
+                ],
+                "ports": [
+                    {
+                        "name": "https",
+                        "port": 9200,
+                        "protocol": "TCP",
+                        "targetPort": 9200
+                    }
+                ],
+                "publishNotReadyAddresses": true,
+                "selector": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt",
+                    "elasticsearch.k8s.elastic.co/statefulset-name": "es-t5dt-es-masterdata"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T16:10:31Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"1565e914-547c-4885-adc7-d93d763b354d\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:clusterIP": {},
+                                "f:ports": {
+                                    ".": {},
+                                    "k:{\"port\":9300,\"protocol\":\"TCP\"}": {
+                                        ".": {},
+                                        "f:name": {},
+                                        "f:port": {},
+                                        "f:protocol": {},
+                                        "f:targetPort": {}
+                                    }
+                                },
+                                "f:publishNotReadyAddresses": {},
+                                "f:selector": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {}
+                                },
+                                "f:sessionAffinity": {},
+                                "f:type": {}
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:31Z"
+                    }
+                ],
+                "name": "es-t5dt-es-transport",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "elasticsearch.k8s.elastic.co/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Elasticsearch",
+                        "name": "es-t5dt",
+                        "uid": "1565e914-547c-4885-adc7-d93d763b354d"
+                    }
+                ],
+                "resourceVersion": "6359",
+                "uid": "6d3fad3b-4e83-4d7f-b1af-6ae2076753b1"
+            },
+            "spec": {
+                "clusterIP": "None",
+                "clusterIPs": [
+                    "None"
+                ],
+                "ports": [
+                    {
+                        "name": "tls-transport",
+                        "port": 9300,
+                        "protocol": "TCP",
+                        "targetPort": 9300
+                    }
+                ],
+                "publishNotReadyAddresses": true,
+                "selector": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T16:10:31Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "kibana",
+                    "kibana.k8s.elastic.co/name": "kb-vkr2"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:kibana.k8s.elastic.co/name": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"1af96d1b-7aca-49a2-852d-c6037cfba34c\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:ports": {
+                                    ".": {},
+                                    "k:{\"port\":5601,\"protocol\":\"TCP\"}": {
+                                        ".": {},
+                                        "f:name": {},
+                                        "f:port": {},
+                                        "f:protocol": {},
+                                        "f:targetPort": {}
+                                    }
+                                },
+                                "f:selector": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:kibana.k8s.elastic.co/name": {}
+                                },
+                                "f:sessionAffinity": {},
+                                "f:type": {}
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:31Z"
+                    }
+                ],
+                "name": "kb-vkr2-kb-http",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "kibana.k8s.elastic.co/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Kibana",
+                        "name": "kb-vkr2",
+                        "uid": "1af96d1b-7aca-49a2-852d-c6037cfba34c"
+                    }
+                ],
+                "resourceVersion": "6393",
+                "uid": "6c4f5270-7e93-4d2c-943a-926c959fe5ab"
+            },
+            "spec": {
+                "clusterIP": "10.96.42.211",
+                "clusterIPs": [
+                    "10.96.42.211"
+                ],
+                "ports": [
+                    {
+                        "name": "https",
+                        "port": 5601,
+                        "protocol": "TCP",
+                        "targetPort": 5601
+                    }
+                ],
+                "selector": {
+                    "common.k8s.elastic.co/type": "kibana",
+                    "kibana.k8s.elastic.co/name": "kb-vkr2"
+                },
+                "sessionAffinity": "None",
+                "type": "ClusterIP"
+            },
+            "status": {
+                "loadBalancer": {}
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

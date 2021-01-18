@@ -1,0 +1,128 @@
+Name:         elastic-agent-restricted
+Labels:       <none>
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"name":"elastic-agent-restricted"},"rules":...
+PolicyRule:
+  Resources                   Non-Resource URLs  Resource Names              Verbs
+  ---------                   -----------------  --------------              -----
+  podsecuritypolicies.policy  []                 [elastic.agent.restricted]  [use]
+
+Name:         elastic-auditbeat-restricted
+Labels:       <none>
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"name":"elastic-auditbeat-restricted"},"rul...
+PolicyRule:
+  Resources                   Non-Resource URLs  Resource Names                  Verbs
+  ---------                   -----------------  --------------                  -----
+  podsecuritypolicies.policy  []                 [elastic.auditbeat.restricted]  [use]
+
+Name:         elastic-beat-autodiscover
+Labels:       <none>
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"name":"elastic-beat-autodiscover"},"rules"...
+PolicyRule:
+  Resources   Non-Resource URLs  Resource Names  Verbs
+  ---------   -----------------  --------------  -----
+  namespaces  []                 []              [get watch list]
+  nodes       []                 []              [get watch list]
+  pods        []                 []              [get watch list]
+
+Name:         elastic-beat-metricbeat
+Labels:       <none>
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"name":"elastic-beat-metricbeat"},"rules":[...
+PolicyRule:
+  Resources               Non-Resource URLs  Resource Names  Verbs
+  ---------               -----------------  --------------  -----
+  events                  []                 []              [get list watch]
+  namespaces              []                 []              [get list watch]
+  nodes                   []                 []              [get list watch]
+  pods                    []                 []              [get list watch]
+  deployments.apps        []                 []              [get list watch]
+  replicasets.apps        []                 []              [get list watch]
+  statefulsets.apps       []                 []              [get list watch]
+  replicasets.extensions  []                 []              [get list watch]
+                          [/metrics]         []              [get]
+  nodes/stats             []                 []              [get]
+
+Name:         elastic-beat-restricted
+Labels:       <none>
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"name":"elastic-beat-restricted"},"rules":[...
+PolicyRule:
+  Resources                   Non-Resource URLs  Resource Names             Verbs
+  ---------                   -----------------  --------------             -----
+  podsecuritypolicies.policy  []                 [elastic.beat.restricted]  [use]
+
+Name:         elastic-journalbeat-restricted
+Labels:       <none>
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"name":"elastic-journalbeat-restricted"},"r...
+PolicyRule:
+  Resources                   Non-Resource URLs  Resource Names                    Verbs
+  ---------                   -----------------  --------------                    -----
+  podsecuritypolicies.policy  []                 [elastic.journalbeat.restricted]  [use]
+
+Name:         elastic-operator
+Labels:       test-run=e2e-z2jna
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"labels":{"test-run":"e2e-z2jna"},"name":"e...
+PolicyRule:
+  Resources                                                      Non-Resource URLs  Resource Names  Verbs
+  ---------                                                      -----------------  --------------  -----
+  configmaps                                                     []                 []              [get list watch create update patch delete]
+  endpoints                                                      []                 []              [get list watch create update patch delete]
+  events                                                         []                 []              [get list watch create update patch delete]
+  persistentvolumeclaims                                         []                 []              [get list watch create update patch delete]
+  pods                                                           []                 []              [get list watch create update patch delete]
+  secrets                                                        []                 []              [get list watch create update patch delete]
+  serviceaccounts                                                []                 []              [get list watch create update patch delete]
+  services                                                       []                 []              [get list watch create update patch delete]
+  mutatingwebhookconfigurations.admissionregistration.k8s.io     []                 []              [get list watch create update patch delete]
+  validatingwebhookconfigurations.admissionregistration.k8s.io   []                 []              [get list watch create update patch delete]
+  agents.agent.k8s.elastic.co/finalizers                         []                 []              [get list watch create update patch delete]
+  agents.agent.k8s.elastic.co/status                             []                 []              [get list watch create update patch delete]
+  agents.agent.k8s.elastic.co                                    []                 []              [get list watch create update patch delete]
+  apmservers.apm.k8s.elastic.co/finalizers                       []                 []              [get list watch create update patch delete]
+  apmservers.apm.k8s.elastic.co/status                           []                 []              [get list watch create update patch delete]
+  apmservers.apm.k8s.elastic.co                                  []                 []              [get list watch create update patch delete]
+  daemonsets.apps                                                []                 []              [get list watch create update patch delete]
+  deployments.apps                                               []                 []              [get list watch create update patch delete]
+  statefulsets.apps                                              []                 []              [get list watch create update patch delete]
+  beats.beat.k8s.elastic.co/finalizers                           []                 []              [get list watch create update patch delete]
+  beats.beat.k8s.elastic.co/status                               []                 []              [get list watch create update patch delete]
+  beats.beat.k8s.elastic.co                                      []                 []              [get list watch create update patch delete]
+  elasticsearches.elasticsearch.k8s.elastic.co/finalizers        []                 []              [get list watch create update patch delete]
+  elasticsearches.elasticsearch.k8s.elastic.co/status            []                 []              [get list watch create update patch delete]
+  elasticsearches.elasticsearch.k8s.elastic.co                   []                 []              [get list watch create update patch delete]
+  enterpriselicenses.elasticsearch.k8s.elastic.co/status         []                 []              [get list watch create update patch delete]
+  enterpriselicenses.elasticsearch.k8s.elastic.co                []                 []              [get list watch create update patch delete]
+  enterprisesearches.enterprisesearch.k8s.elastic.co/finalizers  []                 []              [get list watch create update patch delete]
+  enterprisesearches.enterprisesearch.k8s.elastic.co/status      []                 []              [get list watch create update patch delete]
+  enterprisesearches.enterprisesearch.k8s.elastic.co             []                 []              [get list watch create update patch delete]
+  kibanas.kibana.k8s.elastic.co/finalizers                       []                 []              [get list watch create update patch delete]
+  kibanas.kibana.k8s.elastic.co/status                           []                 []              [get list watch create update patch delete]
+  kibanas.kibana.k8s.elastic.co                                  []                 []              [get list watch create update patch delete]
+  poddisruptionbudgets.policy                                    []                 []              [get list watch create update patch delete]
+  clusterrolebindings.rbac.authorization.k8s.io                  []                 []              [get list watch create update patch delete]
+  storageclasses.storage.k8s.io                                  []                 []              [get list watch]
+
+Name:         elastic-packetbeat-restricted
+Labels:       <none>
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"name":"elastic-packetbeat-restricted"},"ru...
+PolicyRule:
+  Resources                   Non-Resource URLs  Resource Names                   Verbs
+  ---------                   -----------------  --------------                   -----
+  podsecuritypolicies.policy  []                 [elastic.packetbeat.restricted]  [use]
+
+Name:         elastic-restricted
+Labels:       test-run=e2e-z2jna
+Annotations:  kubectl.kubernetes.io/last-applied-configuration:
+                {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"ClusterRole","metadata":{"annotations":{},"labels":{"test-run":"e2e-z2jna"},"name":"e...
+PolicyRule:
+  Resources                       Non-Resource URLs  Resource Names        Verbs
+  ---------                       -----------------  --------------        -----
+  storageclasses.storage.k8s.io   []                 []                    [get list delete create]
+  podsecuritypolicies.extensions  []                 [elastic.restricted]  [use]
+

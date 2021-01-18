@@ -1,0 +1,156 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "enterprisesearch.k8s.elastic.co/v1beta1",
+            "kind": "EnterpriseSearch",
+            "metadata": {
+                "annotations": {
+                    "association.k8s.elastic.co/es-conf": "{\"authSecretName\":\"ent-r4md-ent-user\",\"authSecretKey\":\"e2e-z2jna-mercury-ent-r4md-ent-user\",\"caCertProvided\":true,\"caSecretName\":\"ent-r4md-ent-es-ca\",\"url\":\"https://es-t5dt-es-http.e2e-z2jna-mercury.svc:9200\",\"version\":\"7.7.0\"}",
+                    "common.k8s.elastic.co/controller-version": "1.4.0"
+                },
+                "creationTimestamp": "2021-01-14T16:10:31Z",
+                "generation": 1,
+                "labels": {
+                    "test-name": "ent"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "enterprisesearch.k8s.elastic.co/v1beta1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:test-name": {}
+                                }
+                            },
+                            "f:spec": {
+                                ".": {},
+                                "f:count": {},
+                                "f:elasticsearchRef": {
+                                    ".": {},
+                                    "f:name": {},
+                                    "f:namespace": {}
+                                },
+                                "f:http": {
+                                    ".": {},
+                                    "f:service": {
+                                        ".": {},
+                                        "f:metadata": {
+                                            ".": {},
+                                            "f:creationTimestamp": {}
+                                        },
+                                        "f:spec": {}
+                                    },
+                                    "f:tls": {
+                                        ".": {},
+                                        "f:certificate": {}
+                                    }
+                                },
+                                "f:podTemplate": {
+                                    ".": {},
+                                    "f:metadata": {
+                                        ".": {},
+                                        "f:creationTimestamp": {},
+                                        "f:labels": {
+                                            ".": {},
+                                            "f:test-name": {}
+                                        }
+                                    },
+                                    "f:spec": {
+                                        ".": {},
+                                        "f:containers": {},
+                                        "f:securityContext": {
+                                            ".": {},
+                                            "f:fsGroup": {},
+                                            "f:runAsNonRoot": {},
+                                            "f:runAsUser": {}
+                                        }
+                                    }
+                                },
+                                "f:version": {}
+                            }
+                        },
+                        "manager": "e2e.test",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:31Z"
+                    },
+                    {
+                        "apiVersion": "enterprisesearch.k8s.elastic.co/v1beta1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:association.k8s.elastic.co/es-conf": {},
+                                    "f:common.k8s.elastic.co/controller-version": {}
+                                }
+                            },
+                            "f:status": {
+                                ".": {},
+                                "f:associationStatus": {},
+                                "f:health": {},
+                                "f:service": {},
+                                "f:version": {}
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:39Z"
+                    }
+                ],
+                "name": "ent-r4md",
+                "namespace": "e2e-z2jna-mercury",
+                "resourceVersion": "6606",
+                "uid": "8fb8aaa3-4905-4e24-bc6c-41c1c121d9b1"
+            },
+            "spec": {
+                "count": 1,
+                "elasticsearchRef": {
+                    "name": "es-t5dt",
+                    "namespace": "e2e-z2jna-mercury"
+                },
+                "http": {
+                    "service": {
+                        "metadata": {
+                            "creationTimestamp": null
+                        },
+                        "spec": {}
+                    },
+                    "tls": {
+                        "certificate": {}
+                    }
+                },
+                "podTemplate": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "test-name": "ent"
+                        }
+                    },
+                    "spec": {
+                        "containers": null,
+                        "securityContext": {
+                            "fsGroup": 1000,
+                            "runAsNonRoot": true,
+                            "runAsUser": 1000
+                        }
+                    }
+                },
+                "version": "7.7.0"
+            },
+            "status": {
+                "associationStatus": "Established",
+                "health": "red",
+                "service": "ent-r4md-ent-http",
+                "version": "7.7.0"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

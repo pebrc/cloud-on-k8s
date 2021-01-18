@@ -1,0 +1,39 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "data": {
+                "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIC5zCCAc+gAwIBAgIBADANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwprdWJl\ncm5ldGVzMB4XDTIxMDExNDE1NDUyMloXDTMxMDExMjE1NDUyMlowFTETMBEGA1UE\nAxMKa3ViZXJuZXRlczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAK97\n7kYVgBQ+RoZ/3PhWuXlqUmd5BsUMjkxyUPiqRBYhTOKkjXRMFiLUycOOgukf6thf\n+khFDKDgU6/E1yn52b1GdekpQXmtiG/SkrB5vwMjXacPKSAF77LAitPT2i3YxbRx\nMyDfrTgspm/SrElD2/njNwwrc5ixCliVxYQaUp0G3XYDVmaACtUAXtpxpTHHU2+h\nE/cH0iPjl3k/Z7HO11GTzo1zJ2ogoVXnSj0VcOCS54/neGYXHmhkDOJibo2OJheF\n2LsSt+f6HYgQ/wgC3Ai0o4m8AH91JkqRMTCkTh+ij+0EJduno/mDGJoV3Fgz7M7f\nOvnH1VT3CMTWQrlzcAMCAwEAAaNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB\n/wQFMAMBAf8wHQYDVR0OBBYEFIrwXdrkN2GOknonZviBBwLnkBKsMA0GCSqGSIb3\nDQEBCwUAA4IBAQB+eTQElpgpIkCfJ/rWNnXQ9Lx37bllmWUbsazIaLRwd5qodYP7\nmV6kEm4COYobhybGkrHuDRjuX22qVEa8O5giZwW/m+i8QZRF8gnGH+/pgIF4sZso\n0FQvuijoJqCxsQvFUTYZpZrll6rUizNzmogVfmvgku15zdj9p5t3vt3WZ1zT65f2\nB0C6pMvTz3hQLXJR424mOcK2uoEpB/C9SA1IokiNFBqL3+PrW6f8UgXmAVGfyqjl\nvKWGQeEMBC0SlsZ5xDeBQa/GV4ivXSxqhQE2+7+/71JoFjHz4p4lsMlZ7uDi3a0J\n686GZXGjZJT8tfQ9/P7L+6MDlqMO+m0SHsrr\n-----END CERTIFICATE-----\n"
+            },
+            "kind": "ConfigMap",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:33Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:data": {
+                                ".": {},
+                                "f:ca.crt": {}
+                            }
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:33Z"
+                    }
+                ],
+                "name": "kube-root-ca.crt",
+                "namespace": "e2e-z2jna-venus",
+                "resourceVersion": "1353",
+                "uid": "afb94149-7f29-43c6-bc66-6946fd7a5c4f"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

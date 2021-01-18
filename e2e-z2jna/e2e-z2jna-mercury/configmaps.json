@@ -1,0 +1,167 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "data": {
+                "pre-stop-hook-script.sh": "#!/usr/bin/env bash\n\nset -eux\n\n# This script will wait for up to $PRE_STOP_MAX_WAIT_SECONDS for $POD_IP to disappear from DNS record,\n# then it will wait additional $PRE_STOP_ADDITIONAL_WAIT_SECONDS and exit. This slows down the process shutdown\n# and allows to make changes to the pool gracefully, without blackholing traffic when DNS\n# contains IP that is already inactive. Assumes $HEADLESS_SERVICE_NAME and $POD_IP env variables are defined.\n\n# Max time to wait for pods IP to disappear from DNS.\n# As this runs in parallel to grace period after which process is SIGKILLed,\n# it should be set to allow enough time for the process to gracefully terminate.\nPRE_STOP_MAX_WAIT_SECONDS=${PRE_STOP_MAX_WAIT_SECONDS:=20}\n\n# Additional wait before shutting down Elasticsearch.\n# It allows kube-proxy to refresh its rules and remove the terminating Pod IP.\n# Kube-proxy refresh period defaults to every 30 seconds, but the operation itself can take much longer if\n# using iptables with a lot of services, in which case the default 30sec might not be enough.\n# Also gives some additional bonus time to in-flight requests to terminate, and new requests to still\n# target the Pod IP before Elasticsearch stops.\nPRE_STOP_ADDITIONAL_WAIT_SECONDS=${PRE_STOP_ADDITIONAL_WAIT_SECONDS:=30}\n\nSTART_TIME=$(date +%s)\nwhile true; do\n   ELAPSED_TIME=$(($(date +%s) - $START_TIME))\n\n   if [ $ELAPSED_TIME -gt $PRE_STOP_MAX_WAIT_SECONDS ]; then\n      exit 1\n   fi\n\n   if ! getent hosts $HEADLESS_SERVICE_NAME | grep $POD_IP; then\n      sleep $PRE_STOP_ADDITIONAL_WAIT_SECONDS\n      exit 0\n   fi\n\n   sleep 1\ndone\n",
+                "prepare-fs.sh": "#!/usr/bin/env bash\n\n\tset -eu\n\n\t# the operator only works with the default ES distribution\n\tlicense=/usr/share/elasticsearch/LICENSE.txt\n\tif [[ ! -f $license || $(grep -Fxc \"ELASTIC LICENSE AGREEMENT\" $license) -ne 1 ]]; then\n\t\t\u003e\u00262 echo \"unsupported_distribution\"\n\t\texit 42\n\tfi\n\n\t# compute time in seconds since the given start time\n\tfunction duration() {\n\t\tlocal start=$1\n\t\tend=$(date +%s)\n\t\techo $((end-start))\n\t}\n\n\t######################\n\t#        START       #\n\t######################\n\n\tscript_start=$(date +%s)\n\n\techo \"Starting init script\"\n\n\t######################\n\t#  Config linking    #\n\t######################\n\n\t# Link individual files from their mount location into the config dir\n\t# to a volume, to be used by the ES container\n\tln_start=$(date +%s)\n\t\n\t\techo \"Linking /mnt/elastic-internal/xpack-file-realm/users to /usr/share/elasticsearch/config/users\"\n\t\tln -sf /mnt/elastic-internal/xpack-file-realm/users /usr/share/elasticsearch/config/users\n\t\n\t\techo \"Linking /mnt/elastic-internal/xpack-file-realm/roles.yml to /usr/share/elasticsearch/config/roles.yml\"\n\t\tln -sf /mnt/elastic-internal/xpack-file-realm/roles.yml /usr/share/elasticsearch/config/roles.yml\n\t\n\t\techo \"Linking /mnt/elastic-internal/xpack-file-realm/users_roles to /usr/share/elasticsearch/config/users_roles\"\n\t\tln -sf /mnt/elastic-internal/xpack-file-realm/users_roles /usr/share/elasticsearch/config/users_roles\n\t\n\t\techo \"Linking /mnt/elastic-internal/elasticsearch-config/elasticsearch.yml to /usr/share/elasticsearch/config/elasticsearch.yml\"\n\t\tln -sf /mnt/elastic-internal/elasticsearch-config/elasticsearch.yml /usr/share/elasticsearch/config/elasticsearch.yml\n\t\n\t\techo \"Linking /mnt/elastic-internal/unicast-hosts/unicast_hosts.txt to /usr/share/elasticsearch/config/unicast_hosts.txt\"\n\t\tln -sf /mnt/elastic-internal/unicast-hosts/unicast_hosts.txt /usr/share/elasticsearch/config/unicast_hosts.txt\n\t\n\techo \"File linking duration: $(duration $ln_start) sec.\"\n\n\n\t######################\n\t#  Files persistence #\n\t######################\n\n\t# Persist the content of bin/, config/ and plugins/ to a volume,\n\t# so installed plugins files can to be used by the ES container\n\tmv_start=$(date +%s)\n\t\n\t\tif [[ -z \"$(ls -A /usr/share/elasticsearch/config)\" ]]; then\n\t\t\techo \"Empty dir /usr/share/elasticsearch/config\"\n\t\telse\n\t\t\techo \"Copying /usr/share/elasticsearch/config/* to /mnt/elastic-internal/elasticsearch-config-local/\"\n\t\t\tcp -av /usr/share/elasticsearch/config/* /mnt/elastic-internal/elasticsearch-config-local/\n\t\tfi\n\t\n\t\tif [[ -z \"$(ls -A /usr/share/elasticsearch/plugins)\" ]]; then\n\t\t\techo \"Empty dir /usr/share/elasticsearch/plugins\"\n\t\telse\n\t\t\techo \"Copying /usr/share/elasticsearch/plugins/* to /mnt/elastic-internal/elasticsearch-plugins-local/\"\n\t\t\tcp -av /usr/share/elasticsearch/plugins/* /mnt/elastic-internal/elasticsearch-plugins-local/\n\t\tfi\n\t\n\t\tif [[ -z \"$(ls -A /usr/share/elasticsearch/bin)\" ]]; then\n\t\t\techo \"Empty dir /usr/share/elasticsearch/bin\"\n\t\telse\n\t\t\techo \"Copying /usr/share/elasticsearch/bin/* to /mnt/elastic-internal/elasticsearch-bin-local/\"\n\t\t\tcp -av /usr/share/elasticsearch/bin/* /mnt/elastic-internal/elasticsearch-bin-local/\n\t\tfi\n\t\n\techo \"Files copy duration: $(duration $mv_start) sec.\"\n\n\t######################\n\t#  Volumes chown     #\n\t######################\n\n\t# chown the data and logs volume to the elasticsearch user\n\t# only done when running as root, other cases should be handled\n\t# with a proper security context\n\tchown_start=$(date +%s)\n\tif [[ $EUID -eq 0 ]]; then\n\t\t\n\t\t\techo \"chowning /usr/share/elasticsearch/data to elasticsearch:elasticsearch\"\n\t\t\tchown -v elasticsearch:elasticsearch /usr/share/elasticsearch/data\n\t\t\n\t\t\techo \"chowning /usr/share/elasticsearch/logs to elasticsearch:elasticsearch\"\n\t\t\tchown -v elasticsearch:elasticsearch /usr/share/elasticsearch/logs\n\t\t\n\tfi\n\techo \"chown duration: $(duration $chown_start) sec.\"\n\n\t######################\n\t#  Wait for certs    #\n\t######################\n\n\tINIT_CONTAINER_LOCAL_KEY_PATH=/mnt/elastic-internal/transport-certificates/${POD_NAME}.tls.key\n\n\t# wait for the transport certificates to show up\n\techo \"waiting for the transport certificates (${INIT_CONTAINER_LOCAL_KEY_PATH})\"\n\twait_start=$(date +%s)\n\twhile [ ! -f ${INIT_CONTAINER_LOCAL_KEY_PATH} ]\n\tdo\n\t  sleep 0.2\n\tdone\n\techo \"wait duration: $(duration wait_start) sec.\"\n\n\t######################\n\t#  Certs linking     #\n\t######################\n\n\tKEY_SOURCE_PATH=/usr/share/elasticsearch/config/transport-certs/${POD_NAME}.tls.key\n\tKEY_TARGET_PATH=/mnt/elastic-internal/elasticsearch-config-local/node-transport-cert/transport.tls.key\n\n\tCERT_SOURCE_PATH=/usr/share/elasticsearch/config/transport-certs/${POD_NAME}.tls.crt\n\tCERT_TARGET_PATH=/mnt/elastic-internal/elasticsearch-config-local/node-transport-cert/transport.tls.crt\n\n\t# Link individual files from their mount location into the config dir\n\t# to a volume, to be used by the ES container\n\tln_start=$(date +%s)\n\n\techo \"Linking $CERT_SOURCE_PATH to $CERT_TARGET_PATH\"\n\tmkdir -p $(dirname $KEY_TARGET_PATH)\n\tln -sf $KEY_SOURCE_PATH $KEY_TARGET_PATH\n\techo \"Linking $CERT_SOURCE_PATH to $CERT_TARGET_PATH\"\n\tmkdir -p $(dirname $CERT_TARGET_PATH)\n\tln -sf $CERT_SOURCE_PATH $CERT_TARGET_PATH\n\n\techo \"Certs linking duration: $(duration $ln_start) sec.\"\n\n\t######################\n\t#         End        #\n\t######################\n\n\techo \"Init script successful\"\n\techo \"Script duration: $(duration $script_start) sec.\"\n",
+                "readiness-probe-script.sh": "#!/usr/bin/env bash\n\n# fail should be called as a last resort to help the user to understand why the probe failed\nfunction fail {\n  timestamp=$(date --iso-8601=seconds)\n  echo \"{\\\"timestamp\\\": \\\"${timestamp}\\\", \\\"message\\\": \\\"readiness probe failed\\\", \"$1\"}\" | tee /proc/1/fd/2 2\u003e /dev/null\n  exit 1\n}\n\nlabels=\"/mnt/elastic-internal/downward-api/labels\"\n\nversion=\"\"\nif [[ -f \"${labels}\" ]]; then\n  # get Elasticsearch version from the downward API\n  version=$(grep \"elasticsearch.k8s.elastic.co/version\" ${labels} | cut -d '=' -f 2)\n  # remove quotes\n  version=$(echo \"${version}\" | tr -d '\"')\nfi\n\nREADINESS_PROBE_TIMEOUT=${READINESS_PROBE_TIMEOUT:=3}\n\n# Check if PROBE_PASSWORD_PATH is set, otherwise fall back to its former name in 1.0.0.beta-1: PROBE_PASSWORD_FILE\nif [[ -z \"${PROBE_PASSWORD_PATH}\" ]]; then\n  probe_password_path=\"${PROBE_PASSWORD_FILE}\"\nelse\n  probe_password_path=\"${PROBE_PASSWORD_PATH}\"\nfi\n\n# setup basic auth if credentials are available\nif [ -n \"${PROBE_USERNAME}\" ] \u0026\u0026 [ -f \"${probe_password_path}\" ]; then\n  PROBE_PASSWORD=$(\u003c${probe_password_path})\n  BASIC_AUTH=\"-u ${PROBE_USERNAME}:${PROBE_PASSWORD}\"\nelse\n  BASIC_AUTH=''\nfi\n\n# Check if we are using IPv6\nif [[ $POD_IP =~ .*:.* ]]; then\n  LOOPBACK=\"[::1]\"\nelse \n  LOOPBACK=127.0.01\nfi\n\n# request Elasticsearch on /\n# we are turning globbing off to allow for unescaped [] in case of IPv6\nENDPOINT=\"${READINESS_PROBE_PROTOCOL:-https}://${LOOPBACK}:9200/\"\nstatus=$(curl -o /dev/null -w \"%{http_code}\" --max-time ${READINESS_PROBE_TIMEOUT} -XGET -g -s -k ${BASIC_AUTH} $ENDPOINT)\ncurl_rc=$?\n\nif [[ ${curl_rc} -ne 0 ]]; then\n  fail \"\\\"curl_rc\\\": \\\"${curl_rc}\\\"\"\nfi\n\n# ready if status code 200, 503 is tolerable if ES version is 6.x\nif [[ ${status} == \"200\" ]] || [[ ${status} == \"503\" \u0026\u0026 ${version:0:2} == \"6.\" ]]; then\n  exit 0\nelse\n  fail \" \\\"status\\\": \\\"${status}\\\", \\\"version\\\":\\\"${version}\\\" \"\nfi\n"
+            },
+            "kind": "ConfigMap",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T16:10:31Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt-es-scripts"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:data": {
+                                ".": {},
+                                "f:pre-stop-hook-script.sh": {},
+                                "f:prepare-fs.sh": {},
+                                "f:readiness-probe-script.sh": {}
+                            },
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"1565e914-547c-4885-adc7-d93d763b354d\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:31Z"
+                    }
+                ],
+                "name": "es-t5dt-es-scripts",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "elasticsearch.k8s.elastic.co/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Elasticsearch",
+                        "name": "es-t5dt",
+                        "uid": "1565e914-547c-4885-adc7-d93d763b354d"
+                    }
+                ],
+                "resourceVersion": "6356",
+                "uid": "f7ad2970-904e-4a12-806a-8990a910a549"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "data": {
+                "unicast_hosts.txt": "10.244.1.23:9300\n10.244.2.15:9300\n10.244.3.15:9300"
+            },
+            "kind": "ConfigMap",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T16:10:36Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:data": {
+                                ".": {},
+                                "f:unicast_hosts.txt": {}
+                            },
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"1565e914-547c-4885-adc7-d93d763b354d\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:36Z"
+                    }
+                ],
+                "name": "es-t5dt-es-unicast-hosts",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "elasticsearch.k8s.elastic.co/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Elasticsearch",
+                        "name": "es-t5dt",
+                        "uid": "1565e914-547c-4885-adc7-d93d763b354d"
+                    }
+                ],
+                "resourceVersion": "7456",
+                "uid": "38779ba6-a008-4a71-a5d9-88b9e18f3dcb"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "data": {
+                "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIC5zCCAc+gAwIBAgIBADANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwprdWJl\ncm5ldGVzMB4XDTIxMDExNDE1NDUyMloXDTMxMDExMjE1NDUyMlowFTETMBEGA1UE\nAxMKa3ViZXJuZXRlczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAK97\n7kYVgBQ+RoZ/3PhWuXlqUmd5BsUMjkxyUPiqRBYhTOKkjXRMFiLUycOOgukf6thf\n+khFDKDgU6/E1yn52b1GdekpQXmtiG/SkrB5vwMjXacPKSAF77LAitPT2i3YxbRx\nMyDfrTgspm/SrElD2/njNwwrc5ixCliVxYQaUp0G3XYDVmaACtUAXtpxpTHHU2+h\nE/cH0iPjl3k/Z7HO11GTzo1zJ2ogoVXnSj0VcOCS54/neGYXHmhkDOJibo2OJheF\n2LsSt+f6HYgQ/wgC3Ai0o4m8AH91JkqRMTCkTh+ij+0EJduno/mDGJoV3Fgz7M7f\nOvnH1VT3CMTWQrlzcAMCAwEAAaNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB\n/wQFMAMBAf8wHQYDVR0OBBYEFIrwXdrkN2GOknonZviBBwLnkBKsMA0GCSqGSIb3\nDQEBCwUAA4IBAQB+eTQElpgpIkCfJ/rWNnXQ9Lx37bllmWUbsazIaLRwd5qodYP7\nmV6kEm4COYobhybGkrHuDRjuX22qVEa8O5giZwW/m+i8QZRF8gnGH+/pgIF4sZso\n0FQvuijoJqCxsQvFUTYZpZrll6rUizNzmogVfmvgku15zdj9p5t3vt3WZ1zT65f2\nB0C6pMvTz3hQLXJR424mOcK2uoEpB/C9SA1IokiNFBqL3+PrW6f8UgXmAVGfyqjl\nvKWGQeEMBC0SlsZ5xDeBQa/GV4ivXSxqhQE2+7+/71JoFjHz4p4lsMlZ7uDi3a0J\n686GZXGjZJT8tfQ9/P7L+6MDlqMO+m0SHsrr\n-----END CERTIFICATE-----\n"
+            },
+            "kind": "ConfigMap",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:33Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:data": {
+                                ".": {},
+                                "f:ca.crt": {}
+                            }
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:33Z"
+                    }
+                ],
+                "name": "kube-root-ca.crt",
+                "namespace": "e2e-z2jna-mercury",
+                "resourceVersion": "1350",
+                "uid": "9944e8d2-d5f8-4d70-9ba1-00d397588ddf"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

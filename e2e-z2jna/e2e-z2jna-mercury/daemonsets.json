@@ -1,0 +1,423 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "apps/v1",
+            "kind": "DaemonSet",
+            "metadata": {
+                "annotations": {
+                    "deprecated.daemonset.template.generation": "1"
+                },
+                "creationTimestamp": "2021-01-14T16:10:39Z",
+                "generation": 1,
+                "labels": {
+                    "beat.k8s.elastic.co/name": "fb-4zjj",
+                    "common.k8s.elastic.co/template-hash": "839232230",
+                    "common.k8s.elastic.co/type": "beat"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:deprecated.daemonset.template.generation": {}
+                                },
+                                "f:labels": {
+                                    ".": {},
+                                    "f:beat.k8s.elastic.co/name": {},
+                                    "f:common.k8s.elastic.co/template-hash": {},
+                                    "f:common.k8s.elastic.co/type": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"f03c92e8-5960-4bd5-8ad9-87d345139174\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:revisionHistoryLimit": {},
+                                "f:selector": {},
+                                "f:template": {
+                                    "f:metadata": {
+                                        "f:labels": {
+                                            ".": {},
+                                            "f:beat.k8s.elastic.co/config-checksum": {},
+                                            "f:beat.k8s.elastic.co/name": {},
+                                            "f:beat.k8s.elastic.co/version": {},
+                                            "f:common.k8s.elastic.co/type": {}
+                                        }
+                                    },
+                                    "f:spec": {
+                                        "f:automountServiceAccountToken": {},
+                                        "f:containers": {
+                                            "k:{\"name\":\"filebeat\"}": {
+                                                ".": {},
+                                                "f:args": {},
+                                                "f:image": {},
+                                                "f:imagePullPolicy": {},
+                                                "f:name": {},
+                                                "f:resources": {
+                                                    ".": {},
+                                                    "f:limits": {
+                                                        ".": {},
+                                                        "f:cpu": {},
+                                                        "f:memory": {}
+                                                    },
+                                                    "f:requests": {
+                                                        ".": {},
+                                                        "f:cpu": {},
+                                                        "f:memory": {}
+                                                    }
+                                                },
+                                                "f:terminationMessagePath": {},
+                                                "f:terminationMessagePolicy": {},
+                                                "f:volumeMounts": {
+                                                    ".": {},
+                                                    "k:{\"mountPath\":\"/etc/beat.yml\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {},
+                                                        "f:subPath": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/elasticsearch-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/kibana-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/filebeat/data\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/var/lib/docker/containers\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/var/log/containers\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/var/log/pods\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "f:dnsPolicy": {},
+                                        "f:hostNetwork": {},
+                                        "f:restartPolicy": {},
+                                        "f:schedulerName": {},
+                                        "f:securityContext": {
+                                            ".": {},
+                                            "f:runAsUser": {}
+                                        },
+                                        "f:serviceAccount": {},
+                                        "f:serviceAccountName": {},
+                                        "f:terminationGracePeriodSeconds": {},
+                                        "f:volumes": {
+                                            ".": {},
+                                            "k:{\"name\":\"beat-data\"}": {
+                                                ".": {},
+                                                "f:hostPath": {
+                                                    ".": {},
+                                                    "f:path": {},
+                                                    "f:type": {}
+                                                },
+                                                "f:name": {}
+                                            },
+                                            "k:{\"name\":\"config\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"elasticsearch-certs\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"kibana-certs\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"varlibdockercontainers\"}": {
+                                                ".": {},
+                                                "f:hostPath": {
+                                                    ".": {},
+                                                    "f:path": {},
+                                                    "f:type": {}
+                                                },
+                                                "f:name": {}
+                                            },
+                                            "k:{\"name\":\"varlogcontainers\"}": {
+                                                ".": {},
+                                                "f:hostPath": {
+                                                    ".": {},
+                                                    "f:path": {},
+                                                    "f:type": {}
+                                                },
+                                                "f:name": {}
+                                            },
+                                            "k:{\"name\":\"varlogpods\"}": {
+                                                ".": {},
+                                                "f:hostPath": {
+                                                    ".": {},
+                                                    "f:path": {},
+                                                    "f:type": {}
+                                                },
+                                                "f:name": {}
+                                            }
+                                        }
+                                    }
+                                },
+                                "f:updateStrategy": {
+                                    "f:rollingUpdate": {
+                                        ".": {},
+                                        "f:maxUnavailable": {}
+                                    },
+                                    "f:type": {}
+                                }
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:39Z"
+                    },
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:status": {
+                                "f:currentNumberScheduled": {},
+                                "f:desiredNumberScheduled": {},
+                                "f:numberReady": {},
+                                "f:numberUnavailable": {},
+                                "f:observedGeneration": {},
+                                "f:updatedNumberScheduled": {}
+                            }
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:43:54Z"
+                    }
+                ],
+                "name": "fb-4zjj-beat-filebeat",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "beat.k8s.elastic.co/v1beta1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Beat",
+                        "name": "fb-4zjj",
+                        "uid": "f03c92e8-5960-4bd5-8ad9-87d345139174"
+                    }
+                ],
+                "resourceVersion": "12297",
+                "uid": "a7b1f306-763b-404d-b65c-b7fe560c306f"
+            },
+            "spec": {
+                "revisionHistoryLimit": 10,
+                "selector": {
+                    "matchLabels": {
+                        "beat.k8s.elastic.co/name": "fb-4zjj",
+                        "common.k8s.elastic.co/type": "beat"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "beat.k8s.elastic.co/config-checksum": "b7e37cdfb077ae0fb1138394598654ed548d3fd5def850f9220823c9",
+                            "beat.k8s.elastic.co/name": "fb-4zjj",
+                            "beat.k8s.elastic.co/version": "7.7.0",
+                            "common.k8s.elastic.co/type": "beat"
+                        }
+                    },
+                    "spec": {
+                        "automountServiceAccountToken": true,
+                        "containers": [
+                            {
+                                "args": [
+                                    "-e",
+                                    "-c",
+                                    "/etc/beat.yml"
+                                ],
+                                "image": "docker.elastic.co/beats/filebeat:7.7.0",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "filebeat",
+                                "resources": {
+                                    "limits": {
+                                        "cpu": "100m",
+                                        "memory": "200Mi"
+                                    },
+                                    "requests": {
+                                        "cpu": "100m",
+                                        "memory": "200Mi"
+                                    }
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/usr/share/filebeat/data",
+                                        "name": "beat-data"
+                                    },
+                                    {
+                                        "mountPath": "/etc/beat.yml",
+                                        "name": "config",
+                                        "readOnly": true,
+                                        "subPath": "beat.yml"
+                                    },
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/elasticsearch-certs",
+                                        "name": "elasticsearch-certs",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/kibana-certs",
+                                        "name": "kibana-certs",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/var/lib/docker/containers",
+                                        "name": "varlibdockercontainers"
+                                    },
+                                    {
+                                        "mountPath": "/var/log/containers",
+                                        "name": "varlogcontainers"
+                                    },
+                                    {
+                                        "mountPath": "/var/log/pods",
+                                        "name": "varlogpods"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirstWithHostNet",
+                        "hostNetwork": true,
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {
+                            "runAsUser": 0
+                        },
+                        "serviceAccount": "fb-4zjj-sa",
+                        "serviceAccountName": "fb-4zjj-sa",
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "hostPath": {
+                                    "path": "/var/lib/e2e-z2jna-mercury/fb-4zjj/filebeat-data",
+                                    "type": "DirectoryOrCreate"
+                                },
+                                "name": "beat-data"
+                            },
+                            {
+                                "name": "config",
+                                "secret": {
+                                    "defaultMode": 384,
+                                    "optional": false,
+                                    "secretName": "fb-4zjj-beat-filebeat-config"
+                                }
+                            },
+                            {
+                                "name": "elasticsearch-certs",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "fb-4zjj-beat-es-ca"
+                                }
+                            },
+                            {
+                                "name": "kibana-certs",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "fb-4zjj-beat-kibana-ca"
+                                }
+                            },
+                            {
+                                "hostPath": {
+                                    "path": "/var/lib/docker/containers",
+                                    "type": ""
+                                },
+                                "name": "varlibdockercontainers"
+                            },
+                            {
+                                "hostPath": {
+                                    "path": "/var/log/containers",
+                                    "type": ""
+                                },
+                                "name": "varlogcontainers"
+                            },
+                            {
+                                "hostPath": {
+                                    "path": "/var/log/pods",
+                                    "type": ""
+                                },
+                                "name": "varlogpods"
+                            }
+                        ]
+                    }
+                },
+                "updateStrategy": {
+                    "rollingUpdate": {
+                        "maxUnavailable": 1
+                    },
+                    "type": "RollingUpdate"
+                }
+            },
+            "status": {
+                "currentNumberScheduled": 3,
+                "desiredNumberScheduled": 3,
+                "numberMisscheduled": 0,
+                "numberReady": 0,
+                "numberUnavailable": 3,
+                "observedGeneration": 1,
+                "updatedNumberScheduled": 3
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

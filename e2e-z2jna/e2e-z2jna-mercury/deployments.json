@@ -1,0 +1,1645 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2021-01-14T16:13:43Z",
+                "generation": 1,
+                "labels": {
+                    "apm.k8s.elastic.co/name": "apm-7djz",
+                    "common.k8s.elastic.co/template-hash": "2527479469",
+                    "common.k8s.elastic.co/type": "apm-server"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:apm.k8s.elastic.co/name": {},
+                                    "f:common.k8s.elastic.co/template-hash": {},
+                                    "f:common.k8s.elastic.co/type": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"8f922b64-a946-4095-ad47-50ac34f447a0\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:progressDeadlineSeconds": {},
+                                "f:replicas": {},
+                                "f:revisionHistoryLimit": {},
+                                "f:selector": {},
+                                "f:strategy": {
+                                    "f:rollingUpdate": {
+                                        ".": {},
+                                        "f:maxSurge": {},
+                                        "f:maxUnavailable": {}
+                                    },
+                                    "f:type": {}
+                                },
+                                "f:template": {
+                                    "f:metadata": {
+                                        "f:labels": {
+                                            ".": {},
+                                            "f:apm.k8s.elastic.co/config-files-checksum": {},
+                                            "f:apm.k8s.elastic.co/name": {},
+                                            "f:apm.k8s.elastic.co/version": {},
+                                            "f:common.k8s.elastic.co/type": {},
+                                            "f:test-name": {}
+                                        }
+                                    },
+                                    "f:spec": {
+                                        "f:automountServiceAccountToken": {},
+                                        "f:containers": {
+                                            "k:{\"name\":\"apm-server\"}": {
+                                                ".": {},
+                                                "f:command": {},
+                                                "f:env": {
+                                                    ".": {},
+                                                    "k:{\"name\":\"NAMESPACE\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:valueFrom": {
+                                                            ".": {},
+                                                            "f:fieldRef": {
+                                                                ".": {},
+                                                                "f:apiVersion": {},
+                                                                "f:fieldPath": {}
+                                                            }
+                                                        }
+                                                    },
+                                                    "k:{\"name\":\"NODE_NAME\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:valueFrom": {
+                                                            ".": {},
+                                                            "f:fieldRef": {
+                                                                ".": {},
+                                                                "f:apiVersion": {},
+                                                                "f:fieldPath": {}
+                                                            }
+                                                        }
+                                                    },
+                                                    "k:{\"name\":\"POD_IP\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:valueFrom": {
+                                                            ".": {},
+                                                            "f:fieldRef": {
+                                                                ".": {},
+                                                                "f:apiVersion": {},
+                                                                "f:fieldPath": {}
+                                                            }
+                                                        }
+                                                    },
+                                                    "k:{\"name\":\"POD_NAME\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:valueFrom": {
+                                                            ".": {},
+                                                            "f:fieldRef": {
+                                                                ".": {},
+                                                                "f:apiVersion": {},
+                                                                "f:fieldPath": {}
+                                                            }
+                                                        }
+                                                    },
+                                                    "k:{\"name\":\"SECRET_TOKEN\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:valueFrom": {
+                                                            ".": {},
+                                                            "f:secretKeyRef": {
+                                                                ".": {},
+                                                                "f:key": {},
+                                                                "f:name": {}
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "f:image": {},
+                                                "f:imagePullPolicy": {},
+                                                "f:name": {},
+                                                "f:ports": {
+                                                    ".": {},
+                                                    "k:{\"containerPort\":8200,\"protocol\":\"TCP\"}": {
+                                                        ".": {},
+                                                        "f:containerPort": {},
+                                                        "f:name": {},
+                                                        "f:protocol": {}
+                                                    }
+                                                },
+                                                "f:readinessProbe": {
+                                                    ".": {},
+                                                    "f:failureThreshold": {},
+                                                    "f:httpGet": {
+                                                        ".": {},
+                                                        "f:path": {},
+                                                        "f:port": {},
+                                                        "f:scheme": {}
+                                                    },
+                                                    "f:initialDelaySeconds": {},
+                                                    "f:periodSeconds": {},
+                                                    "f:successThreshold": {},
+                                                    "f:timeoutSeconds": {}
+                                                },
+                                                "f:resources": {
+                                                    ".": {},
+                                                    "f:limits": {
+                                                        ".": {},
+                                                        "f:memory": {}
+                                                    },
+                                                    "f:requests": {
+                                                        ".": {},
+                                                        "f:memory": {}
+                                                    }
+                                                },
+                                                "f:terminationMessagePath": {},
+                                                "f:terminationMessagePolicy": {},
+                                                "f:volumeMounts": {
+                                                    ".": {},
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/http-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/apm-server/config\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/apm-server/config/config-secret\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/apm-server/config/elasticsearch-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/apm-server/config/kibana-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "f:dnsPolicy": {},
+                                        "f:restartPolicy": {},
+                                        "f:schedulerName": {},
+                                        "f:securityContext": {
+                                            ".": {},
+                                            "f:fsGroup": {},
+                                            "f:runAsNonRoot": {},
+                                            "f:runAsUser": {}
+                                        },
+                                        "f:serviceAccount": {},
+                                        "f:serviceAccountName": {},
+                                        "f:terminationGracePeriodSeconds": {},
+                                        "f:volumes": {
+                                            ".": {},
+                                            "k:{\"name\":\"config\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"config-volume\"}": {
+                                                ".": {},
+                                                "f:emptyDir": {},
+                                                "f:name": {}
+                                            },
+                                            "k:{\"name\":\"elastic-internal-http-certificates\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"elasticsearch-certs\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"kibana-certs\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:13:43Z"
+                    },
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:deployment.kubernetes.io/revision": {}
+                                }
+                            },
+                            "f:status": {
+                                "f:availableReplicas": {},
+                                "f:conditions": {
+                                    ".": {},
+                                    "k:{\"type\":\"Available\"}": {
+                                        ".": {},
+                                        "f:lastTransitionTime": {},
+                                        "f:lastUpdateTime": {},
+                                        "f:message": {},
+                                        "f:reason": {},
+                                        "f:status": {},
+                                        "f:type": {}
+                                    },
+                                    "k:{\"type\":\"Progressing\"}": {
+                                        ".": {},
+                                        "f:lastTransitionTime": {},
+                                        "f:lastUpdateTime": {},
+                                        "f:message": {},
+                                        "f:reason": {},
+                                        "f:status": {},
+                                        "f:type": {}
+                                    }
+                                },
+                                "f:observedGeneration": {},
+                                "f:readyReplicas": {},
+                                "f:replicas": {},
+                                "f:updatedReplicas": {}
+                            }
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:14:18Z"
+                    }
+                ],
+                "name": "apm-7djz-apm-server",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apm.k8s.elastic.co/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ApmServer",
+                        "name": "apm-7djz",
+                        "uid": "8f922b64-a946-4095-ad47-50ac34f447a0"
+                    }
+                ],
+                "resourceVersion": "7582",
+                "uid": "379de2ce-8a4d-45b4-98d3-ee1608b7f5f2"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 1,
+                "revisionHistoryLimit": 0,
+                "selector": {
+                    "matchLabels": {
+                        "apm.k8s.elastic.co/name": "apm-7djz",
+                        "common.k8s.elastic.co/type": "apm-server"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "apm.k8s.elastic.co/config-files-checksum": "57f5c3c3aebc8e01a5f841c91eb71e38f5086483fa2ff69c8e927108",
+                            "apm.k8s.elastic.co/name": "apm-7djz",
+                            "apm.k8s.elastic.co/version": "7.7.0",
+                            "common.k8s.elastic.co/type": "apm-server",
+                            "test-name": "apm"
+                        }
+                    },
+                    "spec": {
+                        "automountServiceAccountToken": false,
+                        "containers": [
+                            {
+                                "command": [
+                                    "apm-server",
+                                    "run",
+                                    "-e",
+                                    "-c",
+                                    "config/config-secret/apm-server.yml"
+                                ],
+                                "env": [
+                                    {
+                                        "name": "POD_IP",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "apiVersion": "v1",
+                                                "fieldPath": "status.podIP"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "POD_NAME",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "apiVersion": "v1",
+                                                "fieldPath": "metadata.name"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "NODE_NAME",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "apiVersion": "v1",
+                                                "fieldPath": "spec.nodeName"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "NAMESPACE",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "apiVersion": "v1",
+                                                "fieldPath": "metadata.namespace"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "SECRET_TOKEN",
+                                        "valueFrom": {
+                                            "secretKeyRef": {
+                                                "key": "secret-token",
+                                                "name": "apm-7djz-apm-token"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "image": "docker.elastic.co/apm/apm-server:7.7.0",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "apm-server",
+                                "ports": [
+                                    {
+                                        "containerPort": 8200,
+                                        "name": "https",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "readinessProbe": {
+                                    "failureThreshold": 3,
+                                    "httpGet": {
+                                        "path": "/",
+                                        "port": 8200,
+                                        "scheme": "HTTPS"
+                                    },
+                                    "initialDelaySeconds": 10,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 5
+                                },
+                                "resources": {
+                                    "limits": {
+                                        "memory": "512Mi"
+                                    },
+                                    "requests": {
+                                        "memory": "512Mi"
+                                    }
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/usr/share/apm-server/config/config-secret",
+                                        "name": "config",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/usr/share/apm-server/config",
+                                        "name": "config-volume"
+                                    },
+                                    {
+                                        "mountPath": "/usr/share/apm-server/config/elasticsearch-certs",
+                                        "name": "elasticsearch-certs",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/usr/share/apm-server/config/kibana-certs",
+                                        "name": "kibana-certs",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/http-certs",
+                                        "name": "elastic-internal-http-certificates",
+                                        "readOnly": true
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {
+                            "fsGroup": 1000,
+                            "runAsNonRoot": true,
+                            "runAsUser": 1000
+                        },
+                        "serviceAccount": "apm-7djz",
+                        "serviceAccountName": "apm-7djz",
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "name": "config",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "apm-7djz-apm-config"
+                                }
+                            },
+                            {
+                                "emptyDir": {},
+                                "name": "config-volume"
+                            },
+                            {
+                                "name": "elasticsearch-certs",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "apm-7djz-apm-es-ca"
+                                }
+                            },
+                            {
+                                "name": "kibana-certs",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "apm-7djz-apm-kibana-ca"
+                                }
+                            },
+                            {
+                                "name": "elastic-internal-http-certificates",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "apm-7djz-apm-http-certs-internal"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "availableReplicas": 1,
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2021-01-14T16:14:18Z",
+                        "lastUpdateTime": "2021-01-14T16:14:18Z",
+                        "message": "Deployment has minimum availability.",
+                        "reason": "MinimumReplicasAvailable",
+                        "status": "True",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2021-01-14T16:13:43Z",
+                        "lastUpdateTime": "2021-01-14T16:14:18Z",
+                        "message": "ReplicaSet \"apm-7djz-apm-server-ff69d8d79\" has successfully progressed.",
+                        "reason": "NewReplicaSetAvailable",
+                        "status": "True",
+                        "type": "Progressing"
+                    }
+                ],
+                "observedGeneration": 1,
+                "readyReplicas": 1,
+                "replicas": 1,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2021-01-14T16:10:38Z",
+                "generation": 1,
+                "labels": {
+                    "common.k8s.elastic.co/template-hash": "2031983152",
+                    "common.k8s.elastic.co/type": "enterprise-search",
+                    "enterprisesearch.k8s.elastic.co/name": "ent-r4md"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/template-hash": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:enterprisesearch.k8s.elastic.co/name": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"8fb8aaa3-4905-4e24-bc6c-41c1c121d9b1\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:progressDeadlineSeconds": {},
+                                "f:replicas": {},
+                                "f:revisionHistoryLimit": {},
+                                "f:selector": {},
+                                "f:strategy": {
+                                    "f:rollingUpdate": {
+                                        ".": {},
+                                        "f:maxSurge": {},
+                                        "f:maxUnavailable": {}
+                                    },
+                                    "f:type": {}
+                                },
+                                "f:template": {
+                                    "f:metadata": {
+                                        "f:labels": {
+                                            ".": {},
+                                            "f:common.k8s.elastic.co/type": {},
+                                            "f:enterprisesearch.k8s.elastic.co/config-hash": {},
+                                            "f:enterprisesearch.k8s.elastic.co/name": {},
+                                            "f:enterprisesearch.k8s.elastic.co/version": {},
+                                            "f:test-name": {}
+                                        }
+                                    },
+                                    "f:spec": {
+                                        "f:automountServiceAccountToken": {},
+                                        "f:containers": {
+                                            "k:{\"name\":\"enterprise-search\"}": {
+                                                ".": {},
+                                                "f:env": {
+                                                    ".": {},
+                                                    "k:{\"name\":\"JAVA_OPTS\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:value": {}
+                                                    }
+                                                },
+                                                "f:image": {},
+                                                "f:imagePullPolicy": {},
+                                                "f:name": {},
+                                                "f:ports": {
+                                                    ".": {},
+                                                    "k:{\"containerPort\":3002,\"protocol\":\"TCP\"}": {
+                                                        ".": {},
+                                                        "f:containerPort": {},
+                                                        "f:name": {},
+                                                        "f:protocol": {}
+                                                    }
+                                                },
+                                                "f:readinessProbe": {
+                                                    ".": {},
+                                                    "f:exec": {
+                                                        ".": {},
+                                                        "f:command": {}
+                                                    },
+                                                    "f:failureThreshold": {},
+                                                    "f:initialDelaySeconds": {},
+                                                    "f:periodSeconds": {},
+                                                    "f:successThreshold": {},
+                                                    "f:timeoutSeconds": {}
+                                                },
+                                                "f:resources": {
+                                                    ".": {},
+                                                    "f:limits": {
+                                                        ".": {},
+                                                        "f:memory": {}
+                                                    },
+                                                    "f:requests": {
+                                                        ".": {},
+                                                        "f:memory": {}
+                                                    }
+                                                },
+                                                "f:terminationMessagePath": {},
+                                                "f:terminationMessagePolicy": {},
+                                                "f:volumeMounts": {
+                                                    ".": {},
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/es-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/http-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/scripts/readiness-probe.sh\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {},
+                                                        "f:subPath": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/enterprise-search/config/enterprise-search.yml\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {},
+                                                        "f:subPath": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/var/log/enterprise-search\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "f:dnsPolicy": {},
+                                        "f:restartPolicy": {},
+                                        "f:schedulerName": {},
+                                        "f:securityContext": {
+                                            ".": {},
+                                            "f:fsGroup": {},
+                                            "f:runAsNonRoot": {},
+                                            "f:runAsUser": {}
+                                        },
+                                        "f:terminationGracePeriodSeconds": {},
+                                        "f:volumes": {
+                                            ".": {},
+                                            "k:{\"name\":\"config\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"elastic-internal-http-certificates\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"es-certs\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"logs\"}": {
+                                                ".": {},
+                                                "f:emptyDir": {},
+                                                "f:name": {}
+                                            },
+                                            "k:{\"name\":\"readiness-probe\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:38Z"
+                    },
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:deployment.kubernetes.io/revision": {}
+                                }
+                            },
+                            "f:status": {
+                                "f:conditions": {
+                                    ".": {},
+                                    "k:{\"type\":\"Available\"}": {
+                                        ".": {},
+                                        "f:lastTransitionTime": {},
+                                        "f:lastUpdateTime": {},
+                                        "f:message": {},
+                                        "f:reason": {},
+                                        "f:status": {},
+                                        "f:type": {}
+                                    },
+                                    "k:{\"type\":\"Progressing\"}": {
+                                        ".": {},
+                                        "f:lastTransitionTime": {},
+                                        "f:lastUpdateTime": {},
+                                        "f:message": {},
+                                        "f:reason": {},
+                                        "f:status": {},
+                                        "f:type": {}
+                                    }
+                                },
+                                "f:observedGeneration": {},
+                                "f:replicas": {},
+                                "f:unavailableReplicas": {},
+                                "f:updatedReplicas": {}
+                            }
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:38Z"
+                    }
+                ],
+                "name": "ent-r4md-ent",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "enterprisesearch.k8s.elastic.co/v1beta1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "EnterpriseSearch",
+                        "name": "ent-r4md",
+                        "uid": "8fb8aaa3-4905-4e24-bc6c-41c1c121d9b1"
+                    }
+                ],
+                "resourceVersion": "8649",
+                "uid": "4824e677-dd9f-4f77-a9c3-fb7276ae8af9"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 1,
+                "revisionHistoryLimit": 0,
+                "selector": {
+                    "matchLabels": {
+                        "common.k8s.elastic.co/type": "enterprise-search",
+                        "enterprisesearch.k8s.elastic.co/name": "ent-r4md"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "common.k8s.elastic.co/type": "enterprise-search",
+                            "enterprisesearch.k8s.elastic.co/config-hash": "81cc666175c46ec4b06c63e6926b20cdfe56a62e68ead82fb33a3027",
+                            "enterprisesearch.k8s.elastic.co/name": "ent-r4md",
+                            "enterprisesearch.k8s.elastic.co/version": "7.7.0",
+                            "test-name": "ent"
+                        }
+                    },
+                    "spec": {
+                        "automountServiceAccountToken": false,
+                        "containers": [
+                            {
+                                "env": [
+                                    {
+                                        "name": "JAVA_OPTS",
+                                        "value": "-Xms3500m -Xmx3500m"
+                                    }
+                                ],
+                                "image": "docker.elastic.co/enterprise-search/enterprise-search:7.7.0",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "enterprise-search",
+                                "ports": [
+                                    {
+                                        "containerPort": 3002,
+                                        "name": "https",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "readinessProbe": {
+                                    "exec": {
+                                        "command": [
+                                            "bash",
+                                            "/mnt/elastic-internal/scripts/readiness-probe.sh"
+                                        ]
+                                    },
+                                    "failureThreshold": 3,
+                                    "initialDelaySeconds": 60,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 5
+                                },
+                                "resources": {
+                                    "limits": {
+                                        "memory": "4Gi"
+                                    },
+                                    "requests": {
+                                        "memory": "4Gi"
+                                    }
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/usr/share/enterprise-search/config/enterprise-search.yml",
+                                        "name": "config",
+                                        "readOnly": true,
+                                        "subPath": "enterprise-search.yml"
+                                    },
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/http-certs",
+                                        "name": "elastic-internal-http-certificates",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/es-certs",
+                                        "name": "es-certs",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/var/log/enterprise-search",
+                                        "name": "logs"
+                                    },
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/scripts/readiness-probe.sh",
+                                        "name": "readiness-probe",
+                                        "readOnly": true,
+                                        "subPath": "readiness-probe.sh"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {
+                            "fsGroup": 1000,
+                            "runAsNonRoot": true,
+                            "runAsUser": 1000
+                        },
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "name": "config",
+                                "secret": {
+                                    "defaultMode": 292,
+                                    "optional": false,
+                                    "secretName": "ent-r4md-ent-config"
+                                }
+                            },
+                            {
+                                "name": "elastic-internal-http-certificates",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "ent-r4md-ent-http-certs-internal"
+                                }
+                            },
+                            {
+                                "name": "es-certs",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "ent-r4md-ent-es-ca"
+                                }
+                            },
+                            {
+                                "emptyDir": {},
+                                "name": "logs"
+                            },
+                            {
+                                "name": "readiness-probe",
+                                "secret": {
+                                    "defaultMode": 292,
+                                    "optional": false,
+                                    "secretName": "ent-r4md-ent-config"
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2021-01-14T16:10:38Z",
+                        "lastUpdateTime": "2021-01-14T16:10:38Z",
+                        "message": "Deployment does not have minimum availability.",
+                        "reason": "MinimumReplicasUnavailable",
+                        "status": "False",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2021-01-14T16:20:38Z",
+                        "lastUpdateTime": "2021-01-14T16:20:38Z",
+                        "message": "ReplicaSet \"ent-r4md-ent-6b68896c9b\" has timed out progressing.",
+                        "reason": "ProgressDeadlineExceeded",
+                        "status": "False",
+                        "type": "Progressing"
+                    }
+                ],
+                "observedGeneration": 1,
+                "replicas": 1,
+                "unavailableReplicas": 1,
+                "updatedReplicas": 1
+            }
+        },
+        {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "annotations": {
+                    "deployment.kubernetes.io/revision": "1"
+                },
+                "creationTimestamp": "2021-01-14T16:10:38Z",
+                "generation": 1,
+                "labels": {
+                    "common.k8s.elastic.co/template-hash": "701777838",
+                    "common.k8s.elastic.co/type": "kibana",
+                    "kibana.k8s.elastic.co/name": "kb-vkr2"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/template-hash": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:kibana.k8s.elastic.co/name": {}
+                                },
+                                "f:ownerReferences": {
+                                    ".": {},
+                                    "k:{\"uid\":\"1af96d1b-7aca-49a2-852d-c6037cfba34c\"}": {
+                                        ".": {},
+                                        "f:apiVersion": {},
+                                        "f:blockOwnerDeletion": {},
+                                        "f:controller": {},
+                                        "f:kind": {},
+                                        "f:name": {},
+                                        "f:uid": {}
+                                    }
+                                }
+                            },
+                            "f:spec": {
+                                "f:progressDeadlineSeconds": {},
+                                "f:replicas": {},
+                                "f:revisionHistoryLimit": {},
+                                "f:selector": {},
+                                "f:strategy": {
+                                    "f:rollingUpdate": {
+                                        ".": {},
+                                        "f:maxSurge": {},
+                                        "f:maxUnavailable": {}
+                                    },
+                                    "f:type": {}
+                                },
+                                "f:template": {
+                                    "f:metadata": {
+                                        "f:annotations": {
+                                            ".": {},
+                                            "f:co.elastic.logs/module": {}
+                                        },
+                                        "f:labels": {
+                                            ".": {},
+                                            "f:common.k8s.elastic.co/type": {},
+                                            "f:kibana.k8s.elastic.co/config-checksum": {},
+                                            "f:kibana.k8s.elastic.co/name": {},
+                                            "f:kibana.k8s.elastic.co/version": {},
+                                            "f:test-name": {}
+                                        }
+                                    },
+                                    "f:spec": {
+                                        "f:automountServiceAccountToken": {},
+                                        "f:containers": {
+                                            "k:{\"name\":\"kibana\"}": {
+                                                ".": {},
+                                                "f:image": {},
+                                                "f:imagePullPolicy": {},
+                                                "f:name": {},
+                                                "f:ports": {
+                                                    ".": {},
+                                                    "k:{\"containerPort\":5601,\"protocol\":\"TCP\"}": {
+                                                        ".": {},
+                                                        "f:containerPort": {},
+                                                        "f:name": {},
+                                                        "f:protocol": {}
+                                                    }
+                                                },
+                                                "f:readinessProbe": {
+                                                    ".": {},
+                                                    "f:failureThreshold": {},
+                                                    "f:httpGet": {
+                                                        ".": {},
+                                                        "f:path": {},
+                                                        "f:port": {},
+                                                        "f:scheme": {}
+                                                    },
+                                                    "f:initialDelaySeconds": {},
+                                                    "f:periodSeconds": {},
+                                                    "f:successThreshold": {},
+                                                    "f:timeoutSeconds": {}
+                                                },
+                                                "f:resources": {
+                                                    ".": {},
+                                                    "f:limits": {
+                                                        ".": {},
+                                                        "f:memory": {}
+                                                    },
+                                                    "f:requests": {
+                                                        ".": {},
+                                                        "f:memory": {}
+                                                    }
+                                                },
+                                                "f:terminationMessagePath": {},
+                                                "f:terminationMessagePolicy": {},
+                                                "f:volumeMounts": {
+                                                    ".": {},
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/http-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/kibana-config\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/kibana/config\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/kibana/config/elasticsearch-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/kibana/data\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "f:dnsPolicy": {},
+                                        "f:initContainers": {
+                                            ".": {},
+                                            "k:{\"name\":\"elastic-internal-init-config\"}": {
+                                                ".": {},
+                                                "f:command": {},
+                                                "f:env": {
+                                                    ".": {},
+                                                    "k:{\"name\":\"NAMESPACE\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:valueFrom": {
+                                                            ".": {},
+                                                            "f:fieldRef": {
+                                                                ".": {},
+                                                                "f:apiVersion": {},
+                                                                "f:fieldPath": {}
+                                                            }
+                                                        }
+                                                    },
+                                                    "k:{\"name\":\"NODE_NAME\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:valueFrom": {
+                                                            ".": {},
+                                                            "f:fieldRef": {
+                                                                ".": {},
+                                                                "f:apiVersion": {},
+                                                                "f:fieldPath": {}
+                                                            }
+                                                        }
+                                                    },
+                                                    "k:{\"name\":\"POD_IP\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:valueFrom": {
+                                                            ".": {},
+                                                            "f:fieldRef": {
+                                                                ".": {},
+                                                                "f:apiVersion": {},
+                                                                "f:fieldPath": {}
+                                                            }
+                                                        }
+                                                    },
+                                                    "k:{\"name\":\"POD_NAME\"}": {
+                                                        ".": {},
+                                                        "f:name": {},
+                                                        "f:valueFrom": {
+                                                            ".": {},
+                                                            "f:fieldRef": {
+                                                                ".": {},
+                                                                "f:apiVersion": {},
+                                                                "f:fieldPath": {}
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                "f:image": {},
+                                                "f:imagePullPolicy": {},
+                                                "f:name": {},
+                                                "f:resources": {
+                                                    ".": {},
+                                                    "f:limits": {
+                                                        ".": {},
+                                                        "f:cpu": {},
+                                                        "f:memory": {}
+                                                    },
+                                                    "f:requests": {
+                                                        ".": {},
+                                                        "f:cpu": {},
+                                                        "f:memory": {}
+                                                    }
+                                                },
+                                                "f:securityContext": {
+                                                    ".": {},
+                                                    "f:privileged": {}
+                                                },
+                                                "f:terminationMessagePath": {},
+                                                "f:terminationMessagePolicy": {},
+                                                "f:volumeMounts": {
+                                                    ".": {},
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/http-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/kibana-config\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/mnt/elastic-internal/kibana-config-local\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/kibana/config/elasticsearch-certs\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {},
+                                                        "f:readOnly": {}
+                                                    },
+                                                    "k:{\"mountPath\":\"/usr/share/kibana/data\"}": {
+                                                        ".": {},
+                                                        "f:mountPath": {},
+                                                        "f:name": {}
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "f:restartPolicy": {},
+                                        "f:schedulerName": {},
+                                        "f:securityContext": {
+                                            ".": {},
+                                            "f:fsGroup": {},
+                                            "f:runAsNonRoot": {},
+                                            "f:runAsUser": {}
+                                        },
+                                        "f:terminationGracePeriodSeconds": {},
+                                        "f:volumes": {
+                                            ".": {},
+                                            "k:{\"name\":\"elastic-internal-http-certificates\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"elastic-internal-kibana-config\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"elastic-internal-kibana-config-local\"}": {
+                                                ".": {},
+                                                "f:emptyDir": {},
+                                                "f:name": {}
+                                            },
+                                            "k:{\"name\":\"elasticsearch-certs\"}": {
+                                                ".": {},
+                                                "f:name": {},
+                                                "f:secret": {
+                                                    ".": {},
+                                                    "f:defaultMode": {},
+                                                    "f:optional": {},
+                                                    "f:secretName": {}
+                                                }
+                                            },
+                                            "k:{\"name\":\"kibana-data\"}": {
+                                                ".": {},
+                                                "f:emptyDir": {},
+                                                "f:name": {}
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:38Z"
+                    },
+                    {
+                        "apiVersion": "apps/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:deployment.kubernetes.io/revision": {}
+                                }
+                            },
+                            "f:status": {
+                                "f:conditions": {
+                                    ".": {},
+                                    "k:{\"type\":\"Available\"}": {
+                                        ".": {},
+                                        "f:lastTransitionTime": {},
+                                        "f:lastUpdateTime": {},
+                                        "f:message": {},
+                                        "f:reason": {},
+                                        "f:status": {},
+                                        "f:type": {}
+                                    },
+                                    "k:{\"type\":\"Progressing\"}": {
+                                        ".": {},
+                                        "f:lastTransitionTime": {},
+                                        "f:lastUpdateTime": {},
+                                        "f:message": {},
+                                        "f:reason": {},
+                                        "f:status": {},
+                                        "f:type": {}
+                                    }
+                                },
+                                "f:observedGeneration": {},
+                                "f:replicas": {},
+                                "f:unavailableReplicas": {},
+                                "f:updatedReplicas": {}
+                            }
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:38Z"
+                    }
+                ],
+                "name": "kb-vkr2-kb",
+                "namespace": "e2e-z2jna-mercury",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "kibana.k8s.elastic.co/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "Kibana",
+                        "name": "kb-vkr2",
+                        "uid": "1af96d1b-7aca-49a2-852d-c6037cfba34c"
+                    }
+                ],
+                "resourceVersion": "8650",
+                "uid": "eb1ff3c2-8008-4636-8901-5019734ba110"
+            },
+            "spec": {
+                "progressDeadlineSeconds": 600,
+                "replicas": 1,
+                "revisionHistoryLimit": 0,
+                "selector": {
+                    "matchLabels": {
+                        "common.k8s.elastic.co/type": "kibana",
+                        "kibana.k8s.elastic.co/name": "kb-vkr2"
+                    }
+                },
+                "strategy": {
+                    "rollingUpdate": {
+                        "maxSurge": "25%",
+                        "maxUnavailable": "25%"
+                    },
+                    "type": "RollingUpdate"
+                },
+                "template": {
+                    "metadata": {
+                        "annotations": {
+                            "co.elastic.logs/module": "kibana"
+                        },
+                        "creationTimestamp": null,
+                        "labels": {
+                            "common.k8s.elastic.co/type": "kibana",
+                            "kibana.k8s.elastic.co/config-checksum": "32dfc51dbde72a9e07dfb2990f227669b9d17bb181d285cc96605e73",
+                            "kibana.k8s.elastic.co/name": "kb-vkr2",
+                            "kibana.k8s.elastic.co/version": "7.7.0",
+                            "test-name": "kb"
+                        }
+                    },
+                    "spec": {
+                        "automountServiceAccountToken": false,
+                        "containers": [
+                            {
+                                "image": "docker.elastic.co/kibana/kibana:7.7.0",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "kibana",
+                                "ports": [
+                                    {
+                                        "containerPort": 5601,
+                                        "name": "https",
+                                        "protocol": "TCP"
+                                    }
+                                ],
+                                "readinessProbe": {
+                                    "failureThreshold": 3,
+                                    "httpGet": {
+                                        "path": "/login",
+                                        "port": 5601,
+                                        "scheme": "HTTPS"
+                                    },
+                                    "initialDelaySeconds": 10,
+                                    "periodSeconds": 10,
+                                    "successThreshold": 1,
+                                    "timeoutSeconds": 5
+                                },
+                                "resources": {
+                                    "limits": {
+                                        "memory": "1Gi"
+                                    },
+                                    "requests": {
+                                        "memory": "1Gi"
+                                    }
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/http-certs",
+                                        "name": "elastic-internal-http-certificates",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/kibana-config",
+                                        "name": "elastic-internal-kibana-config",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/usr/share/kibana/config",
+                                        "name": "elastic-internal-kibana-config-local"
+                                    },
+                                    {
+                                        "mountPath": "/usr/share/kibana/config/elasticsearch-certs",
+                                        "name": "elasticsearch-certs",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/usr/share/kibana/data",
+                                        "name": "kibana-data"
+                                    }
+                                ]
+                            }
+                        ],
+                        "dnsPolicy": "ClusterFirst",
+                        "initContainers": [
+                            {
+                                "command": [
+                                    "/usr/bin/env",
+                                    "bash",
+                                    "-c",
+                                    "#!/usr/bin/env bash\nset -eux\n\ninit_config_initialized_flag=/mnt/elastic-internal/kibana-config-local/elastic-internal-init-config.ok\n\nif [[ -f \"${init_config_initialized_flag}\" ]]; then\n    echo \"Kibana configuration already initialized.\"\n\texit 0\nfi\n\necho \"Setup Kibana configuration\"\n\nln -sf /mnt/elastic-internal/kibana-config/* /mnt/elastic-internal/kibana-config-local/\n\ntouch \"${init_config_initialized_flag}\"\necho \"Kibana configuration successfully prepared.\"\n"
+                                ],
+                                "env": [
+                                    {
+                                        "name": "POD_IP",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "apiVersion": "v1",
+                                                "fieldPath": "status.podIP"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "POD_NAME",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "apiVersion": "v1",
+                                                "fieldPath": "metadata.name"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "NODE_NAME",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "apiVersion": "v1",
+                                                "fieldPath": "spec.nodeName"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "NAMESPACE",
+                                        "valueFrom": {
+                                            "fieldRef": {
+                                                "apiVersion": "v1",
+                                                "fieldPath": "metadata.namespace"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "image": "docker.elastic.co/kibana/kibana:7.7.0",
+                                "imagePullPolicy": "IfNotPresent",
+                                "name": "elastic-internal-init-config",
+                                "resources": {
+                                    "limits": {
+                                        "cpu": "100m",
+                                        "memory": "50Mi"
+                                    },
+                                    "requests": {
+                                        "cpu": "100m",
+                                        "memory": "50Mi"
+                                    }
+                                },
+                                "securityContext": {
+                                    "privileged": false
+                                },
+                                "terminationMessagePath": "/dev/termination-log",
+                                "terminationMessagePolicy": "File",
+                                "volumeMounts": [
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/http-certs",
+                                        "name": "elastic-internal-http-certificates",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/kibana-config",
+                                        "name": "elastic-internal-kibana-config",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/mnt/elastic-internal/kibana-config-local",
+                                        "name": "elastic-internal-kibana-config-local"
+                                    },
+                                    {
+                                        "mountPath": "/usr/share/kibana/config/elasticsearch-certs",
+                                        "name": "elasticsearch-certs",
+                                        "readOnly": true
+                                    },
+                                    {
+                                        "mountPath": "/usr/share/kibana/data",
+                                        "name": "kibana-data"
+                                    }
+                                ]
+                            }
+                        ],
+                        "restartPolicy": "Always",
+                        "schedulerName": "default-scheduler",
+                        "securityContext": {
+                            "fsGroup": 1000,
+                            "runAsNonRoot": true,
+                            "runAsUser": 1000
+                        },
+                        "terminationGracePeriodSeconds": 30,
+                        "volumes": [
+                            {
+                                "name": "elastic-internal-http-certificates",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "kb-vkr2-kb-http-certs-internal"
+                                }
+                            },
+                            {
+                                "name": "elastic-internal-kibana-config",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "kb-vkr2-kb-config"
+                                }
+                            },
+                            {
+                                "emptyDir": {},
+                                "name": "elastic-internal-kibana-config-local"
+                            },
+                            {
+                                "name": "elasticsearch-certs",
+                                "secret": {
+                                    "defaultMode": 420,
+                                    "optional": false,
+                                    "secretName": "kb-vkr2-kb-es-ca"
+                                }
+                            },
+                            {
+                                "emptyDir": {},
+                                "name": "kibana-data"
+                            }
+                        ]
+                    }
+                }
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastTransitionTime": "2021-01-14T16:10:38Z",
+                        "lastUpdateTime": "2021-01-14T16:10:38Z",
+                        "message": "Deployment does not have minimum availability.",
+                        "reason": "MinimumReplicasUnavailable",
+                        "status": "False",
+                        "type": "Available"
+                    },
+                    {
+                        "lastTransitionTime": "2021-01-14T16:20:38Z",
+                        "lastUpdateTime": "2021-01-14T16:20:38Z",
+                        "message": "ReplicaSet \"kb-vkr2-kb-86cc99b596\" has timed out progressing.",
+                        "reason": "ProgressDeadlineExceeded",
+                        "status": "False",
+                        "type": "Progressing"
+                    }
+                ],
+                "observedGeneration": 1,
+                "replicas": 1,
+                "unavailableReplicas": 1,
+                "updatedReplicas": 1
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

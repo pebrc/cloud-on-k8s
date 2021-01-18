@@ -1,0 +1,475 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Endpoints",
+            "metadata": {
+                "annotations": {
+                    "endpoints.kubernetes.io/last-change-trigger-time": "2021-01-14T16:14:18Z"
+                },
+                "creationTimestamp": "2021-01-14T16:10:33Z",
+                "labels": {
+                    "apm.k8s.elastic.co/name": "apm-7djz",
+                    "common.k8s.elastic.co/type": "apm-server"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:endpoints.kubernetes.io/last-change-trigger-time": {}
+                                },
+                                "f:labels": {
+                                    ".": {},
+                                    "f:apm.k8s.elastic.co/name": {},
+                                    "f:common.k8s.elastic.co/type": {}
+                                }
+                            },
+                            "f:subsets": {}
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:14:04Z"
+                    }
+                ],
+                "name": "apm-7djz-apm-http",
+                "namespace": "e2e-z2jna-mercury",
+                "resourceVersion": "7579",
+                "uid": "2e7f9d52-6ef2-43b6-aae4-043cd6fc7b0f"
+            },
+            "subsets": [
+                {
+                    "addresses": [
+                        {
+                            "ip": "10.244.3.16",
+                            "nodeName": "eck-e2e-worker3",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "apm-7djz-apm-server-ff69d8d79-dtr9j",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7578",
+                                "uid": "b278091d-3e0f-4123-b9a8-bb54bd85b25e"
+                            }
+                        }
+                    ],
+                    "ports": [
+                        {
+                            "name": "https",
+                            "port": 8200,
+                            "protocol": "TCP"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Endpoints",
+            "metadata": {
+                "annotations": {
+                    "endpoints.kubernetes.io/last-change-trigger-time": "2021-01-14T16:10:38Z"
+                },
+                "creationTimestamp": "2021-01-14T16:10:32Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "enterprise-search",
+                    "enterprisesearch.k8s.elastic.co/name": "ent-r4md"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:endpoints.kubernetes.io/last-change-trigger-time": {}
+                                },
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:enterprisesearch.k8s.elastic.co/name": {}
+                                }
+                            },
+                            "f:subsets": {}
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:11:43Z"
+                    }
+                ],
+                "name": "ent-r4md-ent-http",
+                "namespace": "e2e-z2jna-mercury",
+                "resourceVersion": "6840",
+                "uid": "72755c0e-0638-4ee0-89d3-067407a087af"
+            },
+            "subsets": [
+                {
+                    "notReadyAddresses": [
+                        {
+                            "ip": "10.244.2.14",
+                            "nodeName": "eck-e2e-worker2",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "ent-r4md-ent-6b68896c9b-hvjnk",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "6839",
+                                "uid": "f6c983d4-8c7d-41ec-bbf8-75e7165b1bae"
+                            }
+                        }
+                    ],
+                    "ports": [
+                        {
+                            "name": "https",
+                            "port": 3002,
+                            "protocol": "TCP"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Endpoints",
+            "metadata": {
+                "annotations": {
+                    "endpoints.kubernetes.io/last-change-trigger-time": "2021-01-14T16:14:26Z"
+                },
+                "creationTimestamp": "2021-01-14T16:10:31Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:endpoints.kubernetes.io/last-change-trigger-time": {}
+                                },
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {}
+                                }
+                            },
+                            "f:subsets": {}
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:14:26Z"
+                    }
+                ],
+                "name": "es-t5dt-es-http",
+                "namespace": "e2e-z2jna-mercury",
+                "resourceVersion": "7613",
+                "uid": "3f74753d-56f7-4c79-a8bf-fa1ab95abc63"
+            },
+            "subsets": [
+                {
+                    "addresses": [
+                        {
+                            "ip": "10.244.1.23",
+                            "nodeName": "eck-e2e-worker",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "es-t5dt-es-masterdata-0",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7608",
+                                "uid": "0f1d8fe9-43d8-4579-80dc-6cf8579f21c6"
+                            }
+                        },
+                        {
+                            "ip": "10.244.2.15",
+                            "nodeName": "eck-e2e-worker2",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "es-t5dt-es-masterdata-1",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7465",
+                                "uid": "7a938782-a285-45d7-add1-91f08d323908"
+                            }
+                        },
+                        {
+                            "ip": "10.244.3.15",
+                            "nodeName": "eck-e2e-worker3",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "es-t5dt-es-masterdata-2",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7466",
+                                "uid": "c91861e1-d456-402a-99a7-694a7359e62a"
+                            }
+                        }
+                    ],
+                    "ports": [
+                        {
+                            "name": "https",
+                            "port": 9200,
+                            "protocol": "TCP"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Endpoints",
+            "metadata": {
+                "annotations": {
+                    "endpoints.kubernetes.io/last-change-trigger-time": "2021-01-14T16:14:26Z"
+                },
+                "creationTimestamp": "2021-01-14T16:10:37Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt",
+                    "elasticsearch.k8s.elastic.co/statefulset-name": "es-t5dt-es-masterdata",
+                    "service.kubernetes.io/headless": ""
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:endpoints.kubernetes.io/last-change-trigger-time": {}
+                                },
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {},
+                                    "f:elasticsearch.k8s.elastic.co/statefulset-name": {},
+                                    "f:service.kubernetes.io/headless": {}
+                                }
+                            },
+                            "f:subsets": {}
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:14:26Z"
+                    }
+                ],
+                "name": "es-t5dt-es-masterdata",
+                "namespace": "e2e-z2jna-mercury",
+                "resourceVersion": "7614",
+                "uid": "a7296454-42d5-4458-bef2-680ffaa680ec"
+            },
+            "subsets": [
+                {
+                    "addresses": [
+                        {
+                            "hostname": "es-t5dt-es-masterdata-0",
+                            "ip": "10.244.1.23",
+                            "nodeName": "eck-e2e-worker",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "es-t5dt-es-masterdata-0",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7608",
+                                "uid": "0f1d8fe9-43d8-4579-80dc-6cf8579f21c6"
+                            }
+                        },
+                        {
+                            "hostname": "es-t5dt-es-masterdata-1",
+                            "ip": "10.244.2.15",
+                            "nodeName": "eck-e2e-worker2",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "es-t5dt-es-masterdata-1",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7465",
+                                "uid": "7a938782-a285-45d7-add1-91f08d323908"
+                            }
+                        },
+                        {
+                            "hostname": "es-t5dt-es-masterdata-2",
+                            "ip": "10.244.3.15",
+                            "nodeName": "eck-e2e-worker3",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "es-t5dt-es-masterdata-2",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7466",
+                                "uid": "c91861e1-d456-402a-99a7-694a7359e62a"
+                            }
+                        }
+                    ],
+                    "ports": [
+                        {
+                            "name": "https",
+                            "port": 9200,
+                            "protocol": "TCP"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Endpoints",
+            "metadata": {
+                "annotations": {
+                    "endpoints.kubernetes.io/last-change-trigger-time": "2021-01-14T16:14:26Z"
+                },
+                "creationTimestamp": "2021-01-14T16:10:31Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "elasticsearch",
+                    "elasticsearch.k8s.elastic.co/cluster-name": "es-t5dt",
+                    "service.kubernetes.io/headless": ""
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:endpoints.kubernetes.io/last-change-trigger-time": {}
+                                },
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-name": {},
+                                    "f:service.kubernetes.io/headless": {}
+                                }
+                            },
+                            "f:subsets": {}
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:14:26Z"
+                    }
+                ],
+                "name": "es-t5dt-es-transport",
+                "namespace": "e2e-z2jna-mercury",
+                "resourceVersion": "7611",
+                "uid": "90d4b08e-07a2-4806-bd87-b456804fef1d"
+            },
+            "subsets": [
+                {
+                    "addresses": [
+                        {
+                            "ip": "10.244.1.23",
+                            "nodeName": "eck-e2e-worker",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "es-t5dt-es-masterdata-0",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7608",
+                                "uid": "0f1d8fe9-43d8-4579-80dc-6cf8579f21c6"
+                            }
+                        },
+                        {
+                            "ip": "10.244.2.15",
+                            "nodeName": "eck-e2e-worker2",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "es-t5dt-es-masterdata-1",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7465",
+                                "uid": "7a938782-a285-45d7-add1-91f08d323908"
+                            }
+                        },
+                        {
+                            "ip": "10.244.3.15",
+                            "nodeName": "eck-e2e-worker3",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "es-t5dt-es-masterdata-2",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7466",
+                                "uid": "c91861e1-d456-402a-99a7-694a7359e62a"
+                            }
+                        }
+                    ],
+                    "ports": [
+                        {
+                            "name": "tls-transport",
+                            "port": 9300,
+                            "protocol": "TCP"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Endpoints",
+            "metadata": {
+                "annotations": {
+                    "endpoints.kubernetes.io/last-change-trigger-time": "2021-01-14T16:10:38Z"
+                },
+                "creationTimestamp": "2021-01-14T16:10:31Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "kibana",
+                    "kibana.k8s.elastic.co/name": "kb-vkr2"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:endpoints.kubernetes.io/last-change-trigger-time": {}
+                                },
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {},
+                                    "f:kibana.k8s.elastic.co/name": {}
+                                }
+                            },
+                            "f:subsets": {}
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:12:45Z"
+                    }
+                ],
+                "name": "kb-vkr2-kb-http",
+                "namespace": "e2e-z2jna-mercury",
+                "resourceVersion": "7105",
+                "uid": "ab9f4636-418b-4453-866b-37b35cbf23e5"
+            },
+            "subsets": [
+                {
+                    "notReadyAddresses": [
+                        {
+                            "ip": "10.244.1.22",
+                            "nodeName": "eck-e2e-worker",
+                            "targetRef": {
+                                "kind": "Pod",
+                                "name": "kb-vkr2-kb-86cc99b596-d8vvc",
+                                "namespace": "e2e-z2jna-mercury",
+                                "resourceVersion": "7104",
+                                "uid": "cc45b65c-eebd-4dcc-892d-5c59e0826c9e"
+                            }
+                        }
+                    ],
+                    "ports": [
+                        {
+                            "name": "https",
+                            "port": 5601,
+                            "protocol": "TCP"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

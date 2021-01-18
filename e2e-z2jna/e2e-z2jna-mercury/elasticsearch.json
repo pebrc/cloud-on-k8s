@@ -1,0 +1,199 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "elasticsearch.k8s.elastic.co/v1",
+            "kind": "Elasticsearch",
+            "metadata": {
+                "annotations": {
+                    "common.k8s.elastic.co/controller-version": "1.4.0",
+                    "elasticsearch.k8s.elastic.co/cluster-uuid": "c54q9OlYSwmi_DJupvu8CA"
+                },
+                "creationTimestamp": "2021-01-14T16:10:31Z",
+                "generation": 1,
+                "labels": {
+                    "test-name": "es"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "elasticsearch.k8s.elastic.co/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:test-name": {}
+                                }
+                            },
+                            "f:spec": {
+                                ".": {},
+                                "f:auth": {},
+                                "f:http": {
+                                    ".": {},
+                                    "f:service": {
+                                        ".": {},
+                                        "f:metadata": {
+                                            ".": {},
+                                            "f:creationTimestamp": {}
+                                        },
+                                        "f:spec": {}
+                                    },
+                                    "f:tls": {
+                                        ".": {},
+                                        "f:certificate": {}
+                                    }
+                                },
+                                "f:nodeSets": {},
+                                "f:transport": {
+                                    ".": {},
+                                    "f:service": {
+                                        ".": {},
+                                        "f:metadata": {
+                                            ".": {},
+                                            "f:creationTimestamp": {}
+                                        },
+                                        "f:spec": {}
+                                    },
+                                    "f:tls": {
+                                        ".": {},
+                                        "f:certificate": {}
+                                    }
+                                },
+                                "f:updateStrategy": {
+                                    ".": {},
+                                    "f:changeBudget": {}
+                                },
+                                "f:version": {}
+                            }
+                        },
+                        "manager": "e2e.test",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:31Z"
+                    },
+                    {
+                        "apiVersion": "elasticsearch.k8s.elastic.co/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/controller-version": {},
+                                    "f:elasticsearch.k8s.elastic.co/cluster-uuid": {}
+                                }
+                            },
+                            "f:status": {
+                                ".": {},
+                                "f:availableNodes": {},
+                                "f:health": {},
+                                "f:phase": {},
+                                "f:version": {}
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:13:45Z"
+                    }
+                ],
+                "name": "es-t5dt",
+                "namespace": "e2e-z2jna-mercury",
+                "resourceVersion": "7621",
+                "uid": "1565e914-547c-4885-adc7-d93d763b354d"
+            },
+            "spec": {
+                "auth": {},
+                "http": {
+                    "service": {
+                        "metadata": {
+                            "creationTimestamp": null
+                        },
+                        "spec": {}
+                    },
+                    "tls": {
+                        "certificate": {}
+                    }
+                },
+                "nodeSets": [
+                    {
+                        "config": {
+                            "logger.org.elasticsearch.cluster.service.MasterService": "trace",
+                            "node.store.allow_mmap": false
+                        },
+                        "count": 3,
+                        "name": "masterdata",
+                        "podTemplate": {
+                            "metadata": {
+                                "creationTimestamp": null,
+                                "labels": {
+                                    "test-name": "es"
+                                }
+                            },
+                            "spec": {
+                                "containers": [
+                                    {
+                                        "name": "elasticsearch",
+                                        "resources": {
+                                            "limits": {
+                                                "memory": "2Gi"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "securityContext": {
+                                    "fsGroup": 1000,
+                                    "runAsNonRoot": true,
+                                    "runAsUser": 1000
+                                }
+                            }
+                        },
+                        "volumeClaimTemplates": [
+                            {
+                                "metadata": {
+                                    "creationTimestamp": null,
+                                    "name": "elasticsearch-data"
+                                },
+                                "spec": {
+                                    "accessModes": [
+                                        "ReadWriteOnce"
+                                    ],
+                                    "resources": {
+                                        "requests": {
+                                            "storage": "1Gi"
+                                        }
+                                    },
+                                    "storageClassName": "e2e-default"
+                                },
+                                "status": {}
+                            }
+                        ]
+                    }
+                ],
+                "transport": {
+                    "service": {
+                        "metadata": {
+                            "creationTimestamp": null
+                        },
+                        "spec": {}
+                    },
+                    "tls": {
+                        "certificate": {}
+                    }
+                },
+                "updateStrategy": {
+                    "changeBudget": {}
+                },
+                "version": "7.7.0"
+            },
+            "status": {
+                "availableNodes": 3,
+                "health": "red",
+                "phase": "Ready",
+                "version": "7.7.0"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

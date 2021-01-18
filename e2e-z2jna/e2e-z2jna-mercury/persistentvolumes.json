@@ -1,0 +1,367 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "annotations": {
+                    "pv.kubernetes.io/provisioned-by": "rancher.io/local-path"
+                },
+                "creationTimestamp": "2021-01-14T16:10:41Z",
+                "finalizers": [
+                    "kubernetes.io/pv-protection"
+                ],
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:status": {
+                                "f:phase": {}
+                            }
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:41Z"
+                    },
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:pv.kubernetes.io/provisioned-by": {}
+                                }
+                            },
+                            "f:spec": {
+                                "f:accessModes": {},
+                                "f:capacity": {
+                                    ".": {},
+                                    "f:storage": {}
+                                },
+                                "f:claimRef": {
+                                    ".": {},
+                                    "f:apiVersion": {},
+                                    "f:kind": {},
+                                    "f:name": {},
+                                    "f:namespace": {},
+                                    "f:resourceVersion": {},
+                                    "f:uid": {}
+                                },
+                                "f:hostPath": {
+                                    ".": {},
+                                    "f:path": {},
+                                    "f:type": {}
+                                },
+                                "f:nodeAffinity": {
+                                    ".": {},
+                                    "f:required": {
+                                        ".": {},
+                                        "f:nodeSelectorTerms": {}
+                                    }
+                                },
+                                "f:persistentVolumeReclaimPolicy": {},
+                                "f:storageClassName": {},
+                                "f:volumeMode": {}
+                            }
+                        },
+                        "manager": "local-path-provisioner",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:41Z"
+                    }
+                ],
+                "name": "pvc-0427f522-12cd-4e71-8405-b2238243e425",
+                "resourceVersion": "6659",
+                "uid": "cdbe7fbb-b6da-4dfe-bcb4-93fef4a19c08"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "capacity": {
+                    "storage": "1Gi"
+                },
+                "claimRef": {
+                    "apiVersion": "v1",
+                    "kind": "PersistentVolumeClaim",
+                    "name": "elasticsearch-data-es-t5dt-es-masterdata-0",
+                    "namespace": "e2e-z2jna-mercury",
+                    "resourceVersion": "6525",
+                    "uid": "0427f522-12cd-4e71-8405-b2238243e425"
+                },
+                "hostPath": {
+                    "path": "/var/local-path-provisioner/pvc-0427f522-12cd-4e71-8405-b2238243e425_e2e-z2jna-mercury_elasticsearch-data-es-t5dt-es-masterdata-0",
+                    "type": "DirectoryOrCreate"
+                },
+                "nodeAffinity": {
+                    "required": {
+                        "nodeSelectorTerms": [
+                            {
+                                "matchExpressions": [
+                                    {
+                                        "key": "kubernetes.io/hostname",
+                                        "operator": "In",
+                                        "values": [
+                                            "eck-e2e-worker"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "persistentVolumeReclaimPolicy": "Delete",
+                "storageClassName": "e2e-default",
+                "volumeMode": "Filesystem"
+            },
+            "status": {
+                "phase": "Bound"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "annotations": {
+                    "pv.kubernetes.io/provisioned-by": "rancher.io/local-path"
+                },
+                "creationTimestamp": "2021-01-14T16:10:39Z",
+                "finalizers": [
+                    "kubernetes.io/pv-protection"
+                ],
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:status": {
+                                "f:phase": {}
+                            }
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:39Z"
+                    },
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:pv.kubernetes.io/provisioned-by": {}
+                                }
+                            },
+                            "f:spec": {
+                                "f:accessModes": {},
+                                "f:capacity": {
+                                    ".": {},
+                                    "f:storage": {}
+                                },
+                                "f:claimRef": {
+                                    ".": {},
+                                    "f:apiVersion": {},
+                                    "f:kind": {},
+                                    "f:name": {},
+                                    "f:namespace": {},
+                                    "f:resourceVersion": {},
+                                    "f:uid": {}
+                                },
+                                "f:hostPath": {
+                                    ".": {},
+                                    "f:path": {},
+                                    "f:type": {}
+                                },
+                                "f:nodeAffinity": {
+                                    ".": {},
+                                    "f:required": {
+                                        ".": {},
+                                        "f:nodeSelectorTerms": {}
+                                    }
+                                },
+                                "f:persistentVolumeReclaimPolicy": {},
+                                "f:storageClassName": {},
+                                "f:volumeMode": {}
+                            }
+                        },
+                        "manager": "local-path-provisioner",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:39Z"
+                    }
+                ],
+                "name": "pvc-2800cab6-4558-45d4-b5b0-38af22408015",
+                "resourceVersion": "6615",
+                "uid": "b8cc4738-d686-4a80-8dc3-f4802bedacd6"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "capacity": {
+                    "storage": "1Gi"
+                },
+                "claimRef": {
+                    "apiVersion": "v1",
+                    "kind": "PersistentVolumeClaim",
+                    "name": "elasticsearch-data-es-t5dt-es-masterdata-1",
+                    "namespace": "e2e-z2jna-mercury",
+                    "resourceVersion": "6533",
+                    "uid": "2800cab6-4558-45d4-b5b0-38af22408015"
+                },
+                "hostPath": {
+                    "path": "/var/local-path-provisioner/pvc-2800cab6-4558-45d4-b5b0-38af22408015_e2e-z2jna-mercury_elasticsearch-data-es-t5dt-es-masterdata-1",
+                    "type": "DirectoryOrCreate"
+                },
+                "nodeAffinity": {
+                    "required": {
+                        "nodeSelectorTerms": [
+                            {
+                                "matchExpressions": [
+                                    {
+                                        "key": "kubernetes.io/hostname",
+                                        "operator": "In",
+                                        "values": [
+                                            "eck-e2e-worker2"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "persistentVolumeReclaimPolicy": "Delete",
+                "storageClassName": "e2e-default",
+                "volumeMode": "Filesystem"
+            },
+            "status": {
+                "phase": "Bound"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "PersistentVolume",
+            "metadata": {
+                "annotations": {
+                    "pv.kubernetes.io/provisioned-by": "rancher.io/local-path"
+                },
+                "creationTimestamp": "2021-01-14T16:10:40Z",
+                "finalizers": [
+                    "kubernetes.io/pv-protection"
+                ],
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:status": {
+                                "f:phase": {}
+                            }
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:40Z"
+                    },
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:pv.kubernetes.io/provisioned-by": {}
+                                }
+                            },
+                            "f:spec": {
+                                "f:accessModes": {},
+                                "f:capacity": {
+                                    ".": {},
+                                    "f:storage": {}
+                                },
+                                "f:claimRef": {
+                                    ".": {},
+                                    "f:apiVersion": {},
+                                    "f:kind": {},
+                                    "f:name": {},
+                                    "f:namespace": {},
+                                    "f:resourceVersion": {},
+                                    "f:uid": {}
+                                },
+                                "f:hostPath": {
+                                    ".": {},
+                                    "f:path": {},
+                                    "f:type": {}
+                                },
+                                "f:nodeAffinity": {
+                                    ".": {},
+                                    "f:required": {
+                                        ".": {},
+                                        "f:nodeSelectorTerms": {}
+                                    }
+                                },
+                                "f:persistentVolumeReclaimPolicy": {},
+                                "f:storageClassName": {},
+                                "f:volumeMode": {}
+                            }
+                        },
+                        "manager": "local-path-provisioner",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:40Z"
+                    }
+                ],
+                "name": "pvc-6c31d712-18bd-4417-b04e-bc4fc9d0e0ed",
+                "resourceVersion": "6650",
+                "uid": "ac2e27ff-c2c2-4873-8c8b-a2da894c9761"
+            },
+            "spec": {
+                "accessModes": [
+                    "ReadWriteOnce"
+                ],
+                "capacity": {
+                    "storage": "1Gi"
+                },
+                "claimRef": {
+                    "apiVersion": "v1",
+                    "kind": "PersistentVolumeClaim",
+                    "name": "elasticsearch-data-es-t5dt-es-masterdata-2",
+                    "namespace": "e2e-z2jna-mercury",
+                    "resourceVersion": "6542",
+                    "uid": "6c31d712-18bd-4417-b04e-bc4fc9d0e0ed"
+                },
+                "hostPath": {
+                    "path": "/var/local-path-provisioner/pvc-6c31d712-18bd-4417-b04e-bc4fc9d0e0ed_e2e-z2jna-mercury_elasticsearch-data-es-t5dt-es-masterdata-2",
+                    "type": "DirectoryOrCreate"
+                },
+                "nodeAffinity": {
+                    "required": {
+                        "nodeSelectorTerms": [
+                            {
+                                "matchExpressions": [
+                                    {
+                                        "key": "kubernetes.io/hostname",
+                                        "operator": "In",
+                                        "values": [
+                                            "eck-e2e-worker3"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "persistentVolumeReclaimPolicy": "Delete",
+                "storageClassName": "e2e-default",
+                "volumeMode": "Filesystem"
+            },
+            "status": {
+                "phase": "Bound"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

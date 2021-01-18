@@ -1,0 +1,182 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "apm.k8s.elastic.co/v1",
+            "kind": "ApmServer",
+            "metadata": {
+                "annotations": {
+                    "association.k8s.elastic.co/es-conf": "{\"authSecretName\":\"apm-7djz-apm-user\",\"authSecretKey\":\"e2e-z2jna-mercury-apm-7djz-apm-user\",\"caCertProvided\":true,\"caSecretName\":\"apm-7djz-apm-es-ca\",\"url\":\"https://es-t5dt-es-http.e2e-z2jna-mercury.svc:9200\",\"version\":\"7.7.0\"}",
+                    "association.k8s.elastic.co/kb-conf": "{\"authSecretName\":\"apm-7djz-apm-kb-user\",\"authSecretKey\":\"e2e-z2jna-mercury-apm-7djz-apm-kb-user\",\"caCertProvided\":true,\"caSecretName\":\"apm-7djz-apm-kibana-ca\",\"url\":\"https://kb-vkr2-kb-http.e2e-z2jna-mercury.svc:5601\",\"version\":\"7.7.0\"}",
+                    "common.k8s.elastic.co/controller-version": "1.4.0"
+                },
+                "creationTimestamp": "2021-01-14T16:10:31Z",
+                "generation": 1,
+                "labels": {
+                    "test-name": "apm"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "apm.k8s.elastic.co/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:test-name": {}
+                                }
+                            },
+                            "f:spec": {
+                                ".": {},
+                                "f:config": {
+                                    ".": {},
+                                    "f:apm-server.ilm.enabled": {}
+                                },
+                                "f:count": {},
+                                "f:elasticsearchRef": {
+                                    ".": {},
+                                    "f:name": {},
+                                    "f:namespace": {}
+                                },
+                                "f:http": {
+                                    ".": {},
+                                    "f:service": {
+                                        ".": {},
+                                        "f:metadata": {
+                                            ".": {},
+                                            "f:creationTimestamp": {}
+                                        },
+                                        "f:spec": {}
+                                    },
+                                    "f:tls": {
+                                        ".": {},
+                                        "f:certificate": {}
+                                    }
+                                },
+                                "f:kibanaRef": {
+                                    ".": {},
+                                    "f:name": {},
+                                    "f:namespace": {}
+                                },
+                                "f:podTemplate": {
+                                    ".": {},
+                                    "f:metadata": {
+                                        ".": {},
+                                        "f:creationTimestamp": {},
+                                        "f:labels": {
+                                            ".": {},
+                                            "f:test-name": {}
+                                        }
+                                    },
+                                    "f:spec": {
+                                        ".": {},
+                                        "f:containers": {},
+                                        "f:securityContext": {
+                                            ".": {},
+                                            "f:fsGroup": {},
+                                            "f:runAsNonRoot": {},
+                                            "f:runAsUser": {}
+                                        },
+                                        "f:serviceAccountName": {}
+                                    }
+                                },
+                                "f:version": {}
+                            }
+                        },
+                        "manager": "e2e.test",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:10:31Z"
+                    },
+                    {
+                        "apiVersion": "apm.k8s.elastic.co/v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:association.k8s.elastic.co/es-conf": {},
+                                    "f:association.k8s.elastic.co/kb-conf": {},
+                                    "f:common.k8s.elastic.co/controller-version": {}
+                                }
+                            },
+                            "f:status": {
+                                ".": {},
+                                "f:availableNodes": {},
+                                "f:elasticsearchAssociationStatus": {},
+                                "f:health": {},
+                                "f:kibanaAssociationStatus": {},
+                                "f:secretTokenSecret": {},
+                                "f:service": {},
+                                "f:version": {}
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:14:18Z"
+                    }
+                ],
+                "name": "apm-7djz",
+                "namespace": "e2e-z2jna-mercury",
+                "resourceVersion": "7583",
+                "uid": "8f922b64-a946-4095-ad47-50ac34f447a0"
+            },
+            "spec": {
+                "config": {
+                    "apm-server.ilm.enabled": false
+                },
+                "count": 1,
+                "elasticsearchRef": {
+                    "name": "es-t5dt",
+                    "namespace": "e2e-z2jna-mercury"
+                },
+                "http": {
+                    "service": {
+                        "metadata": {
+                            "creationTimestamp": null
+                        },
+                        "spec": {}
+                    },
+                    "tls": {
+                        "certificate": {}
+                    }
+                },
+                "kibanaRef": {
+                    "name": "kb-vkr2",
+                    "namespace": "e2e-z2jna-mercury"
+                },
+                "podTemplate": {
+                    "metadata": {
+                        "creationTimestamp": null,
+                        "labels": {
+                            "test-name": "apm"
+                        }
+                    },
+                    "spec": {
+                        "containers": null,
+                        "securityContext": {
+                            "fsGroup": 1000,
+                            "runAsNonRoot": true,
+                            "runAsUser": 1000
+                        },
+                        "serviceAccountName": "apm-7djz"
+                    }
+                },
+                "version": "7.7.0"
+            },
+            "status": {
+                "availableNodes": 1,
+                "elasticsearchAssociationStatus": "Established",
+                "health": "green",
+                "kibanaAssociationStatus": "Established",
+                "secretTokenSecret": "apm-7djz-apm-token",
+                "service": "apm-7djz-apm-http",
+                "version": "7.7.0"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

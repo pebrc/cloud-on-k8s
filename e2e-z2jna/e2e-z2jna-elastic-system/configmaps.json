@@ -1,0 +1,143 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "data": {
+                "eck_license_level": "basic",
+                "enterprise_resource_units": "1",
+                "timestamp": "2021-01-14T16:42:38Z",
+                "total_managed_memory": "16.11GB"
+            },
+            "kind": "ConfigMap",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:47Z",
+                "labels": {
+                    "common.k8s.elastic.co/type": "elastic-usage"
+                },
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:data": {
+                                ".": {},
+                                "f:eck_license_level": {},
+                                "f:enterprise_resource_units": {},
+                                "f:timestamp": {},
+                                "f:total_managed_memory": {}
+                            },
+                            "f:metadata": {
+                                "f:labels": {
+                                    ".": {},
+                                    "f:common.k8s.elastic.co/type": {}
+                                }
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:47Z"
+                    }
+                ],
+                "name": "elastic-licensing",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "12093",
+                "uid": "a3b1372b-54da-45cb-8bb0-b08fdfd47c89"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "ConfigMap",
+            "metadata": {
+                "annotations": {
+                    "control-plane.alpha.kubernetes.io/leader": "{\"holderIdentity\":\"e2e-z2jna-operator-0_220b9b50-27b4-425c-b3e3-e54fa0bfd463\",\"leaseDurationSeconds\":15,\"acquireTime\":\"2021-01-14T16:06:31Z\",\"renewTime\":\"2021-01-14T16:44:34Z\",\"leaderTransitions\":1}"
+                },
+                "creationTimestamp": "2021-01-14T15:51:37Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:metadata": {
+                                "f:annotations": {
+                                    ".": {},
+                                    "f:control-plane.alpha.kubernetes.io/leader": {}
+                                }
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:37Z"
+                    }
+                ],
+                "name": "elastic-operator-leader",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "12404",
+                "uid": "d6a24879-bcab-4224-b500-172a1429ccf6"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "data": {
+                "uuid": "11e606a1-e4d3-47bf-9581-490f75dc1e27"
+            },
+            "kind": "ConfigMap",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:35Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:data": {
+                                ".": {},
+                                "f:uuid": {}
+                            }
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:35Z"
+                    }
+                ],
+                "name": "elastic-operator-uuid",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1394",
+                "uid": "9fe6085d-8ffd-4f1f-b155-8c3148dc78f2"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "data": {
+                "ca.crt": "-----BEGIN CERTIFICATE-----\nMIIC5zCCAc+gAwIBAgIBADANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwprdWJl\ncm5ldGVzMB4XDTIxMDExNDE1NDUyMloXDTMxMDExMjE1NDUyMlowFTETMBEGA1UE\nAxMKa3ViZXJuZXRlczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAK97\n7kYVgBQ+RoZ/3PhWuXlqUmd5BsUMjkxyUPiqRBYhTOKkjXRMFiLUycOOgukf6thf\n+khFDKDgU6/E1yn52b1GdekpQXmtiG/SkrB5vwMjXacPKSAF77LAitPT2i3YxbRx\nMyDfrTgspm/SrElD2/njNwwrc5ixCliVxYQaUp0G3XYDVmaACtUAXtpxpTHHU2+h\nE/cH0iPjl3k/Z7HO11GTzo1zJ2ogoVXnSj0VcOCS54/neGYXHmhkDOJibo2OJheF\n2LsSt+f6HYgQ/wgC3Ai0o4m8AH91JkqRMTCkTh+ij+0EJduno/mDGJoV3Fgz7M7f\nOvnH1VT3CMTWQrlzcAMCAwEAAaNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB\n/wQFMAMBAf8wHQYDVR0OBBYEFIrwXdrkN2GOknonZviBBwLnkBKsMA0GCSqGSIb3\nDQEBCwUAA4IBAQB+eTQElpgpIkCfJ/rWNnXQ9Lx37bllmWUbsazIaLRwd5qodYP7\nmV6kEm4COYobhybGkrHuDRjuX22qVEa8O5giZwW/m+i8QZRF8gnGH+/pgIF4sZso\n0FQvuijoJqCxsQvFUTYZpZrll6rUizNzmogVfmvgku15zdj9p5t3vt3WZ1zT65f2\nB0C6pMvTz3hQLXJR424mOcK2uoEpB/C9SA1IokiNFBqL3+PrW6f8UgXmAVGfyqjl\nvKWGQeEMBC0SlsZ5xDeBQa/GV4ivXSxqhQE2+7+/71JoFjHz4p4lsMlZ7uDi3a0J\n686GZXGjZJT8tfQ9/P7L+6MDlqMO+m0SHsrr\n-----END CERTIFICATE-----\n"
+            },
+            "kind": "ConfigMap",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:32Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:data": {
+                                ".": {},
+                                "f:ca.crt": {}
+                            }
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:32Z"
+                    }
+                ],
+                "name": "kube-root-ca.crt",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1341",
+                "uid": "651e5ed3-6913-475a-96bf-e8fc3ef60067"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

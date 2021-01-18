@@ -1,0 +1,435 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2021-01-14T15:51:33Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "e2e-z2jna-operator-0",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1374",
+                "uid": "e4822c17-4acf-4bd8-b08e-bc4a0faa8954"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2021-01-14T15:51:33Z",
+            "message": "Successfully assigned e2e-z2jna-elastic-system/e2e-z2jna-operator-0 to eck-e2e-worker3",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:33Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:count": {},
+                            "f:firstTimestamp": {},
+                            "f:involvedObject": {
+                                "f:apiVersion": {},
+                                "f:kind": {},
+                                "f:name": {},
+                                "f:namespace": {},
+                                "f:resourceVersion": {},
+                                "f:uid": {}
+                            },
+                            "f:lastTimestamp": {},
+                            "f:message": {},
+                            "f:reason": {},
+                            "f:source": {
+                                "f:component": {}
+                            },
+                            "f:type": {}
+                        },
+                        "manager": "kube-scheduler",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:33Z"
+                    }
+                ],
+                "name": "e2e-z2jna-operator-0.165a241609a0e1d8",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1379",
+                "uid": "2a737a51-2589-4908-bed7-c0045e037cac"
+            },
+            "reason": "Scheduled",
+            "reportingComponent": "",
+            "reportingInstance": "",
+            "source": {
+                "component": "default-scheduler"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 2,
+            "eventTime": null,
+            "firstTimestamp": "2021-01-14T15:51:34Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{manager}",
+                "kind": "Pod",
+                "name": "e2e-z2jna-operator-0",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1377",
+                "uid": "e4822c17-4acf-4bd8-b08e-bc4a0faa8954"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2021-01-14T16:06:06Z",
+            "message": "Container image \"docker.elastic.co/eck/eck-operator:1.4.0-bc2\" already present on machine",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:34Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:count": {},
+                            "f:firstTimestamp": {},
+                            "f:involvedObject": {
+                                "f:apiVersion": {},
+                                "f:fieldPath": {},
+                                "f:kind": {},
+                                "f:name": {},
+                                "f:namespace": {},
+                                "f:resourceVersion": {},
+                                "f:uid": {}
+                            },
+                            "f:lastTimestamp": {},
+                            "f:message": {},
+                            "f:reason": {},
+                            "f:source": {
+                                "f:component": {},
+                                "f:host": {}
+                            },
+                            "f:type": {}
+                        },
+                        "manager": "kubelet",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:34Z"
+                    }
+                ],
+                "name": "e2e-z2jna-operator-0.165a2416301d50e4",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "5052",
+                "uid": "26a26299-5d57-4bab-b9b2-ac7dd5135c74"
+            },
+            "reason": "Pulled",
+            "reportingComponent": "",
+            "reportingInstance": "",
+            "source": {
+                "component": "kubelet",
+                "host": "eck-e2e-worker3"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 2,
+            "eventTime": null,
+            "firstTimestamp": "2021-01-14T15:51:34Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{manager}",
+                "kind": "Pod",
+                "name": "e2e-z2jna-operator-0",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1377",
+                "uid": "e4822c17-4acf-4bd8-b08e-bc4a0faa8954"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2021-01-14T16:06:09Z",
+            "message": "Created container manager",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:34Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:count": {},
+                            "f:firstTimestamp": {},
+                            "f:involvedObject": {
+                                "f:apiVersion": {},
+                                "f:fieldPath": {},
+                                "f:kind": {},
+                                "f:name": {},
+                                "f:namespace": {},
+                                "f:resourceVersion": {},
+                                "f:uid": {}
+                            },
+                            "f:lastTimestamp": {},
+                            "f:message": {},
+                            "f:reason": {},
+                            "f:source": {
+                                "f:component": {},
+                                "f:host": {}
+                            },
+                            "f:type": {}
+                        },
+                        "manager": "kubelet",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:34Z"
+                    }
+                ],
+                "name": "e2e-z2jna-operator-0.165a241639f57394",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "5074",
+                "uid": "3aed38e6-98bc-47de-a882-dab532c3e79c"
+            },
+            "reason": "Created",
+            "reportingComponent": "",
+            "reportingInstance": "",
+            "source": {
+                "component": "kubelet",
+                "host": "eck-e2e-worker3"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 2,
+            "eventTime": null,
+            "firstTimestamp": "2021-01-14T15:51:34Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{manager}",
+                "kind": "Pod",
+                "name": "e2e-z2jna-operator-0",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1377",
+                "uid": "e4822c17-4acf-4bd8-b08e-bc4a0faa8954"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2021-01-14T16:06:12Z",
+            "message": "Started container manager",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:34Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:count": {},
+                            "f:firstTimestamp": {},
+                            "f:involvedObject": {
+                                "f:apiVersion": {},
+                                "f:fieldPath": {},
+                                "f:kind": {},
+                                "f:name": {},
+                                "f:namespace": {},
+                                "f:resourceVersion": {},
+                                "f:uid": {}
+                            },
+                            "f:lastTimestamp": {},
+                            "f:message": {},
+                            "f:reason": {},
+                            "f:source": {
+                                "f:component": {},
+                                "f:host": {}
+                            },
+                            "f:type": {}
+                        },
+                        "manager": "kubelet",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:34Z"
+                    }
+                ],
+                "name": "e2e-z2jna-operator-0.165a24164048f298",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "5079",
+                "uid": "6fcecd8d-6166-47ac-bc58-0406ff07bcd5"
+            },
+            "reason": "Started",
+            "reportingComponent": "",
+            "reportingInstance": "",
+            "source": {
+                "component": "kubelet",
+                "host": "eck-e2e-worker3"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2021-01-14T15:51:33Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "StatefulSet",
+                "name": "e2e-z2jna-operator",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1368",
+                "uid": "e585108e-34b8-4d3f-a1c8-3fca4eecafff"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2021-01-14T15:51:33Z",
+            "message": "create Pod e2e-z2jna-operator-0 in StatefulSet e2e-z2jna-operator successful",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:33Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:count": {},
+                            "f:firstTimestamp": {},
+                            "f:involvedObject": {
+                                "f:apiVersion": {},
+                                "f:kind": {},
+                                "f:name": {},
+                                "f:namespace": {},
+                                "f:resourceVersion": {},
+                                "f:uid": {}
+                            },
+                            "f:lastTimestamp": {},
+                            "f:message": {},
+                            "f:reason": {},
+                            "f:source": {
+                                "f:component": {}
+                            },
+                            "f:type": {}
+                        },
+                        "manager": "kube-controller-manager",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:33Z"
+                    }
+                ],
+                "name": "e2e-z2jna-operator.165a2416000a3c64",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1378",
+                "uid": "c91bb0f1-2c0a-48a6-a071-58aeef7e42f0"
+            },
+            "reason": "SuccessfulCreate",
+            "reportingComponent": "",
+            "reportingInstance": "",
+            "source": {
+                "component": "statefulset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2021-01-14T15:51:37Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "ConfigMap",
+                "name": "elastic-operator-leader",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1398",
+                "uid": "d6a24879-bcab-4224-b500-172a1429ccf6"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2021-01-14T15:51:37Z",
+            "message": "e2e-z2jna-operator-0_0cc48227-4b8b-43ab-bf66-05ce35a024c0 became leader",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T15:51:37Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:count": {},
+                            "f:firstTimestamp": {},
+                            "f:involvedObject": {
+                                "f:apiVersion": {},
+                                "f:kind": {},
+                                "f:name": {},
+                                "f:namespace": {},
+                                "f:resourceVersion": {},
+                                "f:uid": {}
+                            },
+                            "f:lastTimestamp": {},
+                            "f:message": {},
+                            "f:reason": {},
+                            "f:source": {
+                                "f:component": {}
+                            },
+                            "f:type": {}
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T15:51:37Z"
+                    }
+                ],
+                "name": "elastic-operator-leader.165a2416cd6e9010",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "1399",
+                "uid": "fa42786d-d01c-447d-87af-ccf8386a270a"
+            },
+            "reason": "LeaderElection",
+            "reportingComponent": "",
+            "reportingInstance": "",
+            "source": {
+                "component": "e2e-z2jna-operator-0_0cc48227-4b8b-43ab-bf66-05ce35a024c0"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2021-01-14T16:06:31Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "ConfigMap",
+                "name": "elastic-operator-leader",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "5140",
+                "uid": "d6a24879-bcab-4224-b500-172a1429ccf6"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2021-01-14T16:06:31Z",
+            "message": "e2e-z2jna-operator-0_220b9b50-27b4-425c-b3e3-e54fa0bfd463 became leader",
+            "metadata": {
+                "creationTimestamp": "2021-01-14T16:06:31Z",
+                "managedFields": [
+                    {
+                        "apiVersion": "v1",
+                        "fieldsType": "FieldsV1",
+                        "fieldsV1": {
+                            "f:count": {},
+                            "f:firstTimestamp": {},
+                            "f:involvedObject": {
+                                "f:apiVersion": {},
+                                "f:kind": {},
+                                "f:name": {},
+                                "f:namespace": {},
+                                "f:resourceVersion": {},
+                                "f:uid": {}
+                            },
+                            "f:lastTimestamp": {},
+                            "f:message": {},
+                            "f:reason": {},
+                            "f:source": {
+                                "f:component": {}
+                            },
+                            "f:type": {}
+                        },
+                        "manager": "elastic-operator",
+                        "operation": "Update",
+                        "time": "2021-01-14T16:06:31Z"
+                    }
+                ],
+                "name": "elastic-operator-leader.165a24e70304016c",
+                "namespace": "e2e-z2jna-elastic-system",
+                "resourceVersion": "5142",
+                "uid": "689c6e6d-7939-4fc7-a30a-ae9f8678b6d5"
+            },
+            "reason": "LeaderElection",
+            "reportingComponent": "",
+            "reportingInstance": "",
+            "source": {
+                "component": "e2e-z2jna-operator-0_220b9b50-27b4-425c-b3e3-e54fa0bfd463"
+            },
+            "type": "Normal"
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}
