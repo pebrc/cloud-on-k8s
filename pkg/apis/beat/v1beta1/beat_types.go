@@ -38,11 +38,11 @@ type BeatSpec struct {
 
 	// ElasticsearchRef is a reference to an Elasticsearch cluster running in the same Kubernetes cluster.
 	// +kubebuilder:validation:Optional
-	ElasticsearchRef commonv1.ObjectSelector `json:"elasticsearchRef,omitempty"`
+	ElasticsearchRef commonv1.ServiceRef `json:"elasticsearchRef,omitempty"`
 
 	// KibanaRef is a reference to a Kibana instance running in the same Kubernetes cluster.
 	// It allows automatic setup of dashboards and visualizations.
-	KibanaRef commonv1.ObjectSelector `json:"kibanaRef,omitempty"`
+	KibanaRef commonv1.ServiceRef `json:"kibanaRef,omitempty"`
 
 	// Image is the Beat Docker image to deploy. Version and Type have to match the Beat in the image.
 	// +kubebuilder:validation:Optional
@@ -214,7 +214,7 @@ func (b *Beat) IsMarkedForDeletion() bool {
 	return !b.DeletionTimestamp.IsZero()
 }
 
-func (b *Beat) ElasticsearchRef() commonv1.ObjectSelector {
+func (b *Beat) ElasticsearchRef() commonv1.ServiceRef {
 	return b.Spec.ElasticsearchRef
 }
 
@@ -238,7 +238,7 @@ func (b *BeatESAssociation) AssociationType() commonv1.AssociationType {
 	return commonv1.ElasticsearchAssociationType
 }
 
-func (b *BeatESAssociation) AssociationRef() commonv1.ObjectSelector {
+func (b *BeatESAssociation) AssociationRef() commonv1.ServiceRef {
 	return b.Spec.ElasticsearchRef.WithDefaultNamespace(b.Namespace)
 }
 
@@ -286,7 +286,7 @@ func (b *BeatKibanaAssociation) AssociationType() commonv1.AssociationType {
 	return commonv1.KibanaAssociationType
 }
 
-func (b *BeatKibanaAssociation) AssociationRef() commonv1.ObjectSelector {
+func (b *BeatKibanaAssociation) AssociationRef() commonv1.ServiceRef {
 	return b.Spec.KibanaRef.WithDefaultNamespace(b.Namespace)
 }
 

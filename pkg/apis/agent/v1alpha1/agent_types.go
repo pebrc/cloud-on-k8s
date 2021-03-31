@@ -70,8 +70,8 @@ type AgentSpec struct {
 }
 
 type Output struct {
-	commonv1.ObjectSelector `json:",omitempty,inline"`
-	OutputName              string `json:"outputName,omitempty"`
+	commonv1.ServiceRef `json:",omitempty,inline"`
+	OutputName          string `json:"outputName,omitempty"`
 }
 
 type DaemonSetSpec struct {
@@ -217,10 +217,12 @@ func (aea *AgentESAssociation) AssociationType() commonv1.AssociationType {
 	return commonv1.ElasticsearchAssociationType
 }
 
-func (aea *AgentESAssociation) AssociationRef() commonv1.ObjectSelector {
-	return commonv1.ObjectSelector{
-		Name:      aea.ref.Name,
-		Namespace: aea.ref.Namespace,
+func (aea *AgentESAssociation) AssociationRef() commonv1.ServiceRef {
+	return commonv1.ServiceRef{
+		ObjectSelector: commonv1.ObjectSelector{
+			Name:      aea.ref.Name,
+			Namespace: aea.ref.Namespace,
+		},
 	}
 }
 

@@ -92,7 +92,7 @@ func (b Builder) WithRestrictedSecurityContext() Builder {
 	return b
 }
 
-func (b Builder) WithElasticsearchRef(ref commonv1.ObjectSelector) Builder {
+func (b Builder) WithElasticsearchRef(ref commonv1.ServiceRef) Builder {
 	b.EnterpriseSearch.Spec.ElasticsearchRef = ref
 	return b
 }

@@ -32,11 +32,11 @@ func AddEntES(mgr manager.Manager, accessReviewer rbac.AccessReviewer, params op
 	return association.AddAssociationController(mgr, accessReviewer, params, association.AssociationInfo{
 		AssociatedObjTemplate: func() commonv1.Associated { return &entv1.EnterpriseSearch{} },
 		ElasticsearchRef: func(c k8s.Client, association commonv1.Association) (bool, commonv1.ObjectSelector, error) {
-			return true, association.AssociationRef(), nil
+			return true, association.AssociationRef().ObjectSelector, nil
 		},
 		ReferencedResourceVersion: referencedElasticsearchStatusVersion,
 		AssociationType:           commonv1.ElasticsearchAssociationType,
-		ExternalServiceURL:        getElasticsearchExternalURL,
+		ExternalService:           getElasticsearchExternalURL,
 		AssociatedNamer:           esv1.ESNamer,
 		AssociationName:           "ent-es",
 		AssociatedShortName:       "ent",

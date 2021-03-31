@@ -39,11 +39,11 @@ type ApmServerSpec struct {
 	HTTP commonv1.HTTPConfig `json:"http,omitempty"`
 
 	// ElasticsearchRef is a reference to the output Elasticsearch cluster running in the same Kubernetes cluster.
-	ElasticsearchRef commonv1.ObjectSelector `json:"elasticsearchRef,omitempty"`
+	ElasticsearchRef commonv1.ServiceRef `json:"elasticsearchRef,omitempty"`
 
 	// KibanaRef is a reference to a Kibana instance running in the same Kubernetes cluster.
 	// It allows APM agent central configuration management in Kibana.
-	KibanaRef commonv1.ObjectSelector `json:"kibanaRef,omitempty"`
+	KibanaRef commonv1.ServiceRef `json:"kibanaRef,omitempty"`
 
 	// PodTemplate provides customisation options (labels, annotations, affinity rules, resource requests, and so on) for the APM Server pods.
 	// +kubebuilder:validation:Optional
@@ -201,7 +201,7 @@ func (aes *ApmEsAssociation) AssociationType() commonv1.AssociationType {
 	return commonv1.ElasticsearchAssociationType
 }
 
-func (aes *ApmEsAssociation) AssociationRef() commonv1.ObjectSelector {
+func (aes *ApmEsAssociation) AssociationRef() commonv1.ServiceRef {
 	return aes.Spec.ElasticsearchRef.WithDefaultNamespace(aes.Namespace)
 }
 
@@ -246,7 +246,7 @@ func (akb *ApmKibanaAssociation) AssociationType() commonv1.AssociationType {
 	return commonv1.KibanaAssociationType
 }
 
-func (akb *ApmKibanaAssociation) AssociationRef() commonv1.ObjectSelector {
+func (akb *ApmKibanaAssociation) AssociationRef() commonv1.ServiceRef {
 	return akb.Spec.KibanaRef.WithDefaultNamespace(akb.Namespace)
 }
 

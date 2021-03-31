@@ -53,7 +53,7 @@ type AssociationInfo struct {
 	// AssociatedNamer is used to build the name of the Secret which contains the CA of the target.
 	AssociatedNamer name.Namer
 	// ExternalServiceURL is used to build the external service url as it will be set in the resource configuration.
-	ExternalServiceURL func(c k8s.Client, association commonv1.Association) (string, error)
+	ExternalService func(c k8s.Client, association commonv1.Association) (*corev1.Service, string, error)
 	// AssociationName is the name of the association (eg. "kb-es").
 	AssociationName string
 	// AssociatedShortName is the short name of the associated resource type (eg. "kb").
@@ -270,9 +270,16 @@ func (r *Reconciler) reconcileAssociation(ctx context.Context, association commo
 		return commonv1.AssociationPending, err // maybe not created yet
 	}
 
-	url, err := r.AssociationInfo.ExternalServiceURL(r.Client, association)
+	svc, url, err := r.AssociationInfo.ExternalService(r.Client, association)
 	if err != nil {
 		return commonv1.AssociationPending, err // maybe not created yet
+	}
+
+	if svc != nil {
+		if _, err := common.ReconcileService(ctx, r.Client, svc, association.Associated()); err != nil {
+			return commonv1.AssociationFailed, err // not recoverable
+		}
+
 	}
 
 	// Propagate the currently running version of the referenced resource (example: Elasticsearch version).

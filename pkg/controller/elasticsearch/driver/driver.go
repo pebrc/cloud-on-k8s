@@ -127,7 +127,7 @@ func (d *defaultDriver) Reconcile(ctx context.Context) *reconciler.Results {
 
 	externalService, err := common.ReconcileService(ctx, d.Client, services.NewExternalService(d.ES), &d.ES)
 	if err != nil {
-		return results.WithError(err)
+		return results.WithError(fmt.Errorf("while reconciling service: %w", err))
 	}
 
 	certificateResources, res := certificates.Reconcile(

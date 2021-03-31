@@ -130,8 +130,8 @@ func (in *ApmServerSpec) DeepCopyInto(out *ApmServerSpec) {
 		*out = (*in).DeepCopy()
 	}
 	in.HTTP.DeepCopyInto(&out.HTTP)
-	out.ElasticsearchRef = in.ElasticsearchRef
-	out.KibanaRef = in.KibanaRef
+	in.ElasticsearchRef.DeepCopyInto(&out.ElasticsearchRef)
+	in.KibanaRef.DeepCopyInto(&out.KibanaRef)
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 	if in.SecureSettings != nil {
 		in, out := &in.SecureSettings, &out.SecureSettings

@@ -11,7 +11,7 @@ import (
 )
 
 type testAPMServer struct {
-	elasticsearchRef, kibanaRef          commonv1.ObjectSelector
+	elasticsearchRef, kibanaRef          commonv1.ServiceRef
 	esConfAnnotations, kbConfAnnotations bool
 	esAssociation, kbAssociation         *commonv1.AssociationConf
 }
@@ -50,12 +50,12 @@ func (t testAPMServer) build() *apmv1.ApmServer {
 }
 
 func (t testAPMServer) withElasticsearchRef() testAPMServer {
-	t.elasticsearchRef = commonv1.ObjectSelector{Name: "es"}
+	t.elasticsearchRef = commonv1.ServiceRef{ObjectSelector: commonv1.ObjectSelector{Name: "es"}}
 	return t
 }
 
 func (t testAPMServer) withKibanaRef() testAPMServer {
-	t.kibanaRef = commonv1.ObjectSelector{Name: "kb"}
+	t.kibanaRef = commonv1.ServiceRef{ObjectSelector: commonv1.ObjectSelector{Name: "kb"}}
 	return t
 }
 

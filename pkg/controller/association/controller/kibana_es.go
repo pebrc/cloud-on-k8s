@@ -34,10 +34,10 @@ func AddKibanaES(mgr manager.Manager, accessReviewer rbac.AccessReviewer, params
 	return association.AddAssociationController(mgr, accessReviewer, params, association.AssociationInfo{
 		AssociatedObjTemplate: func() commonv1.Associated { return &kbv1.Kibana{} },
 		ElasticsearchRef: func(c k8s.Client, association commonv1.Association) (bool, commonv1.ObjectSelector, error) {
-			return true, association.AssociationRef(), nil
+			return true, association.AssociationRef().ObjectSelector, nil
 		},
 		ReferencedResourceVersion: referencedElasticsearchStatusVersion,
-		ExternalServiceURL:        getElasticsearchExternalURL,
+		ExternalService:           getElasticsearchExternalURL,
 		AssociationType:           commonv1.ElasticsearchAssociationType,
 		AssociatedNamer:           esv1.ESNamer,
 		AssociationName:           "kb-es",

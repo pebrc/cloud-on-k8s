@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"strconv"
 
+	corev1 "k8s.io/api/core/v1"
+
 	apmv1 "github.com/elastic/cloud-on-k8s/pkg/apis/apm/v1"
 	commonv1 "github.com/elastic/cloud-on-k8s/pkg/apis/common/v1"
 	kbv1 "github.com/elastic/cloud-on-k8s/pkg/apis/kibana/v1"
@@ -33,7 +35,7 @@ func AddApmKibana(mgr manager.Manager, accessReviewer rbac.AccessReviewer, param
 	return association.AddAssociationController(mgr, accessReviewer, params, association.AssociationInfo{
 		AssociatedShortName:       "apm",
 		AssociatedObjTemplate:     func() commonv1.Associated { return &apmv1.ApmServer{} },
-		ExternalServiceURL:        getKibanaExternalURL,
+		ExternalService:           getKibanaExternalURL,
 		ReferencedResourceVersion: referencedKibanaStatusVersion,
 		ElasticsearchRef:          getElasticsearchFromKibana,
 		AssociatedNamer:           kibana.Namer,
@@ -70,16 +72,16 @@ func AddApmKibana(mgr manager.Manager, accessReviewer rbac.AccessReviewer, param
 	})
 }
 
-func getKibanaExternalURL(c k8s.Client, association commonv1.Association) (string, error) {
+func getKibanaExternalURL(c k8s.Client, association commonv1.Association) (*corev1.Service, string, error) {
 	kibanaRef := association.AssociationRef()
 	if !kibanaRef.IsDefined() {
-		return "", nil
+		return nil, "", nil
 	}
 	kb := kbv1.Kibana{}
 	if err := c.Get(context.Background(), kibanaRef.NamespacedName(), &kb); err != nil {
-		return "", err
+		return nil, "", err
 	}
-	return stringsutil.Concat(kb.Spec.HTTP.Protocol(), "://", kibana.HTTPService(kb.Name), ".", kb.Namespace, ".svc:", strconv.Itoa(kibana.HTTPPort)), nil
+	return nil, stringsutil.Concat(kb.Spec.HTTP.Protocol(), "://", kibana.HTTPService(kb.Name), ".", kb.Namespace, ".svc:", strconv.Itoa(kibana.HTTPPort)), nil
 }
 
 // referencedKibanaStatusVersion returns the currently running version of Kibana
@@ -108,5 +110,5 @@ func getElasticsearchFromKibana(c k8s.Client, association commonv1.Association) 
 		return false, commonv1.ObjectSelector{}, err
 	}
 
-	return true, kb.AssociationRef(), nil
+	return true, kb.AssociationRef().ObjectSelector, nil
 }

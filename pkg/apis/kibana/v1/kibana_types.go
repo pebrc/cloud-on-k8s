@@ -31,7 +31,7 @@ type KibanaSpec struct {
 	Count int32 `json:"count,omitempty"`
 
 	// ElasticsearchRef is a reference to an Elasticsearch cluster running in the same Kubernetes cluster.
-	ElasticsearchRef commonv1.ObjectSelector `json:"elasticsearchRef,omitempty"`
+	ElasticsearchRef commonv1.ServiceRef `json:"elasticsearchRef,omitempty"`
 
 	// Config holds the Kibana configuration. See: https://www.elastic.co/guide/en/kibana/current/settings.html
 	Config *commonv1.Config `json:"config,omitempty"`
@@ -75,7 +75,7 @@ func (k *Kibana) AssociationType() commonv1.AssociationType {
 	return commonv1.ElasticsearchAssociationType
 }
 
-func (k *Kibana) AssociationRef() commonv1.ObjectSelector {
+func (k *Kibana) AssociationRef() commonv1.ServiceRef {
 	return k.Spec.ElasticsearchRef.WithDefaultNamespace(k.Namespace)
 }
 

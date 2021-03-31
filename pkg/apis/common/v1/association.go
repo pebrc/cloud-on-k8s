@@ -139,7 +139,7 @@ type Association interface {
 
 	// AssociationRef is a reference to the associated resource. If defined with a Name then the Namespace is expected
 	// to be set in the returned object.
-	AssociationRef() ObjectSelector
+	AssociationRef() ServiceRef
 
 	// AssociationConfAnnotationName is the name of the annotation used to define the config for the associated resource.
 	// It is used by the association controller to store the configuration and by the controller which is

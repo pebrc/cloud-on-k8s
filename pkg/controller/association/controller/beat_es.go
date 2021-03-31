@@ -38,10 +38,10 @@ func AddBeatES(mgr manager.Manager, accessReviewer rbac.AccessReviewer, params o
 		AssociatedObjTemplate: func() commonv1.Associated { return &beatv1beta1.Beat{} },
 		AssociationType:       commonv1.ElasticsearchAssociationType,
 		ElasticsearchRef: func(c k8s.Client, association commonv1.Association) (bool, commonv1.ObjectSelector, error) {
-			return true, association.AssociationRef(), nil
+			return true, association.AssociationRef().ObjectSelector, nil
 		},
 		ReferencedResourceVersion: referencedElasticsearchStatusVersion,
-		ExternalServiceURL:        getElasticsearchExternalURL,
+		ExternalService:           getElasticsearchExternalURL,
 		AssociatedNamer:           esv1.ESNamer,
 		AssociationName:           "beat-es",
 		AssociatedShortName:       "beat",

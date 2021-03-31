@@ -150,12 +150,12 @@ func (b Builder) WithESValidations(validations ...ValidationFunc) Builder {
 	return b
 }
 
-func (b Builder) WithElasticsearchRef(ref commonv1.ObjectSelector) Builder {
+func (b Builder) WithElasticsearchRef(ref commonv1.ServiceRef) Builder {
 	b.Beat.Spec.ElasticsearchRef = ref
 	return b
 }
 
-func (b Builder) WithKibanaRef(ref commonv1.ObjectSelector) Builder {
+func (b Builder) WithKibanaRef(ref commonv1.ServiceRef) Builder {
 	b.Beat.Spec.KibanaRef = ref
 	return b
 }

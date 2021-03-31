@@ -302,7 +302,7 @@ func ApplyYamls(t *testing.T, b Builder, configYaml, podTemplateYaml string) Bui
 
 func ToOutput(selector commonv1.ObjectSelector, outputName string) agentv1alpha1.Output {
 	return agentv1alpha1.Output{
-		ObjectSelector: selector,
-		OutputName:     outputName,
+		ServiceRef: commonv1.ServiceRef{ObjectSelector: selector},
+		OutputName: outputName,
 	}
 }

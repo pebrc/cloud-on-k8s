@@ -355,7 +355,7 @@ func builderPriority(builder test.Builder) int {
 	}
 }
 
-func tweakServiceRef(ref commonv1.ObjectSelector, suffix string) commonv1.ObjectSelector {
+func tweakServiceRef(ref commonv1.ServiceRef, suffix string) commonv1.ServiceRef {
 	// All the objects defined in the YAML file will have a random test suffix added to prevent clashes with previous runs.
 	// This necessitates changing the Elasticsearch reference to match the suffixed name.
 	if ref.Name != "" {
@@ -369,8 +369,8 @@ func tweakOutputRefs(outputs []agentv1alpha1.Output, suffix string) (results []a
 	for _, output := range outputs {
 		// All the objects defined in the YAML file will have a random test suffix added to prevent clashes with previous runs.
 		// This necessitates changing the Elasticsearch reference to match the suffixed name.
-		ref := tweakServiceRef(output.ObjectSelector, suffix)
-		output.ObjectSelector = ref
+		ref := tweakServiceRef(output.ServiceRef, suffix)
+		output.ServiceRef = ref
 		results = append(results, output)
 	}
 

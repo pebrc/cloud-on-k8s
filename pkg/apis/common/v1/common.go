@@ -70,6 +70,30 @@ func (o ObjectSelector) NamespacedName() types.NamespacedName {
 	}
 }
 
+type ServiceRef struct {
+	ObjectSelector `json:",inline"`
+	Service        *ServiceTemplate `json:"service,omitempty"`
+}
+
+// WithDefaultNamespace adds a default namespace to a given ObjectSelector if none is set.
+func (s ServiceRef) WithDefaultNamespace(defaultNamespace string) ServiceRef {
+	if len(s.Namespace) > 0 {
+		return s
+	}
+	return ServiceRef{
+		ObjectSelector: ObjectSelector{
+			Namespace: defaultNamespace,
+			Name:      s.Name,
+		},
+		Service: s.Service,
+	}
+}
+
+// NamespacedName is a convenience method to turn an ObjectSelector into a NamespacedName.
+func (s ServiceRef) NamespacedName() types.NamespacedName {
+	return s.ObjectSelector.NamespacedName()
+}
+
 // IsDefined checks if the object selector is not nil and has a name.
 // Namespace is not mandatory as it may be inherited by the parent object.
 func (o *ObjectSelector) IsDefined() bool {

@@ -10,6 +10,8 @@ import (
 	"math/rand"
 	"strconv"
 
+	v1 "github.com/elastic/cloud-on-k8s/pkg/apis/common/v1"
+
 	esv1 "github.com/elastic/cloud-on-k8s/pkg/apis/elasticsearch/v1"
 	"github.com/elastic/cloud-on-k8s/pkg/controller/common/defaults"
 	"github.com/elastic/cloud-on-k8s/pkg/controller/elasticsearch/label"
@@ -73,21 +75,32 @@ func ExternalTransportServiceHost(es types.NamespacedName) string {
 
 // ExternalServiceURL returns the URL used to reach Elasticsearch's external endpoint
 func ExternalServiceURL(es esv1.Elasticsearch) string {
-	return stringsutil.Concat(es.Spec.HTTP.Protocol(), "://", ExternalServiceName(es.Name), ".", es.Namespace, globalServiceSuffix, ":", strconv.Itoa(network.HTTPPort))
+	return ServiceURL(es, ExternalServiceName(es.Name))
+}
+
+func ServiceURL(es esv1.Elasticsearch, svcName string) string {
+	return stringsutil.Concat(es.Spec.HTTP.Protocol(), "://", svcName, ".", es.Namespace, globalServiceSuffix, ":", strconv.Itoa(network.HTTPPort))
 }
 
 // NewExternalService returns the external service associated to the given cluster
 // It is used by users to perform requests against one of the cluster nodes.
 func NewExternalService(es esv1.Elasticsearch) *corev1.Service {
+	tpl := es.Spec.HTTP.Service
+	tpl.ObjectMeta.Namespace = es.Namespace
+	tpl.ObjectMeta.Name = ExternalServiceName(es.Name)
+
+	return NewESService(es, tpl)
+}
+
+// NewExternalService returns the external service associated to the given cluster
+// It is used by users to perform requests against one of the cluster nodes.
+func NewESService(es esv1.Elasticsearch, tpl v1.ServiceTemplate) *corev1.Service {
 	nsn := k8s.ExtractNamespacedName(&es)
 
 	svc := corev1.Service{
-		ObjectMeta: es.Spec.HTTP.Service.ObjectMeta,
-		Spec:       es.Spec.HTTP.Service.Spec,
+		ObjectMeta: tpl.ObjectMeta,
+		Spec:       tpl.Spec,
 	}
-
-	svc.ObjectMeta.Namespace = es.Namespace
-	svc.ObjectMeta.Name = ExternalServiceName(es.Name)
 
 	labels := label.NewLabels(nsn)
 	ports := []corev1.ServicePort{

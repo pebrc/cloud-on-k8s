@@ -90,7 +90,7 @@ func (in *EnterpriseSearchSpec) DeepCopyInto(out *EnterpriseSearchSpec) {
 		**out = **in
 	}
 	in.HTTP.DeepCopyInto(&out.HTTP)
-	out.ElasticsearchRef = in.ElasticsearchRef
+	in.ElasticsearchRef.DeepCopyInto(&out.ElasticsearchRef)
 	in.PodTemplate.DeepCopyInto(&out.PodTemplate)
 }
 

@@ -6,7 +6,10 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	"strings"
+
+	corev1 "k8s.io/api/core/v1"
 
 	apmv1 "github.com/elastic/cloud-on-k8s/pkg/apis/apm/v1"
 	commonv1 "github.com/elastic/cloud-on-k8s/pkg/apis/common/v1"
@@ -39,10 +42,10 @@ func AddApmES(mgr manager.Manager, accessReviewer rbac.AccessReviewer, params op
 		AssociatedObjTemplate: func() commonv1.Associated { return &apmv1.ApmServer{} },
 		AssociationType:       commonv1.ElasticsearchAssociationType,
 		ElasticsearchRef: func(c k8s.Client, association commonv1.Association) (bool, commonv1.ObjectSelector, error) {
-			return true, association.AssociationRef(), nil
+			return true, association.AssociationRef().ObjectSelector, nil
 		},
 		ReferencedResourceVersion: referencedElasticsearchStatusVersion,
-		ExternalServiceURL:        getElasticsearchExternalURL,
+		ExternalService:           getElasticsearchExternalURL,
 		AssociatedNamer:           esv1.ESNamer,
 		AssociationName:           "apm-es",
 		Labels: func(associated types.NamespacedName) map[string]string {
@@ -60,16 +63,23 @@ func AddApmES(mgr manager.Manager, accessReviewer rbac.AccessReviewer, params op
 	})
 }
 
-func getElasticsearchExternalURL(c k8s.Client, association commonv1.Association) (string, error) {
+func getElasticsearchExternalURL(c k8s.Client, association commonv1.Association) (*corev1.Service, string, error) {
 	esRef := association.AssociationRef()
 	if !esRef.IsDefined() {
-		return "", nil
+		return nil, "", nil
 	}
 	es := esv1.Elasticsearch{}
 	if err := c.Get(context.Background(), esRef.NamespacedName(), &es); err != nil {
-		return "", err
+		return nil, "", err
 	}
-	return services.ExternalServiceURL(es), nil
+	if association.AssociationRef().Service == nil {
+		return nil, services.ExternalServiceURL(es), nil
+	}
+
+	template := *association.AssociationRef().Service
+	template.ObjectMeta.Name = fmt.Sprintf("es-kb-%s", association.GetName())
+	template.ObjectMeta.Namespace = es.Namespace
+	return services.NewESService(es, template), services.ServiceURL(es, template.ObjectMeta.Name), nil
 }
 
 // referencedElasticsearchStatusVersion returns the currently running version of Elasticsearch
