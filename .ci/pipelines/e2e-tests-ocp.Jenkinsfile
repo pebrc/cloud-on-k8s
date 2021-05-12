@@ -84,10 +84,10 @@ pipeline {
             }
         }
         cleanup {
-            script {
-                sh ".ci/setenvconfig cleanup/ocp $ocpVersion"
-                sh 'make -C .ci TARGET=run-deployer ci'
-            }
+//             script {
+//                 sh ".ci/setenvconfig cleanup/ocp $ocpVersion"
+//                 sh 'make -C .ci TARGET=run-deployer ci'
+//             }
             cleanWs()
         }
     }
