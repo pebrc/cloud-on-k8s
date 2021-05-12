@@ -100,6 +100,7 @@ func (d *OcpDriver) setup() []func() error {
 	return []func() error{
 		d.ensureWorkDir,
 		d.authToGCP,
+		d.ensureSSHDir,
 		d.ensurePullSecret,
 		d.downloadClusterState,
 	}
@@ -299,6 +300,15 @@ func (d *OcpDriver) authToGCP() error {
 		return err
 	}
 	d.runtimeState.Authenticated = true
+	return nil
+}
+
+func (d *OcpDriver) ensureSSHDir() error {
+	sshDir := filepath.Join(os.Getenv("HOME"), ".ssh")
+	if _, err := os.Stat(sshDir); os.IsNotExist(err) {
+		log.Printf("Creating .ssh directory")
+		return os.Mkdir(sshDir, 0700)
+	}
 	return nil
 }
 
