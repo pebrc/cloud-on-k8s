@@ -63,7 +63,8 @@ platform:
   gcp:
     projectID: {{.GCloudProject}}
     region: {{.Region}}
-pullSecret: '{{.PullSecret}}'`
+pullSecret: '{{.PullSecret}}'
+sshKey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC5sHfihtwUUH+QGJqNebGWWHRlv2l1iDYD2CT6bsgCaU0en61V7z+mi4n85PiiH70CNjRUqXd53zEiXL5V8jFA3ERqnrTveh/wGztWefuD0nMNQMEUQdYMaxdW+tNbHtzVTNws9WeS06KwCE3TtKg5UK6MGH3WoI5hR3V2PDLhMXOvDxaUnGNc9B+0hAKnBXnBU9W4T90y/FgIe1t7FmQibzmqI3sl4TxMcEdc8ZQnQDQQDstRWssS5VvVI2i6y458TUBeahuU5cynAaBAqDM+a4FJcMmBAZUUvf6EmeK2siAQCIMflmj2ADNysaOwJfF3BnwPBMqLt+FF5pLuZxkyAmepvrDCTBujiaMtb8LukT38LyDXuyiPKv5RcrI6ygLy8mJujJYY89N8FmE7rXQ8zJVaGE9WObpQCJxAUM4jVkDHPkz7m/M3C2OPC9+g5cr0l49IYdRXvwPlNS+Rhm/zBl1LqKmotuuIF8tT80BETOAZn27GC8USZNieVTbGf4mRadkUJAnwpkqTBBaNXSXOwRJyLytImVhLac+XHFtiCvLcZa9vKFIf4Qbgg/6kKc7em9IzJJfwVvUI6HSth/bhi87pcdX3pyx8zpVmfCFYXtXy4lVH0DKXQo+DOX8KrCZT9zqgoKZo0P1cX4K2tnjX2lukX41KX9WQb9SkDsvA+Q== peter.brachwitz@elastic.co`
 )
 
 func init() {
