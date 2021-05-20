@@ -12,8 +12,12 @@ RUN curl -fsSLO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${CLIE
     mv oc /usr/local/bin/oc && \
     rm openshift-client-linux-${CLIENT_VERSION}.tar.gz
 
-FROM scratch
+FROM alpine:3.11
+RUN apk add --no-cache \
+  openssh-client \
+  ca-certificates \
+  bash
 # be able to make TLS requests to the GCloud API
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+# COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder /usr/local/bin/openshift-install .
 COPY --from=builder /usr/local/bin/oc .
