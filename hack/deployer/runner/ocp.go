@@ -459,7 +459,7 @@ func (d *OcpDriver) runInstallerCommand(action string) error {
 	params := map[string]interface{}{
 		"ClusterStateDirBase": filepath.Base(d.runtimeState.ClusterStateDir),
 		"SharedVolume":        SharedVolumeName(),
-		"GCloudCredsPath":     filepath.Join("/home", GCPDir, ServiceAccountFilename),
+		"GCloudCredsPath":     filepath.Join("/root", GCPDir, ServiceAccountFilename),
 		"OCPToolsDockerImage": d.runtimeState.ClientImage,
 		"Action":              action,
 	}
@@ -468,12 +468,11 @@ func (d *OcpDriver) runInstallerCommand(action string) error {
 	// scratch+curl and thus an empty
 	// We are mounting tmp as the installer needs a scratch space and writing into the container won't work
 	cmd := NewCommand(`docker run --rm \
-		-v {{.SharedVolume}}:/home \
+		-v {{.SharedVolume}}:/root \
 		-v /tmp:/tmp \
 		-e GOOGLE_APPLICATION_CREDENTIALS={{.GCloudCredsPath}} \
-		-e HOME=/home \
 		{{.OCPToolsDockerImage}} \
-		/openshift-install {{.Action}} cluster --dir /home/{{.ClusterStateDirBase}} --log-level debug`)
+		/openshift-install {{.Action}} cluster --dir /root/{{.ClusterStateDirBase}} --log-level debug`)
 	return cmd.AsTemplate(params).Run()
 }
 
