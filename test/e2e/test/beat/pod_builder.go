@@ -59,7 +59,7 @@ func newPodBuilder(name, suffix string) PodBuilder {
 						},
 					},
 				},
-				SecurityContext: test.DefaultSecurityContext(),
+				SecurityContext: test.APMDefaultSecurityContext(),
 			},
 		},
 		Logged: loggedString,
