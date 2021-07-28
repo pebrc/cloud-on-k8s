@@ -7,10 +7,15 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
 	"strings"
+
+	v1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/meta"
+	"k8s.io/apimachinery/pkg/runtime"
 
 	"k8s.io/kubectl/pkg/describe"
 
@@ -92,6 +97,59 @@ func (c Kubectl) Get(resource, namespace string, w io.Writer) error {
 	}
 
 	return printer.PrintObj(obj, w)
+}
+
+func (c Kubectl) GetMeta(resource, namespace string, w io.Writer) error {
+	r := c.factory.NewBuilder().
+		Unstructured().
+		NamespaceParam(namespace).DefaultNamespace().AllNamespaces(false).
+		ResourceTypeOrNameArgs(true, resource).
+		ContinueOnError().
+		Latest().
+		Flatten().
+		Do()
+
+	r.IgnoreErrors(apierrors.IsNotFound)
+	if err := r.Err(); err != nil {
+		return err
+	}
+
+	type MetaList struct {
+		Items []interface{}
+	}
+
+	var metas MetaList
+	metaAccess := meta.NewAccessor()
+	infos, err := r.Infos()
+	if err != nil {
+		return err
+	}
+	for i := range infos {
+		obj := infos[i].Object
+		annotations, err := metaAccess.Annotations(obj)
+		if err != nil {
+			return err
+		}
+		// last-applied-configuration can contain sensitive data let's remove it
+		delete(annotations, v1.LastAppliedConfigAnnotation)
+		metaAccess.SetAnnotations(obj, annotations)
+		unstructured, err := runtime.DefaultUnstructuredConverter.ToUnstructured(obj)
+		if err != nil {
+			return err
+		}
+		// remove the actual secret data
+		delete(unstructured, "data")
+		// or spec for other objects
+		delete(unstructured, "spec")
+		metas.Items = append(metas.Items, unstructured)
+	}
+	bytes, err := json.MarshalIndent(metas, "", "    ")
+	if err != nil {
+		return err
+	}
+	_, err = w.Write(bytes)
+	return err
+
 }
 
 func (c Kubectl) Describe(resource, prefix, namespace string, w io.Writer) error {

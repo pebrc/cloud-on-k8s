@@ -64,6 +64,11 @@ func RunDump(params DumpParams) error {
 			"networkpolicies",
 			"controllerrevisions",
 		}))
+		zipFile.add(map[string]func(io.Writer) error{
+			filepath.Join(ns, "secrets.json"): func(writer io.Writer) error {
+				return kubectl.GetMeta("secrets", ns, writer)
+			},
+		})
 	}
 
 	for _, ns := range params.ResourcesNamespaces {
