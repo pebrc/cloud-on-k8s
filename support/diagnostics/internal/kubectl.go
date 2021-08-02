@@ -266,3 +266,22 @@ func streamLogs(nsn types.NamespacedName, request rest.ResponseWrapper, out io.W
 		}
 	}
 }
+
+func (c Kubectl) Version(out io.Writer) error {
+	client, err := c.factory.ToDiscoveryClient()
+	if err != nil {
+		return err
+	}
+	// mirroring kubectl behaviour to fetch fresh data from server
+	client.Invalidate()
+	serverVersion, err := client.ServerVersion()
+	if err != nil {
+		return err
+	}
+	bytes, err := json.MarshalIndent(serverVersion, "", "  ")
+	if err != nil {
+		return err
+	}
+	_, err = out.Write(bytes)
+	return err
+}

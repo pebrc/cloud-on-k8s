@@ -42,7 +42,10 @@ func RunDump(params DumpParams) error {
 	if err != nil {
 		return err
 	}
-	zipFile.add(map[string]func(io.Writer) error{
+	if err := zipFile.add(map[string]func(io.Writer) error{
+		"version.json": func(writer io.Writer) error {
+			return kubectl.Version(writer)
+		},
 		"nodes.json": func(writer io.Writer) error {
 			return kubectl.Get("nodes", "", writer)
 		},
@@ -52,7 +55,9 @@ func RunDump(params DumpParams) error {
 		"clusterroles.txt": func(writer io.Writer) error {
 			return kubectl.Describe("clusterroles", "elastic", "", writer)
 		},
-	})
+	}); err != nil {
+		return err
+	}
 
 	for _, ns := range params.OperatorNamespaces {
 		if err := zipFile.add(getResources(kubectl, ns, []string{
