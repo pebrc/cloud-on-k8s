@@ -55,7 +55,7 @@ func RunDump(params DumpParams) error {
 	})
 
 	for _, ns := range params.OperatorNamespaces {
-		zipFile.add(getResources(kubectl, ns, []string{
+		if err := zipFile.add(getResources(kubectl, ns, []string{
 			"statefulsets",
 			"pods",
 			"services",
@@ -63,16 +63,23 @@ func RunDump(params DumpParams) error {
 			"events",
 			"networkpolicies",
 			"controllerrevisions",
-		}))
-		zipFile.add(map[string]func(io.Writer) error{
+		})); err != nil {
+			return err
+		}
+		if err := zipFile.add(map[string]func(io.Writer) error{
 			filepath.Join(ns, "secrets.json"): func(writer io.Writer) error {
 				return kubectl.GetMeta("secrets", ns, writer)
 			},
-		})
+		}); err != nil {
+			return err
+		}
+		if err := kubectl.Logs(ns, "", zipFile.Create); err != nil {
+			return err
+		}
 	}
 
 	for _, ns := range params.ResourcesNamespaces {
-		zipFile.add(getResources(kubectl, ns, []string{
+		if err := zipFile.add(getResources(kubectl, ns, []string{
 			"statefulsets",
 			"replicasets",
 			"deployments",
@@ -86,10 +93,41 @@ func RunDump(params DumpParams) error {
 			"events",
 			"networkpolicies",
 			"controllerrevisions",
-		}))
-	}
+			"kibana",
+			"elasticsearch",
+			"apmserver",
+			"enterprisesearch",
+			"beat",
+			"agent",
+			"elasticmapsserver",
+		})); err != nil {
+			return err
+		}
 
+		if err := getLogs(kubectl, zipFile, ns,
+			"common.k8s.elastic.co/type=elasticsearch",
+			"common.k8s.elastic.co/type=kibana",
+			"common.k8s.elastic.co/type=apm-server",
+			"common.k8s.elastic.co/type=enterprise-search",
+			"common.k8s.elastic.co/type=beat",
+			"common.k8s.elastic.co/type=agent",
+			"common.k8s.elastic.co/type=maps",
+		); err != nil {
+			return err
+		}
+
+	}
 	return zipFile.Close()
+}
+
+func getLogs(k *Kubectl, zipFile *ZipFile, ns string, selector ...string) error {
+
+	for _, s := range selector {
+		if err := k.Logs(ns, s, zipFile.Create); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func getResources(k *Kubectl, ns string, rs []string) map[string]func(io.Writer) error {
@@ -104,7 +142,7 @@ func getResources(k *Kubectl, ns string, rs []string) map[string]func(io.Writer)
 }
 
 type ZipFile struct {
-	zip        *zip.Writer
+	*zip.Writer
 	underlying io.Closer
 }
 
@@ -115,7 +153,7 @@ func NewZipFile(dir string) (*ZipFile, error) {
 	}
 	w := zip.NewWriter(f)
 	return &ZipFile{
-		zip:        w,
+		Writer:     w,
 		underlying: f,
 	}, nil
 
@@ -124,12 +162,12 @@ func NewZipFile(dir string) (*ZipFile, error) {
 func (z ZipFile) Close() error {
 	// TODO aggregate error?
 	defer z.underlying.Close()
-	return z.zip.Close()
+	return z.Writer.Close()
 }
 
 func (z ZipFile) add(fns map[string]func(io.Writer) error) error {
 	for k, f := range fns {
-		fw, err := z.zip.Create(k)
+		fw, err := z.Create(k)
 		if err != nil {
 			return err
 		}
