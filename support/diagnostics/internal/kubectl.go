@@ -1,7 +1,6 @@
 // Copyright Elasticsearch B.V. and/or licensed to Elasticsearch B.V. under one
-// or more contributor license agreements. Licensed under the Elastic License
-// 2.0; you may not use this file except in compliance with the Elastic License
-// 2.0.
+// or more contributor license agreements. Licensed under the Elastic License;
+// you may not use this file except in compliance with the Elastic License.
 
 package internal
 
@@ -15,6 +14,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"k8s.io/cli-runtime/pkg/resource"
 
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -74,17 +75,8 @@ func (c Kubectl) CheckNamespaces(ctx context.Context, nss []string) error {
 }
 
 func (c Kubectl) Get(resource, namespace string, w io.Writer) error {
-	r := c.factory.NewBuilder().
-		Unstructured().
-		NamespaceParam(namespace).DefaultNamespace().AllNamespaces(false).
-		ResourceTypeOrNameArgs(true, resource).
-		ContinueOnError().
-		Latest().
-		Flatten().
-		Do()
-
-	r.IgnoreErrors(apierrors.IsNotFound)
-	if err := r.Err(); err != nil {
+	r, err := c.getResources(resource, namespace)
+	if err != nil {
 		return err
 	}
 	printer, err := printers.NewTypeSetter(scheme.Scheme).WrapToPrinter(&printers.JSONPrinter{}, nil)
@@ -98,6 +90,23 @@ func (c Kubectl) Get(resource, namespace string, w io.Writer) error {
 	}
 
 	return printer.PrintObj(obj, w)
+}
+
+func (c Kubectl) getResources(resource string, namespace string) (*resource.Result, error) {
+	r := c.factory.NewBuilder().
+		Unstructured().
+		NamespaceParam(namespace).DefaultNamespace().AllNamespaces(false).
+		ResourceTypeOrNameArgs(true, resource).
+		ContinueOnError().
+		Latest().
+		Flatten().
+		Do()
+
+	r.IgnoreErrors(apierrors.IsNotFound)
+	if err := r.Err(); err != nil {
+		return nil, err
+	}
+	return r, nil
 }
 
 func (c Kubectl) GetMeta(resource, namespace string, w io.Writer) error {
@@ -268,6 +277,8 @@ func streamLogs(nsn types.NamespacedName, request rest.ResponseWrapper, out io.W
 }
 
 func (c Kubectl) Version(out io.Writer) error {
+	// TODO dump the diagnostic tools own version
+
 	client, err := c.factory.ToDiscoveryClient()
 	if err != nil {
 		return err
