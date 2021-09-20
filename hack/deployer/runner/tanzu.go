@@ -160,11 +160,6 @@ func (t *TanzuDriver) copyKubeconfig() error {
 
 // perpareCLI prepares the tanzu/az CLI by installing the necessary plugins and setting up configuration
 func (t *TanzuDriver) perpareCLI() error {
-	// allow dynamic installation of Azure CLI extensions
-	err := NewCommand("az config set extension.use_dynamic_install=yes_without_prompt").Run()
-	if err != nil {
-		return err
-	}
 	log.Println("Installing Tanzu CLI plugins")
 	return t.dockerizedTanzuCmd("plugin", "install", "--local", "/", "all").Run()
 }
@@ -301,6 +296,7 @@ func (t *TanzuDriver) setup() []func() error {
 	return []func() error{
 		t.loginToAzure,
 		t.loginToContainerRegistry,
+		t.installAzureStoragePreview,
 		t.ensureWorkDir,
 		t.ensureStorageContainer,
 		t.restoreInstallerState,
@@ -340,6 +336,11 @@ func (t *TanzuDriver) loginToContainerRegistry() error {
 		AsTemplate(map[string]interface{}{
 			"ContainerRegistry": t.acrName,
 		}).Run()
+}
+
+func (t *TanzuDriver) installAzureStoragePreview() error {
+	log.Println("Installing Azure storage-preview extension")
+	return NewCommand("az extension add --name storage-preview -y").Run()
 }
 
 // ensureResourceGroup checks for the existence of an Azure resource group (which we name unless overridden after the
