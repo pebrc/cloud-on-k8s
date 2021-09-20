@@ -343,7 +343,7 @@ func (t *TanzuDriver) ensureResourceGroup() (bool, error) {
 	exists, err := NewCommand("az group exists --name {{.ResourceGroup}}").
 		AsTemplate(map[string]interface{}{
 			"ResourceGroup": t.plan.Tanzu.ResourceGroup,
-		}).WithoutStreaming().OutputContainsAny("true")
+		}).OutputContainsAny("true")
 	if err != nil || exists {
 		return false, err
 	}
@@ -352,7 +352,7 @@ func (t *TanzuDriver) ensureResourceGroup() (bool, error) {
 		AsTemplate(map[string]interface{}{
 			"Location":      t.plan.Tanzu.Location,
 			"ResourceGroup": t.plan.Tanzu.ResourceGroup,
-		}).WithoutStreaming().Run()
+		}).Run()
 	return true, err
 }
 
@@ -385,7 +385,7 @@ func (t *TanzuDriver) ensureStorageContainer() error {
 		AsTemplate(map[string]interface{}{
 			"StorageAccount":   t.azureStorageAccount,
 			"StorageContainer": t.plan.ClusterName,
-		}).WithoutStreaming().Run()
+		}).Run()
 }
 
 func (t TanzuDriver) deleteStorageContainer() error {
@@ -394,7 +394,7 @@ func (t TanzuDriver) deleteStorageContainer() error {
 		AsTemplate(map[string]interface{}{
 			"StorageAccount":   t.azureStorageAccount,
 			"StorageContainer": t.plan.ClusterName,
-		}).WithoutStreaming().Run()
+		}).Run()
 }
 
 func (t *TanzuDriver) persistInstallerState() error {
@@ -404,7 +404,7 @@ func (t *TanzuDriver) persistInstallerState() error {
 			"StorageAccount":    t.azureStorageAccount,
 			"StorageContainer":  t.plan.ClusterName,
 			"InstallerStateDir": t.installerStateDir,
-		}).WithoutStreaming().Run()
+		}).Run()
 }
 
 func (t *TanzuDriver) restoreInstallerState() error {
@@ -414,7 +414,7 @@ func (t *TanzuDriver) restoreInstallerState() error {
 			"StorageAccount":    t.azureStorageAccount,
 			"StorageContainer":  t.plan.ClusterName,
 			"InstallerStateDir": t.installerStateDir,
-		}).WithoutStreaming().Run()
+		}).Run()
 }
 
 var _ Driver = &TanzuDriver{}
