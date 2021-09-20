@@ -158,8 +158,13 @@ func (t *TanzuDriver) copyKubeconfig() error {
 	return mergeKubeconfig(ciContainerKubeconfigPath)
 }
 
-// perpareCLI prepares the tanzu CLI by installing the necessary plugins.
+// perpareCLI prepares the tanzu/az CLI by installing the necessary plugins and setting up configuration
 func (t *TanzuDriver) perpareCLI() error {
+	// allow dynamic installation of Azure CLI extensions
+	err := NewCommand("az config set extension.use_dynamic_install=yes_without_prompt").Run()
+	if err != nil {
+		return err
+	}
 	log.Println("Installing Tanzu CLI plugins")
 	return t.dockerizedTanzuCmd("plugin", "install", "--local", "/", "all").Run()
 }
