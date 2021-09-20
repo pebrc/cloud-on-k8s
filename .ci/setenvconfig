@@ -365,6 +365,7 @@ MONITORING_SECRETS=/go/src/github.com/elastic/cloud-on-k8s/.ci/monitoring-secret
 
 OPERATOR_IMAGE=$JKS_PARAM_OPERATOR_IMAGE
 
+TESTS_MATCH=TestSmoke
 PIPELINE=e2e/tanzu
 BUILD_NUMBER=$BUILD_NUMBER
 E2E_PROVIDER=tanzu
