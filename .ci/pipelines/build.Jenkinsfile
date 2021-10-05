@@ -1,6 +1,6 @@
 // This library overrides the default checkout behavior to enable sleep+retries if there are errors
 // Added to help overcome some recurring github connection issues
-@Library('apm@current') _
+// @Library('apm@current') _
 
 pipeline {
 
@@ -136,7 +136,6 @@ pipeline {
                         ],
                         wait: false
                 } else {
-
                     build job: 'cloud-on-k8s-e2e-tests-ocp-all-but-latest',
                         parameters: [
                             string(name: 'JKS_PARAM_OPERATOR_IMAGE', value: operatorImage),
