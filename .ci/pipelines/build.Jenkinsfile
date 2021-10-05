@@ -77,7 +77,7 @@ pipeline {
         success {
             script {
                 def operatorImage = sh(returnStdout: true, script: 'make print-operator-image').trim()
-                if isWeekday() {
+                if (isWeekday()) {
                     build job: 'cloud-on-k8s-e2e-tests-stack-versions',
                         parameters: [
                             string(name: 'JKS_PARAM_OPERATOR_IMAGE', value: operatorImage),
