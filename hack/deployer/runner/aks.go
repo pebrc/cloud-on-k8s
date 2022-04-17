@@ -6,9 +6,9 @@ package runner
 
 import (
 	"fmt"
+	"github.com/elastic/cloud-on-k8s/hack/deployer/exec"
 	"log"
 
-	"github.com/elastic/cloud-on-k8s/hack/deployer/exec"
 	"github.com/elastic/cloud-on-k8s/hack/deployer/runner/azure"
 	"github.com/elastic/cloud-on-k8s/hack/deployer/vault"
 )
