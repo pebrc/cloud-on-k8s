@@ -58,9 +58,29 @@ func (r *AgentPolicyReconciler) reconcileAutoOpsESCASecret(
 		return fmt.Errorf("while retrieving http-certs-public secret for ES cluster %s/%s: %w", es.Namespace, es.Name, err)
 	}
 
-	caCert, ok := sourceSecret.Data[certificates.CAFileName]
-	if !ok || len(caCert) == 0 {
-		log.V(1).Info("ca.crt not found in http-certs-public secret, skipping")
+	caCert := sourceSecret.Data[certificates.CAFileName]
+
+	// If ca.crt is not in the public certs secret, try the user-provided custom certificate secret directly.
+	// This handles the case where the user provides their own tls.crt and tls.key (with an optional ca.crt)
+	// and disables the self-signed certificate: the public certs secret may not contain a ca.crt at all.
+	if len(caCert) == 0 && es.Spec.HTTP.TLS.Certificate.SecretName != "" {
+		customCertSecretKey := types.NamespacedName{
+			Namespace: es.Namespace,
+			Name:      es.Spec.HTTP.TLS.Certificate.SecretName,
+		}
+		var customCertSecret corev1.Secret
+		if err := r.Client.Get(ctx, customCertSecretKey, &customCertSecret); err != nil {
+			if !apierrors.IsNotFound(err) {
+				return fmt.Errorf("while retrieving custom certificate secret %s/%s: %w", customCertSecretKey.Namespace, customCertSecretKey.Name, err)
+			}
+			log.V(1).Info("Custom certificate secret not found", "secret", customCertSecretKey)
+		} else {
+			caCert = customCertSecret.Data[certificates.CAFileName]
+		}
+	}
+
+	if len(caCert) == 0 {
+		log.V(1).Info("ca.crt not found in http-certs-public or custom certificate secret, skipping")
 		return nil
 	}
 
