@@ -154,7 +154,7 @@ type Reconciler struct {
 }
 
 func (r *Reconciler) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
-	if !r.NamespaceMatcher.Matches(request.Namespace) {
+	if !r.NamespaceMatcher.Matches(ctx, request.Namespace) {
 		r.onNamespaceOutOfScope(types.NamespacedName{Namespace: request.Namespace, Name: request.Name})
 		return reconcile.Result{}, nil
 	}

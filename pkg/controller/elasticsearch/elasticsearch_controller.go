@@ -169,7 +169,7 @@ type ReconcileElasticsearch struct {
 // Reconcile reads the state of the cluster for an Elasticsearch object and makes changes based on the state read and
 // what is in the Elasticsearch.Spec
 func (r *ReconcileElasticsearch) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
-	if !r.NamespaceMatcher.Matches(request.Namespace) {
+	if !r.NamespaceMatcher.Matches(ctx, request.Namespace) {
 		r.onNamespaceOutOfScope(request.NamespacedName)
 		return reconcile.Result{}, nil
 	}

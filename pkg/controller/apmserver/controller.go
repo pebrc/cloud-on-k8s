@@ -187,7 +187,7 @@ var _ driver.Interface = (*ReconcileApmServer)(nil)
 // Reconcile reads that state of the cluster for a ApmServer object and makes changes based on the state read
 // and what is in the ApmServer.Spec
 func (r *ReconcileApmServer) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
-	if !r.NamespaceMatcher.Matches(request.Namespace) {
+	if !r.NamespaceMatcher.Matches(ctx, request.Namespace) {
 		r.onNamespaceOutOfScope(request.NamespacedName)
 		return reconcile.Result{}, nil
 	}

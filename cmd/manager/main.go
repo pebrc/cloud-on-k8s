@@ -89,7 +89,6 @@ import (
 	licensetrial "github.com/elastic/cloud-on-k8s/v3/pkg/controller/license/trial"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/logstash"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/maps"
-	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/namespace"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/packageregistry"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/remotecluster"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/stackconfigpolicy"
@@ -692,10 +691,6 @@ func startOperator(ctx context.Context) error {
 
 	// cache can only be set after manager is created.
 	namespaceMatcher.SetCache(mgr.GetCache())
-	// The match-state map is maintained on every replica, but the subscribed
-	// controllers only consume broadcasts on the leader: give the matcher the
-	// election signal so Broadcast is a no-op until this replica is elected.
-	namespaceMatcher.SetElected(mgr.Elected())
 
 	// Retrieve globally shared CA if any
 	ca, err := readOptionalCA(viper.GetString(operator.CADirFlag))
@@ -975,7 +970,6 @@ func registerControllers(mgr manager.Manager, params operator.Parameters, access
 		name         string
 		registerFunc func(manager.Manager, operator.Parameters) error
 	}{
-		{name: "Namespace", registerFunc: namespace.Add},
 		{name: "APMServer", registerFunc: apmserver.Add},
 		{name: "Elasticsearch", registerFunc: elasticsearch.Add},
 		{name: "ElasticsearchAutoscaling", registerFunc: autoscaling.Add},

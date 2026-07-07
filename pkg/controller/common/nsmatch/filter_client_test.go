@@ -21,12 +21,15 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client/interceptor"
 )
 
-// makeFilterClient builds a FilterClient whose notifier has sel active and the given namespaces pre-seeded as matching.
+// makeFilterClient builds a FilterClient whose matcher reads from a cache
+// containing the given namespaces, labelled so that they match sel.
 func makeFilterClient(delegate client.Client, sel labels.Selector, matchedNSes ...string) *FilterClient {
 	nfn := NewNamespaceMatcher(sel, testOperatorNS)
+	nsObjs := make([]client.Object, 0, len(matchedNSes))
 	for _, ns := range matchedNSes {
-		nfn.Swap(ns, true)
+		nsObjs = append(nsObjs, namespace(ns, map[string]string{"env": "prod"}))
 	}
+	nfn.SetCache(fake.NewClientBuilder().WithObjects(nsObjs...).Build())
 	return NewFilterClient(delegate, nfn)
 }
 
@@ -65,7 +68,7 @@ func TestFilterClientList(t *testing.T) {
 	ctx := context.Background()
 
 	t.Run("delegate error is propagated without filtering", func(t *testing.T) {
-		fc := NewFilterClient(fakeClientListErr(errors.New("api server unavailable")), NewNamespaceMatcher(sel, testOperatorNS))
+		fc := makeFilterClient(fakeClientListErr(errors.New("api server unavailable")), sel, "prod-ns")
 		require.Error(t, fc.List(ctx, &corev1.PodList{}))
 	})
 
@@ -145,7 +148,7 @@ func TestFilterClientGet(t *testing.T) {
 	ctx := context.Background()
 
 	t.Run("delegate error is propagated without filtering", func(t *testing.T) {
-		fc := NewFilterClient(fakeClientGetErr(errors.New("api server unavailable")), NewNamespaceMatcher(sel, testOperatorNS))
+		fc := makeFilterClient(fakeClientGetErr(errors.New("api server unavailable")), sel, "prod-ns")
 		require.Error(t, fc.Get(ctx, client.ObjectKey{Name: "my-pod", Namespace: "prod-ns"}, &corev1.Pod{}))
 	})
 

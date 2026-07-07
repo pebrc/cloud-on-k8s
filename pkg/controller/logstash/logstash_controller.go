@@ -136,7 +136,7 @@ type ReconcileLogstash struct {
 // +kubebuilder:rbac:groups=logstash.k8s.elastic.co,resources=logstashes,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=logstash.k8s.elastic.co,resources=logstashes/status,verbs=get;update;patch
 func (r *ReconcileLogstash) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
-	if !r.NamespaceMatcher.Matches(request.Namespace) {
+	if !r.NamespaceMatcher.Matches(ctx, request.Namespace) {
 		r.onNamespaceOutOfScope(request.NamespacedName)
 		return reconcile.Result{}, nil
 	}

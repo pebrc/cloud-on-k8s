@@ -131,7 +131,7 @@ type ReconcileBeat struct {
 // Reconcile reads that state of the cluster for a Beat object and makes changes based on the state read
 // and what is in the Beat.Spec.
 func (r *ReconcileBeat) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
-	if !r.NamespaceMatcher.Matches(request.Namespace) {
+	if !r.NamespaceMatcher.Matches(ctx, request.Namespace) {
 		r.onNamespaceOutOfScope(request.NamespacedName)
 		return reconcile.Result{}, nil
 	}

@@ -90,7 +90,7 @@ func addWatches(mgr manager.Manager, c controller.Controller, r *AgentPolicyReco
 	if err := c.Watch(watches.NamespacedKind(m, mgr.GetCache(), &appsv1.Deployment{}, reconcileRequestForAutoOpsPolicyFromDeployment())); err != nil {
 		return err
 	}
-	return watches.WatchNamespaceFlipsMapped(c, m, namespaceFlipRequests(log, mgr.GetCache()))
+	return watches.WatchNamespaceFlipsMapped(c, mgr.GetCache(), m, namespaceFlipRequests(log, mgr.GetCache()))
 }
 
 // namespaceFlipRequests returns a mapper translating a namespace match-state change into
@@ -171,7 +171,7 @@ type AgentPolicyReconciler struct {
 
 // Reconcile reconciles the AutoOpsAgentPolicy resource ensuring that any resources are created/updated/deleted as needed.
 func (r *AgentPolicyReconciler) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
-	if !r.params.NamespaceMatcher.Matches(request.Namespace) {
+	if !r.params.NamespaceMatcher.Matches(ctx, request.Namespace) {
 		r.onNamespaceOutOfScope(request.NamespacedName)
 		return reconcile.Result{}, nil
 	}

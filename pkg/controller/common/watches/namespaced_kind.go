@@ -5,6 +5,8 @@
 package watches
 
 import (
+	"context"
+
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
@@ -35,7 +37,9 @@ func NamespacedKind[T client.Object](
 		return source.Kind(c, obj, h, preds...)
 	}
 	nsPred := predicate.NewTypedPredicateFuncs(func(o T) bool {
-		return m.Matches(o.GetNamespace())
+		// Predicates carry no context; the namespace informer backing Matches is
+		// already synced by the time events flow, so the lookup never blocks.
+		return m.Matches(context.TODO(), o.GetNamespace())
 	})
 	all := make([]predicate.TypedPredicate[T], 0, len(preds)+1)
 	all = append(all, nsPred)

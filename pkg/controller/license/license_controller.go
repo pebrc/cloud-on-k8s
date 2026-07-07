@@ -55,7 +55,7 @@ const (
 // In any case it schedules a new reconcile request to be processed when the license is about to expire.
 // This happens independently from any watch triggered reconcile request.
 func (r *ReconcileLicenses) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
-	if !r.NamespaceMatcher.Matches(request.Namespace) {
+	if !r.NamespaceMatcher.Matches(ctx, request.Namespace) {
 		return reconcile.Result{}, nil
 	}
 	ctx = common.NewReconciliationContext(ctx, &r.iteration, r.Tracer, name, "es_name", request)
@@ -136,7 +136,7 @@ func addWatches(mgr manager.Manager, c controller.Controller, r *ReconcileLicens
 		return err
 	}
 
-	return watches.WatchNamespaceFlipsMapped(c, r.NamespaceMatcher, namespaceFlipRequests(mgr.GetCache(), r.Client, log))
+	return watches.WatchNamespaceFlipsMapped(c, mgr.GetCache(), r.NamespaceMatcher, namespaceFlipRequests(mgr.GetCache(), r.Client, log))
 }
 
 // namespaceFlipRequests returns the mapper deciding which Elasticsearch clusters to reconcile when a

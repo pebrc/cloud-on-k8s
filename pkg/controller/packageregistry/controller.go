@@ -144,7 +144,7 @@ var _ driver.Interface = (*ReconcilePackageRegistry)(nil)
 // Reconcile reads that state of the cluster for a PackageRegistry object and makes changes based on the state read and what is
 // in the PackageRegistry.Spec
 func (r *ReconcilePackageRegistry) Reconcile(ctx context.Context, request reconcile.Request) (reconcile.Result, error) {
-	if !r.NamespaceMatcher.Matches(request.Namespace) {
+	if !r.NamespaceMatcher.Matches(ctx, request.Namespace) {
 		r.onNamespaceOutOfScope(request.NamespacedName)
 		return reconcile.Result{}, nil
 	}
