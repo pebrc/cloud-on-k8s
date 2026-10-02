@@ -13,7 +13,6 @@ import (
 
 	commonv1 "github.com/elastic/cloud-on-k8s/v3/pkg/apis/common/v1"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/common/version"
-	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/kibana/label"
 )
 
 const (
@@ -614,14 +613,4 @@ func (k *Kibana) MonitoringAssociation(esRef commonv1.ObjectSelector) commonv1.A
 		Kibana: k,
 		ref:    esRef.WithDefaultNamespace(k.Namespace),
 	}
-}
-
-func (k *Kibana) GetResourcesForRole(role label.Role) commonv1.Resources {
-	if k.BackgroundTasksEnabled() &&
-		role.IsBackgroundTasks() &&
-		!k.Spec.BackgroundTasks.Resources.IsEmpty() {
-		return k.Spec.BackgroundTasks.Resources
-	}
-
-	return k.Spec.Resources
 }

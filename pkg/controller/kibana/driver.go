@@ -17,12 +17,10 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	toolsevents "k8s.io/client-go/tools/events"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	commonv1 "github.com/elastic/cloud-on-k8s/v3/pkg/apis/common/v1"
 	kbv1 "github.com/elastic/cloud-on-k8s/v3/pkg/apis/kibana/v1"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/association"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/common"
@@ -36,7 +34,6 @@ import (
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/common/metadata"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/common/operator"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/common/reconciler"
-	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/common/settings"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/common/tracing"
 	"github.com/elastic/cloud-on-k8s/v3/pkg/controller/common/version"
 	commonvolume "github.com/elastic/cloud-on-k8s/v3/pkg/controller/common/volume"
@@ -218,86 +215,27 @@ func (d *driver) Reconcile(
 	// violating Kibana's requirement that all outdated instances stop first.
 	scaleToZero := shouldScaleAllPoolsToZeroForUpgrade(kb, existingPods)
 
-	var (
-		aggregateAvailable int32
-		aggregateCount     int32
-		aggregateHealth    = commonv1.GreenHealth
-	)
-
-	// reconciledSecrets tracks which config secrets have already been written this pass
-	// so that pools sharing the base secret don't trigger a redundant write.
-	reconciledSecrets := map[string]bool{}
-
-	for _, role := range kb.ActiveRoles() {
-		poolParams, err := d.poolParams(kb, role)
-		if err != nil {
-			return results.WithError(err)
+	plans, err := buildPoolPlans(kb)
+	if err != nil {
+		return results.WithError(err)
+	}
+	poolResult, err := d.reconcilePools(ctx, state, kb, plans, poolReconcileParams{
+		meta:                      meta,
+		policyConfig:              kibanaPolicyCfg,
+		basePath:                  basePath,
+		setDefaultSecurityContext: params.SetDefaultSecurityContext,
+		operatorNamespace:         params.OperatorNamespace,
+		existingPods:              existingPods,
+		scaleToZero:               scaleToZero,
+	})
+	if err != nil {
+		return results.WithError(err)
+	}
+	if poolResult.selectorMismatch {
+		if poolResult.requeue {
+			return results.WithRequeue()
 		}
-
-		poolConfig, err := NewConfigSettings(ctx, d.client, *kb, poolParams.Config, d.version, d.ipFamily, kibanaPolicyCfg.KibanaConfig)
-		if err != nil {
-			return results.WithError(err)
-		}
-
-		// Detect immutable selector transition.
-		// Kubernetes rejects selector updates as immutable, so we delete the stale deployment and requeue;
-		// the next pass recreates it with the correct selector.
-		var existingDeployment appsv1.Deployment
-		var existingSelector map[string]string
-		if err := d.client.Get(ctx, types.NamespacedName{Namespace: kb.Namespace, Name: poolParams.DeploymentName}, &existingDeployment); err == nil {
-			if existingDeployment.Spec.Selector != nil {
-				existingSelector = existingDeployment.Spec.Selector.MatchLabels
-			}
-		} else if !apierrors.IsNotFound(err) {
-			return results.WithError(err)
-		}
-		selector := d.deploymentSelector(kb, role, existingSelector)
-		mismatch, herr := d.handleDeploymentSelectorMismatch(ctx, kb, &existingDeployment, existingSelector, selector, poolParams.DeploymentName)
-		if herr != nil {
-			return results.WithError(herr)
-		}
-		if mismatch.mismatch {
-			if mismatch.requeue {
-				return results.WithRequeue()
-			}
-
-			// When a mismatch is found and orchestration is paused, deletion is deferred and the caller returns without requeue.
-			// If the split is enabled while on pause, the reconciliation should end here.
-			return results
-		}
-
-		if !reconciledSecrets[poolParams.SecretName] {
-			if err = ReconcileConfigSecret(ctx, d.client, *kb, poolConfig, poolParams.SecretName, meta); err != nil {
-				return results.WithError(err)
-			}
-			reconciledSecrets[poolParams.SecretName] = true
-		}
-
-		// Determine replica count for this pool.
-		replicas, oldReplicas := d.deploymentReplicas(logger, scaleToZero, kb, role, &existingDeployment)
-		dpParams, err := d.deploymentParams(ctx, kb, role, poolParams.SecretName, poolParams.DeploymentName, replicas, oldReplicas, kibanaPolicyCfg.PodAnnotations, basePath, params.SetDefaultSecurityContext, params.OperatorNamespace, meta, selector)
-		if err != nil {
-			return results.WithError(err)
-		}
-
-		expectedDp := deployment.New(dpParams)
-		reconciledDp, err := common.ReconcilePauseAware(ctx, d.client, d.recorder, expectedDp, kb, deployment.Reconcile)
-		if err != nil {
-			return results.WithError(err)
-		}
-
-		poolStatus, err := common.DeploymentStatus(ctx, state.Kibana.Status.DeploymentStatus, reconciledDp, existingPods, kblabel.KibanaVersionLabelName)
-		if err != nil {
-			return results.WithError(err)
-		}
-
-		aggregateAvailable += poolStatus.AvailableNodes
-		aggregateCount += poolStatus.Count
-		if poolStatus.Health != commonv1.GreenHealth {
-			aggregateHealth = poolStatus.Health
-		}
-
-		buildStatus(state, kb, role, poolStatus, aggregateHealth, aggregateAvailable, aggregateCount)
+		return results
 	}
 
 	if scaleToZero {
@@ -308,86 +246,9 @@ func (d *driver) Reconcile(
 	return results
 }
 
-func buildStatus(state *State, kb *kbv1.Kibana, role kblabel.Role, poolStatus commonv1.DeploymentStatus, aggregateHealth commonv1.DeploymentHealth, aggregateAvailable, aggregateCount int32) {
-	if kb.BackgroundTasksEnabled() && state.Kibana.Status.Pools == nil {
-		state.Kibana.Status.Pools = &kbv1.KibanaPoolsStatuses{}
-	}
-
-	switch {
-	case role.IsSinglePool():
-		state.Kibana.Status.DeploymentStatus = poolStatus
-	case role.IsPrimary():
-		state.Kibana.Status.DeploymentStatus = poolStatus
-		state.Kibana.Status.Pools.Primary = &kbv1.KibanaPoolStatus{
-			Selector:       poolStatus.Selector,
-			Count:          poolStatus.Count,
-			AvailableNodes: poolStatus.AvailableNodes,
-			Health:         poolStatus.Health,
-		}
-	case role.IsBackgroundTasks():
-		state.Kibana.Status.Pools.BackgroundTasks = &kbv1.KibanaPoolStatus{
-			Selector:       poolStatus.Selector,
-			Count:          poolStatus.Count,
-			AvailableNodes: poolStatus.AvailableNodes,
-			Health:         poolStatus.Health,
-		}
-	}
-
-	// replace with aggregate in top level
-	if !role.IsSinglePool() {
-		state.Kibana.Status.DeploymentStatus.Health = aggregateHealth
-		state.Kibana.Status.DeploymentStatus.AvailableNodes = aggregateAvailable
-		state.Kibana.Status.DeploymentStatus.Count = aggregateCount
-		state.Kibana.Status.DeploymentStatus.Health = aggregateHealth
-		state.Kibana.Status.DeploymentStatus.Selector = metav1.FormatLabelSelector(&metav1.LabelSelector{
-			MatchLabels: kb.GetIdentityLabels(), // without the role label
-		})
-	} else {
-		// Single pool: clear pools status.
-		state.Kibana.Status.Pools = nil
-	}
-}
-
-type poolParameters struct {
-	Config         CanonicalConfig
-	SecretName     string
-	DeploymentName string
-}
-
-func (d *driver) poolParams(kb *kbv1.Kibana, role kblabel.Role) (params poolParameters, rErr error) {
-	var specConfigData map[string]any
-	if kb.Spec.Config != nil {
-		specConfigData = kb.Spec.Config.Data
-	}
-	pcg, err := settings.NewCanonicalConfigFrom(specConfigData)
-	if err != nil {
-		return poolParameters{}, err
-	}
-	primaryPoolConfig := CanonicalConfig{pcg}
-
-	if role.IsSinglePool() || role.IsUI() || (role == kblabel.Role{}) {
-		// Single all-roles pool or UI pool: use the base config and base names.
-		return poolParameters{Config: primaryPoolConfig, SecretName: kbv1.ConfigSecret(kb.Name), DeploymentName: kbv1.KBNamer.Suffix(kb.Name)}, nil
-	}
-
-	// Background tasks pool: only create a separate secret when there is an overlay.
-	overlay := kb.Spec.BackgroundTasks.Config // kb.Spec.BackgroundTasks is non-nil when BG role is active
-	if overlay == nil {
-		// No overlay — share the base secret; no separate BG secret needed.
-		return poolParameters{Config: primaryPoolConfig, SecretName: kbv1.ConfigSecret(kb.Name), DeploymentName: kbv1.BackgroundTasksDeployment(kb.Name)}, nil
-	}
-
-	poolCfg, err := primaryPoolConfig.WithOverlay(overlay)
-	if err != nil {
-		return poolParameters{}, err
-	}
-
-	return poolParameters{Config: poolCfg, SecretName: kbv1.BackgroundTasksConfigSecret(kb.Name), DeploymentName: kbv1.BackgroundTasksDeployment(kb.Name)}, nil
-}
-
 // deploymentSelector returns the label selector to use for a pool deployment.
 //
-// The base case is kb.GetPoolIdentityLabels(role). One exception exists for the ECK upgrade
+// expectedByRole is the pool plan's identity selector. One exception exists for the ECK upgrade
 // path: when the expected selector would add role=primary to a single-pool (non-split) cluster
 // whose existing deployment does not yet carry that label, the role label is stripped from the
 // result. This avoids an unnecessary delete+recreate for every Kibana that does not use
@@ -395,9 +256,7 @@ func (d *driver) poolParams(kb *kbv1.Kibana, role kblabel.Role) (params poolPara
 //
 // existingMatchLabels is nil when the deployment does not exist yet; in that case the full
 // expected selector is returned.
-func (d *driver) deploymentSelector(kb *kbv1.Kibana, role kblabel.Role, existingMatchLabels map[string]string) map[string]string {
-	expectedByRole := kb.GetPoolIdentityLabels(role)
-
+func (d *driver) deploymentSelector(kb *kbv1.Kibana, expectedByRole, existingMatchLabels map[string]string) map[string]string {
 	if existingMatchLabels == nil {
 		return expectedByRole
 	}
@@ -428,12 +287,18 @@ func (d *driver) serviceSelector(ctx context.Context, kb *kbv1.Kibana) (map[stri
 		if !apierrors.IsNotFound(err) {
 			return nil, err
 		}
-		return d.deploymentSelector(kb, kblabel.UIRole, nil), nil
+		return d.deploymentSelector(kb, poolIdentityLabels(kb, kblabel.UIRole), nil), nil
 	}
-	return d.deploymentSelector(kb, kblabel.UIRole, existingSvc.Spec.Selector), nil
+	return d.deploymentSelector(kb, poolIdentityLabels(kb, kblabel.UIRole), existingSvc.Spec.Selector), nil
 }
 
-func (d *driver) deploymentReplicas(logger logr.Logger, scaleToZero bool, kb *kbv1.Kibana, role kblabel.Role, existingDeployment *appsv1.Deployment) (newValue *int32, oldValue *int32) {
+func (d *driver) deploymentReplicas(
+	logger logr.Logger,
+	scaleToZero bool,
+	kb *kbv1.Kibana,
+	plan poolPlan,
+	existingDeployment *appsv1.Deployment,
+) (newValue *int32, oldValue *int32) {
 	// replicasFromAnnotation returns the replica count saved in the maintenance annotation
 	// when present. This preserves the saved count across multiple
 	// reconciles that occur while the stop phase is active.
@@ -453,8 +318,8 @@ func (d *driver) deploymentReplicas(logger logr.Logger, scaleToZero bool, kb *kb
 	}
 
 	getBackgroundReplicas := func() *int32 {
-		if kb.Spec.BackgroundTasks.Count != nil {
-			return kb.Spec.BackgroundTasks.Count
+		if plan.desiredReplicas != nil {
+			return plan.desiredReplicas
 		}
 
 		if existingDeployment.Spec.Replicas != nil && *existingDeployment.Spec.Replicas > 0 {
@@ -469,15 +334,15 @@ func (d *driver) deploymentReplicas(logger logr.Logger, scaleToZero bool, kb *kb
 		newValue = new(int32(0)) // drain both pools before starting the new version
 
 		// Return the old value if the deployment is background tasks. It will be stored in annotation.
-		if role.IsBackgroundTasks() {
+		if plan.role.IsBackgroundTasks() {
 			oldValue = getBackgroundReplicas()
 		}
 
-	case kb.BackgroundTasksEnabled() && role.IsBackgroundTasks():
+	case kb.BackgroundTasksEnabled() && plan.role.IsBackgroundTasks():
 		newValue = getBackgroundReplicas()
 
 	default:
-		newValue = new(kb.Spec.Count)
+		newValue = plan.desiredReplicas
 	}
 
 	return newValue, oldValue
@@ -606,20 +471,22 @@ func (d *driver) getStrategyType(kb *kbv1.Kibana) (appsv1.DeploymentStrategyType
 	return appsv1.RollingUpdateDeploymentStrategyType, nil
 }
 
+type deploymentBuildParams struct {
+	plan                      poolPlan
+	replicas                  *int32
+	replicasAnnotationValue   *int32
+	policyAnnotations         map[string]string
+	basePath                  string
+	setDefaultSecurityContext bool
+	operatorNamespace         string
+	meta                      metadata.Metadata
+	selector                  map[string]string
+}
+
 func (d *driver) deploymentParams(
 	ctx context.Context,
 	kb *kbv1.Kibana,
-	role kblabel.Role,
-	configSecretName string,
-	deploymentName string,
-	replicas *int32,
-	replicasAnnotationValue *int32,
-	policyAnnotations map[string]string,
-	basePath string,
-	setDefaultSecurityContext bool,
-	operatorNamespace string,
-	meta metadata.Metadata,
-	selector map[string]string,
+	params deploymentBuildParams,
 ) (deployment.Params, error) {
 	initContainersParameters, err := initcontainer.NewInitContainersParameters(kb)
 	if err != nil {
@@ -631,25 +498,35 @@ func (d *driver) deploymentParams(
 		d,
 		kb,
 		kbv1.KBNamer,
-		meta,
-		operatorNamespace,
+		params.meta,
+		params.operatorNamespace,
 		initContainersParameters,
 	)
 	if err != nil {
 		return deployment.Params{}, err
 	}
 
-	volumes, err := d.buildVolumes(kb, configSecretName)
+	volumes, err := d.buildVolumes(kb, params.plan.configSecretName)
 	if err != nil {
 		return deployment.Params{}, err
 	}
 
 	// Pool-specific metadata: add role label to pod labels.
-	poolLabels := umaps.Merge(map[string]string{}, meta.Labels)
-	poolLabels[kblabel.RoleLabelName] = role.LabelValue
-	poolMeta := metadata.Propagate(kb, metadata.Metadata{Labels: poolLabels, Annotations: meta.Annotations})
+	poolLabels := umaps.Merge(map[string]string{}, params.meta.Labels)
+	poolLabels[kblabel.RoleLabelName] = params.plan.role.LabelValue
+	poolMeta := metadata.Propagate(kb, metadata.Metadata{Labels: poolLabels, Annotations: params.meta.Annotations})
 
-	kibanaPodSpec, err := NewPodTemplateSpec(ctx, d.client, *kb, role, keystoreResources, volumes, basePath, setDefaultSecurityContext, poolMeta, configSecretName)
+	kibanaPodSpec, err := newPodTemplateSpec(
+		ctx,
+		d.client,
+		*kb,
+		params.plan,
+		keystoreResources,
+		volumes,
+		params.basePath,
+		params.setDefaultSecurityContext,
+		poolMeta,
+	)
 	if err != nil {
 		return deployment.Params{}, err
 	}
@@ -657,8 +534,8 @@ func (d *driver) deploymentParams(
 	// When background task isolation is active, set NODE_ROLES on the Kibana container.
 	// Kibana reads this env var to determine which roles it runs, taking precedence over
 	// kibana.yml.
-	if role.IsBackgroundTasks() || role.IsUI() {
-		nodeRolesValue := fmt.Sprintf(`["%s"]`, role.Name)
+	if params.plan.role.IsBackgroundTasks() || params.plan.role.IsUI() {
+		nodeRolesValue := fmt.Sprintf(`["%s"]`, params.plan.role.Name)
 		for i, c := range kibanaPodSpec.Spec.Containers {
 			if c.Name == kbv1.KibanaContainerName {
 				kibanaPodSpec.Spec.Containers[i].Env = append(
@@ -700,7 +577,7 @@ func (d *driver) deploymentParams(
 
 	// Hash the pool-specific config secret so changes roll this deployment.
 	var configSecret corev1.Secret
-	if err = d.client.Get(ctx, types.NamespacedName{Name: configSecretName, Namespace: kb.Namespace}, &configSecret); err != nil {
+	if err = d.client.Get(ctx, types.NamespacedName{Name: params.plan.configSecretName, Namespace: kb.Namespace}, &configSecret); err != nil {
 		return deployment.Params{}, err
 	}
 	_, _ = configHash.Write(configSecret.Data[SettingsFilename])
@@ -710,7 +587,7 @@ func (d *driver) deploymentParams(
 	kibanaPodSpec.Annotations[configHashAnnotationName] = fmt.Sprint(configHash.Sum32())
 
 	// add additional annotations related to the StackConfigPolicy
-	kibanaPodSpec.Annotations = umaps.Merge(kibanaPodSpec.Annotations, policyAnnotations)
+	kibanaPodSpec.Annotations = umaps.Merge(kibanaPodSpec.Annotations, params.policyAnnotations)
 
 	// decide the strategy type
 	strategyType, err := d.getStrategyType(kb)
@@ -719,17 +596,17 @@ func (d *driver) deploymentParams(
 	}
 
 	// add the replicas Deployment's annotation if needed.
-	if role.IsBackgroundTasks() && replicasAnnotationValue != nil {
+	if params.plan.role.IsBackgroundTasks() && params.replicasAnnotationValue != nil {
 		poolMeta = poolMeta.Merge(metadata.Metadata{Annotations: map[string]string{
-			replicasAnnotationName: fmt.Sprintf("%d", *replicasAnnotationValue),
+			replicasAnnotationName: fmt.Sprintf("%d", *params.replicasAnnotationValue),
 		}})
 	}
 
 	return deployment.Params{
-		Name:                 deploymentName,
+		Name:                 params.plan.deploymentName,
 		Namespace:            kb.Namespace,
-		Replicas:             replicas,
-		Selector:             selector,
+		Replicas:             params.replicas,
+		Selector:             params.selector,
 		Metadata:             poolMeta,
 		PodTemplateSpec:      kibanaPodSpec,
 		RevisionHistoryLimit: kb.Spec.RevisionHistoryLimit,

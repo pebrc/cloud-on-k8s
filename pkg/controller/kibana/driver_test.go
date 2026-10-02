@@ -377,7 +377,16 @@ func TestDriverDeploymentParams(t *testing.T) {
 			d, err := newDriver(client, w, toolsevents.NewFakeRecorder(100), kb, corev1.IPv4Protocol)
 			require.NoError(t, err)
 
-			got, err := d.deploymentParams(context.Background(), kb, kblabel.SinglePoolRole, kbv1.ConfigSecret(kb.Name), kbv1.KBNamer.Suffix(kb.Name), new(kb.Spec.Count), nil, tt.args.policyAnnotations, "", tt.args.setDefaultSecurityContextFlag, "", metadata.Propagate(kb, metadata.Metadata{Labels: kb.GetIdentityLabels()}), kb.GetIdentityLabels())
+			plan, err := buildPoolPlan(kb, kblabel.SinglePoolRole)
+			require.NoError(t, err)
+			got, err := d.deploymentParams(context.Background(), kb, deploymentBuildParams{
+				plan:                      plan,
+				replicas:                  new(kb.Spec.Count),
+				policyAnnotations:         tt.args.policyAnnotations,
+				setDefaultSecurityContext: tt.args.setDefaultSecurityContextFlag,
+				meta:                      metadata.Propagate(kb, metadata.Metadata{Labels: kb.GetIdentityLabels()}),
+				selector:                  kb.GetIdentityLabels(),
+			})
 			if tt.wantErr {
 				require.Error(t, err)
 				return
@@ -828,7 +837,7 @@ func TestNewService(t *testing.T) {
 					HTTP: tc.httpConf,
 				},
 			}
-			haveSvc := NewService(kb, metadata.Propagate(&kb, metadata.Metadata{Labels: kb.GetIdentityLabels()}), kb.GetPoolIdentityLabels(kblabel.UIRole))
+			haveSvc := NewService(kb, metadata.Propagate(&kb, metadata.Metadata{Labels: kb.GetIdentityLabels()}), poolIdentityLabels(&kb, kblabel.UIRole))
 			compare.JSONEqual(t, tc.wantSvc(), haveSvc)
 		})
 	}

@@ -124,7 +124,7 @@ func (c CanonicalConfig) WithOverlay(overlay *commonv1.Config) (CanonicalConfig,
 // userSettings is deliberately passed in by the caller and NOT read from kb.Spec.Config here.
 // The background tasks pool config (spec.backgroundTasks.config) is an overlay on top of the
 // primary spec.config, so the caller must first merge the overlay into the primary settings
-// (see poolParams) to obtain the pool's user settings. Those merged user settings are then
+// (see buildPoolPlan) to obtain the pool's user settings. Those merged user settings are then
 // applied here, right before kibanaConfigFromPolicy, so that a StackConfigPolicy still takes
 // precedence over both the primary config and the background tasks overlay.
 func NewConfigSettings(ctx context.Context, client k8s.Client, kb kbv1.Kibana, userSettings CanonicalConfig, v version.Version, ipFamily corev1.IPFamily, kibanaConfigFromPolicy *settings.CanonicalConfig) (CanonicalConfig, error) {

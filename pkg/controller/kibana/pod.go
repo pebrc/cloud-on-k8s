@@ -122,17 +122,16 @@ func readinessProbe(useTLS bool, basePath string, v version.Version) corev1.Prob
 	}
 }
 
-func NewPodTemplateSpec(
+func newPodTemplateSpec(
 	ctx context.Context,
 	client k8sclient.Client,
 	kb kbv1.Kibana,
-	role kblabel.Role,
+	plan poolPlan,
 	keystore *keystore.Resources,
 	volumes []volume.VolumeLike,
 	basePath string,
 	setDefaultSecurityContext bool,
 	meta metadata.Metadata,
-	configSecretName string,
 ) (corev1.PodTemplateSpec, error) {
 	labels := kb.GetIdentityLabels()
 	labels[kblabel.KibanaVersionLabelName] = kb.Spec.Version
@@ -149,26 +148,21 @@ func NewPodTemplateSpec(
 		Annotations: DefaultAnnotations,
 	})
 
-	pt, err := getPodTemplateSpecForRole(kb, role)
-	if err != nil {
-		return corev1.PodTemplateSpec{}, err
-	}
-
-	builder := defaults.NewPodTemplateBuilder(pt, kbv1.KibanaContainerName).
+	builder := defaults.NewPodTemplateBuilder(plan.podTemplate, kbv1.KibanaContainerName).
 		WithLabels(meta.Labels).
 		WithAnnotations(meta.Annotations).
 		WithDockerImage(kb.Spec.Image, container.ImageRepository(container.KibanaImage, v)).
 		WithReadinessProbe(readinessProbe(kb.Spec.HTTP.TLS.Enabled(), basePath, v)).
 		WithVolumes(scriptsConfigMapVolume.Volume()).WithVolumeMounts(scriptsConfigMapVolume.VolumeMount()).
 		WithVolumes(PluginsVolume.Volume()).WithVolumeMounts(PluginsVolume.VolumeMount()).
-		WithResourcesAndOverrides(DefaultResources, kb.GetResourcesForRole(role)).
+		WithResourcesAndOverrides(DefaultResources, plan.resources).
 		WithPorts(ports)
 
 	for _, volume := range volumes {
 		builder.WithVolumes(volume.Volume()).WithVolumeMounts(volume.VolumeMount())
 	}
 
-	initContainer, err := initcontainer.NewInitContainer(configSecretName)
+	initContainer, err := initcontainer.NewInitContainer(plan.configSecretName)
 	if err != nil {
 		return corev1.PodTemplateSpec{}, err
 	}

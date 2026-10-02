@@ -126,9 +126,9 @@ func TestWithOverlay(t *testing.T) {
 	})
 }
 
-// ---- poolParams -------------------------------------------------------------
+// ---- poolPlan ---------------------------------------------------------------
 
-func TestPoolParams(t *testing.T) {
+func TestBuildPoolPlan(t *testing.T) {
 	overlay := &commonv1.Config{Data: map[string]any{"xpack.extra": "v"}}
 
 	tests := []struct {
@@ -141,9 +141,9 @@ func TestPoolParams(t *testing.T) {
 		wantAbsentKeys     []string          // keys that must not be in the resulting config
 	}{
 		{
-			name:               "empty role: base secret and deployment names",
+			name:               "single pool: base secret and deployment names",
 			kb:                 &kbv1.Kibana{Name: "mykb", Spec: kbv1.KibanaSpec{Version: "8.17.0"}},
-			role:               kblabel.Role{},
+			role:               kblabel.SinglePoolRole,
 			wantSecretName:     kbv1.ConfigSecret("mykb"),
 			wantDeploymentName: kbv1.KBNamer.Suffix("mykb"),
 		},
@@ -223,17 +223,17 @@ func TestPoolParams(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			params, err := (&driver{}).poolParams(tt.kb, tt.role)
+			plan, err := buildPoolPlan(tt.kb, tt.role)
 			require.NoError(t, err)
-			assert.Equal(t, tt.wantSecretName, params.SecretName)
-			assert.Equal(t, tt.wantDeploymentName, params.DeploymentName)
+			assert.Equal(t, tt.wantSecretName, plan.configSecretName)
+			assert.Equal(t, tt.wantDeploymentName, plan.deploymentName)
 			for k, want := range tt.wantConfig {
-				got, err := params.Config.String(k)
+				got, err := plan.config.String(k)
 				require.NoError(t, err, "key %q", k)
 				assert.Equal(t, want, got, "key %q", k)
 			}
 			for _, k := range tt.wantAbsentKeys {
-				_, err := params.Config.String(k)
+				_, err := plan.config.String(k)
 				assert.Error(t, err, "key %q must be absent", k)
 			}
 		})
@@ -638,11 +638,6 @@ func TestNodeRolesEnvVar(t *testing.T) {
 		wantPresent   bool
 	}{
 		{
-			name:        "empty role (single-pool mode) injects no NODE_ROLES",
-			role:        kblabel.Role{},
-			wantPresent: false,
-		},
-		{
 			name:        "Single-pool mode injects no NODE_ROLES",
 			role:        kblabel.SinglePoolRole,
 			wantPresent: false,
@@ -668,17 +663,19 @@ func TestNodeRolesEnvVar(t *testing.T) {
 			params, err := d.deploymentParams(
 				context.Background(),
 				kb,
-				tc.role,
-				kbv1.ConfigSecret(kb.Name),
-				kbv1.KBNamer.Suffix(kb.Name),
-				replicas,
-				nil, // replicasAnnotationValue
-				nil, // policyAnnotations
-				"",
-				true,
-				"",
-				metadata.Propagate(kb, metadata.Metadata{Labels: kb.GetIdentityLabels()}),
-				kb.GetIdentityLabels(),
+				deploymentBuildParams{
+					plan: poolPlan{
+						role:             tc.role,
+						configSecretName: kbv1.ConfigSecret(kb.Name),
+						deploymentName:   kbv1.KBNamer.Suffix(kb.Name),
+						resources:        kb.Spec.Resources,
+						podTemplate:      kb.Spec.PodTemplate,
+					},
+					replicas:                  replicas,
+					setDefaultSecurityContext: true,
+					meta:                      metadata.Propagate(kb, metadata.Metadata{Labels: kb.GetIdentityLabels()}),
+					selector:                  kb.GetIdentityLabels(),
+				},
 			)
 			require.NoError(t, err)
 
@@ -784,12 +781,31 @@ func TestServiceSelector(t *testing.T) {
 	}
 }
 
-// ---- Deployment selector labels (via GetPoolIdentityLabels) -----------------
+// ---- Pool topology and identity labels --------------------------------------
 
-func TestGetPoolIdentityLabels_SplitOnOff(t *testing.T) {
+func TestBuildPoolPlans(t *testing.T) {
+	t.Run("single pool", func(t *testing.T) {
+		kb := &kbv1.Kibana{Name: "x"}
+		plans, err := buildPoolPlans(kb)
+		require.NoError(t, err)
+		require.Len(t, plans, 1)
+		assert.Equal(t, kblabel.SinglePoolRole, plans[0].role)
+		assert.Equal(t, kblabel.RolePrimaryValue, plans[0].identityLabels[kblabel.RoleLabelName])
+	})
+
+	t.Run("split pools", func(t *testing.T) {
+		plans, err := buildPoolPlans(kbWithBG(nil, nil))
+		require.NoError(t, err)
+		require.Len(t, plans, 2)
+		assert.Equal(t, kblabel.UIRole, plans[0].role)
+		assert.Equal(t, kblabel.BackgroundTasksRole, plans[1].role)
+	})
+}
+
+func TestPoolIdentityLabels_SplitOnOff(t *testing.T) {
 	t.Run("split disabled: single pool always gets role=primary", func(t *testing.T) {
 		kb := &kbv1.Kibana{Name: "x"}
-		labels := kb.GetPoolIdentityLabels(kblabel.UIRole)
+		labels := poolIdentityLabels(kb, kblabel.UIRole)
 		assert.Equal(t, kblabel.RolePrimaryValue, labels[kblabel.RoleLabelName])
 	})
 
@@ -798,10 +814,10 @@ func TestGetPoolIdentityLabels_SplitOnOff(t *testing.T) {
 			Name: "x",
 			Spec: kbv1.KibanaSpec{BackgroundTasks: &kbv1.KibanaBackgroundTasks{}},
 		}
-		uiLabels := kb.GetPoolIdentityLabels(kblabel.UIRole)
+		uiLabels := poolIdentityLabels(kb, kblabel.UIRole)
 		assert.Equal(t, kblabel.RolePrimaryValue, uiLabels[kblabel.RoleLabelName])
 
-		bgLabels := kb.GetPoolIdentityLabels(kblabel.BackgroundTasksRole)
+		bgLabels := poolIdentityLabels(kb, kblabel.BackgroundTasksRole)
 		assert.Equal(t, kblabel.RoleBackgroundTasksValue, bgLabels[kblabel.RoleLabelName])
 
 		// The two selectors are mutually exclusive — same key, different values.
@@ -1168,7 +1184,9 @@ func TestDeploymentReplicas(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			d := &driver{}
-			gotNew, gotOld := d.deploymentReplicas(logr.Discard(), tt.stopNeeded, tt.kb, tt.role, tt.existingDp)
+			plan, err := buildPoolPlan(tt.kb, tt.role)
+			require.NoError(t, err)
+			gotNew, gotOld := d.deploymentReplicas(logr.Discard(), tt.stopNeeded, tt.kb, plan, tt.existingDp)
 			assert.Equal(t, tt.wantNew, gotNew)
 			assert.Equal(t, tt.wantOld, gotOld)
 		})
@@ -1234,21 +1252,21 @@ func TestDeploymentParamsReplicasAnnotation(t *testing.T) {
 			d, err := newDriver(c, w, toolsevents.NewFakeRecorder(100), kb, corev1.IPv4Protocol)
 			require.NoError(t, err)
 
-			configSecret := kbv1.ConfigSecret(kb.Name)
-			dpName := kbv1.KBNamer.Suffix(kb.Name)
-			if tt.role == kblabel.BackgroundTasksRole {
-				configSecret = kbv1.BackgroundTasksConfigSecret(kb.Name)
-				dpName = kbv1.BackgroundTasksDeployment(kb.Name)
-			}
+			plan, err := buildPoolPlan(kb, tt.role)
+			require.NoError(t, err)
 			replicas := ptr(kb.Spec.Count)
 			meta := metadata.Propagate(kb, metadata.Metadata{Labels: kb.GetIdentityLabels()})
 
 			got, err := d.deploymentParams(
-				context.Background(), kb, tt.role,
-				configSecret, dpName,
-				replicas, tt.replicasAnnotation,
-				nil, "", false, "",
-				meta, kb.GetIdentityLabels(),
+				context.Background(),
+				kb,
+				deploymentBuildParams{
+					plan:                    plan,
+					replicas:                replicas,
+					replicasAnnotationValue: tt.replicasAnnotation,
+					meta:                    meta,
+					selector:                kb.GetIdentityLabels(),
+				},
 			)
 			require.NoError(t, err)
 

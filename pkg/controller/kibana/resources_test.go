@@ -38,17 +38,18 @@ func newMinimalKibana(spec kbv1.KibanaSpec) kbv1.Kibana {
 
 func buildKibanaPodTemplate(t *testing.T, kb kbv1.Kibana) corev1.PodTemplateSpec {
 	t.Helper()
-	got, err := NewPodTemplateSpec(
+	plan, err := buildPoolPlan(&kb, kblabel.SinglePoolRole)
+	require.NoError(t, err)
+	got, err := newPodTemplateSpec(
 		context.Background(),
 		k8s.NewFakeClient(),
 		kb,
-		kblabel.SinglePoolRole,
+		plan,
 		nil,
 		[]commonvolume.VolumeLike{},
 		"",
 		false,
 		metadata.Metadata{},
-		kbv1.ConfigSecret(kb.Name),
 	)
 	require.NoError(t, err)
 	return got
